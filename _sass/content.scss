@@ -1,0 +1,13 @@
+.content {
+  margin: 0 1rem;
+  @media screen and (min-width: $expansion-width) {
+    max-width: $expansion-width;
+    margin: 0 auto;
+  }
+}
+
+.below-header {
+  position: relative;
+  top: $headerheight;
+  padding-top: 1rem;
+}

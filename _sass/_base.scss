@@ -1,0 +1,20 @@
+html, body {
+  width: 100%;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  font-family: 'Roboto', sans;
+}
+
+.on-edge {
+  top: -27.75px;
+  left: 10%;
+}
+
+.hidden {
+  display: none;
+}
+
+main {
+  flex: 1 0 auto;
+}

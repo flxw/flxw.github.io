@@ -1,0 +1,18 @@
+---
+layout: default
+---
+<div>
+  <div class="card" itemscope="" itemtype="http://schema.org/BlogPosting">
+    <div class="card-image">
+    {% if post.image %}
+        <img src="/posts/img/{{ post.image }}" itemprop="thumbnailUrl">
+    {% else %}
+      <img class="cyan lighten-3" style="height:8rem">
+      <span class="card-title grey-text text-darken-4" itemprop="name headline">{{ page.title }}</span>
+    {% endif %}
+    </div>
+    <div class="card-content post" itemprop="articleBody">
+      {{ content }}
+    </div>
+  </div>
+</div>

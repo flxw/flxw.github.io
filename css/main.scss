@@ -1,0 +1,21 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+$feature-color: #589ff1;
+$header-text-color: #fff;
+$expansion-width: 768px;
+$headerheight: 12rem;
+
+
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import
+        "base",
+        "normalize.css",
+        "header",
+        "content",
+        "animations",
+        "footer",
+        "post"
+;

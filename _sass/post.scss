@@ -1,0 +1,24 @@
+.card-content, .post {
+  font-family: 'Roboto Slab', serif
+}
+
+.card-title {
+  font-family: 'Roboto' sans !important
+}
+
+.post {
+  p {
+    font-size: 1.1rem;
+    line-height: 1.5 !important;
+    margin: 1rem 0 !important;
+  }
+
+  li {
+    font-size: 1.1rem;
+  }
+
+  h1 {
+    margin: 0;
+    line-height: 3rem;
+  }
+}

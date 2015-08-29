@@ -1,0 +1,16 @@
+<div class="card" data-time="{{site.posts.first.time}}">
+  <!--if (latestPost.image) { %>
+    <div class="card-image">
+      <img src="/posts/img
+      <span class="card-title grey-text text-darken-4"><%= latestPost.title %></span>
+    </div>
+   -->
+  <div class="card-content">
+    <span class="card-title grey-text">{{ site.posts.first.title }}</span>
+    <p>{{ site.posts.first.excerpt }}</p>
+  </div>
+  <div class="card-action">
+    <a href="{{site.baseurl}}{{site.posts.first.url}}">OPEN</a>
+    <a href="/posts.html">SHOW ALL POSTS</a>
+  </div>
+</div>
