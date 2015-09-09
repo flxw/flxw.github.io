@@ -6,7 +6,7 @@ layout: default
     <div class="card-image">
     {% if post.image %}
         <img src="/posts/img/{{ post.image }}" itemprop="thumbnailUrl">
-    {% elsif post.covercolor !== '' && post.titlecolor !== '' %}
+    {% elsif post.covercolor !== '' and post.titlecolor !== '' %}
       <img class="{{ post.covercolor }} lighten-3" style="height:8rem">
       <span class="card-title {{ post.titlecolor }}" itemprop="name headline">{{ page.title }}</span>
     {% else %}
