@@ -4,11 +4,11 @@ layout: default
 <div>
   <div class="card" itemscope="" itemtype="http://schema.org/BlogPosting">
     <div class="card-image">
-    {% if post.image %}
-        <img src="/posts/img/{{ post.image }}" itemprop="thumbnailUrl">
-    {% elsif post.covercolor !== '' and post.titlecolor !== '' %}
-      <img class="{{ post.covercolor }} lighten-3" style="height:8rem">
-      <span class="card-title {{ post.titlecolor }}" itemprop="name headline">{{ page.title }}</span>
+    {% if page.image %}
+        <img src="/posts/img/{{ page.image }}" itemprop="thumbnailUrl">
+    {% elsif page.covercolor !== '' and page.titlecolor !== '' %}
+      <img class="{{ page.covercolor }} lighten-3" style="height:8rem">
+      <span class="card-title {{ page.titlecolor }}" itemprop="name headline">{{ page.title }}</span>
     {% else %}
       <img class="cyan lighten-3" style="height:8rem">
       <span class="card-title grey-text text-darken-4" itemprop="name headline">{{ page.title }}</span>
