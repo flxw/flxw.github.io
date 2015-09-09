@@ -1,13 +1,16 @@
 ---
 layout: post
 title: Moving back-back to Jeckyll
+titlecolor: yellow
+covercolor: grey darken-1
 ---
 
-Today, I made the move away from [[harp](http://harpjs.com) and back to Jeckyll.
+Today, I made the move away from [harp](http://harpjs.com) and back to Jeckyll.
 Dissatisfied with the complexity of publishing an article, I also moved the blog
 to GitHub pages. This saves me money for the webserver and time for publishing a post.
 
 ## Welcome [Jekyll](http://jekyllrb.com)!
+
 ## Welcome [Github Pages](http://pages.github.com)!
 
 The whole blog structure has been refactored, so that you may easily clone the blog,
