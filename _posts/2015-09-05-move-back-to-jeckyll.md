@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Moving back-back to Jeckyll
-titlecolor: yellow
+titlecolor: yellow-text
 covercolor: grey darken-1
 ---
 
