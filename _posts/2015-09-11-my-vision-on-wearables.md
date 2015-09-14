@@ -17,7 +17,7 @@ visualizing the collected data.
 Just take a look at the gorgeous graph web-based Google Fit draws for
 my step data (as of September 2015):
 
-![Google Fit walking statistics](/img/wearables-walk-stat.png)
+<img alt="Google Fit walking statistics" src="/img/wearables-walk-stat.png" class="materialboxed">
 
 The data displayed is very clear. It displays how many steps I have made
 each day within a week.
@@ -48,7 +48,7 @@ but that analytics should give actionable advice, if it can be given. This way, 
 for information overload is reduced and the matter is only brought to our attention if
 it is demanding. One possibility might be via simple Google Now Card:
 
-![Google Now Card sleep advice](/img/wearables-google-now-advice.png)
+<img alt="Google Now Card sleep advice" src="/img/wearables-google-now-advice.png" class="materialboxed">
 
 There is already an app that does something in that direction. [Sleep as Android](https://play.google.com/store/apps/details?id=com.urbandroid.sleep) gives recommendations on how to catch up on sleep deficit, although
 these tips are standardized and not tailored to ones demands.
