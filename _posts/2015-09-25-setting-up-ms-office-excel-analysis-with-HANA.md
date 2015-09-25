@@ -10,14 +10,14 @@ SAP HANA. Unfortunately, this fairly simple procedure is the ultimate example fo
 bad documentation, and I want to note down my approach here for getting it to work.
 
 The following is for Analysis for Excel versions **2.0 and greater** ([see why](http://scn.sap.com/docs/DOC-63785))
-1. Make sure Analysis for Excel is up to date. An obvious step but you don't want any version conflicts after having it set up.
-2. Install the *HANA Client for Excel* from [here](https://support.sap.com/software/installations.html) (Click *Search for Software*)
-3. Grant your database user the required privileges for accessing HANA via Excel through HTTP ([see why](http://scn.sap.com/community/businessobjects-analysis-ms-office/blog))
-  a. Import the delivery unit *AHCO_INA_SERVICE.tgz* from the server
-  b. Add the *INA_USER* role to your user under the *granted roles* section
-  c. Add the object privileges *_SYS_BI*, *_SYS_BIC* and *_SYS_RT* to your user and enable the *SELECT* checkbox for those
-4. Open Analysis for Excel ([see images](http://scn.sap.com/docs/DOC-63784))
-  a. Click the *Analysis* tab
-  b. Hit the *Insert Data Source* and *Select Data Source...*
-  c. Right-click inside the selection menu, and *Create new SAP HANA connection...*
-  d. Enter your credentials and the selection menu for views should pop up
+  1. Make sure Analysis for Excel is up to date. An obvious step but you don't want any version conflicts after having it set up.
+  2. Install the *HANA Client for Excel* from [here](https://support.sap.com/software/installations.html) (Click *Search for Software*)
+  3. Grant your database user the required privileges for accessing HANA via Excel through HTTP ([see why](http://scn.sap.com/community/businessobjects-analysis-ms-office/blog))
+    1. Import the delivery unit *AHCO_INA_SERVICE.tgz* from the server
+    2. Add the *INA_USER* role to your user under the *granted roles* section
+    3. Add the object privileges *_SYS_BI*, *_SYS_BIC* and *_SYS_RT* to your user and enable the *SELECT* checkbox for those
+  4. Open Analysis for Excel ([see images](http://scn.sap.com/docs/DOC-63784))
+    1. Click the *Analysis* tab
+    2. Hit the *Insert Data Source* and *Select Data Source...*
+    3. Right-click inside the selection menu, and *Create new SAP HANA connection...*
+    4. Enter your credentials and the selection menu for views should pop up
