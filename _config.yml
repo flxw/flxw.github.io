@@ -18,4 +18,4 @@ speciality: "IT-Systems Engineer"
 place: "Berlin &amp; Brisbane"
 
 # Build settings
-markdown: kramdown
+markdown: rdiscount
