@@ -5,7 +5,7 @@ titlecolor: white-text
 covercolor: blue darken-1
 ---
 
-Here at my SAP internship, I want to connect Analysis für Excel with
+Here at my SAP internship, I want to connect Analysis for Excel with
 SAP HANA. Unfortunately, this fairly simple procedure is the ultimate example for
 bad documentation, and I want to note down my approach here for getting it to work.
 
