@@ -30,14 +30,14 @@ of data if you have no clue about how to read it? Does it deliver any value besi
 or "oh that is not so much"? Machines are very good at deriving
 patterns from great amounts of data - and I believe that this capability should be put to use.
 
-**Providing background information**
+*Providing background information*
 
 Let's have a look at this graph of sleep information.
 It tells me when I experienced deep sleep and light sleep and when my body moved during sleeping.
 Now I can see when I entered a different sleep phase. But what will I do with this information?
 Can I improve my sleep based on this data? I *could*, if I knew how.
 
-**Giving actionable advice**
+*Giving actionable advice*
 
 I could make changes if I knew about basic sleep mechanisms and how behaviour before going to bed affects sleep.
 Certainly no secret, the blue light emitted by electronic devices affects our sleep in a [bad way](http://www.health.harvard.edu/staying-healthy/blue-light-has-a-dark-side).
@@ -59,4 +59,3 @@ What makes a tracker really valuable is the data analytics, not the hardware. Ta
 at [Freeletics](http://freeletics.com) for example. They provide members with weekly tips and insights
 in bodily functions and regeneration mechanics. This information could easily be reused in
 your applications!
-
