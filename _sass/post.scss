@@ -1,9 +1,9 @@
 .card-content, .post {
-  font-family: 'Roboto Slab', serif
+  font-family: 'Merriweather', serif
 }
 
 .card-title {
-  font-family: 'Roboto' sans !important
+  font-family: 'Roboto', sans !important;
 }
 
 .post {
@@ -11,11 +11,13 @@
     font-size: 1.1rem;
     line-height: 1.5 !important;
     margin: 1rem 0 !important;
+    text-align: justify;
 
     img {
       display: block;
       margin: 0 auto;
-      max-height: 15rem;
+      max-height: 20rem;
+      max-width: 80%;
     }
   }
 
@@ -26,5 +28,9 @@
   h1 {
     margin: 0;
     line-height: 3rem;
+  }
+
+  h1,h2,h3,h4,h5 {
+    font-family: 'Roboto', sans !important;
   }
 }
