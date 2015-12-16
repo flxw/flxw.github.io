@@ -1,22 +1,20 @@
 ---
 layout: default
 ---
-<div>
-  <div class="card" itemscope="" itemtype="http://schema.org/BlogPosting">
-    <div class="card-image">
-    {% if page.image %}
-        <img src="{{ page.image }}" itemprop="thumbnailUrl">
-        <span class="card-title {{ page.titlecolor }}" itemprop="name headline">{{ page.title }}</span>
-    {% elsif page.covercolor != '' and page.titlecolor != '' %}
-      <img class="{{ page.covercolor }}" style="height:8rem">
+<div class="card" itemscope="" itemtype="http://schema.org/BlogPosting">
+  <div class="card-image">
+  {% if page.image %}
+      <img src="{{ page.image }}" itemprop="thumbnailUrl">
       <span class="card-title {{ page.titlecolor }}" itemprop="name headline">{{ page.title }}</span>
-    {% else %}
-      <img class="cyan lighten-3" style="height:8rem">
-      <span class="card-title grey-text text-darken-4" itemprop="name headline">{{ page.title }}</span>
-    {% endif %}
-    </div>
-    <div class="card-content post" itemprop="articleBody">
-      {{ content }}
-    </div>
+  {% elsif page.covercolor != '' and page.titlecolor != '' %}
+    <img class="{{ page.covercolor }}" style="height:8rem">
+    <span class="card-title {{ page.titlecolor }}" itemprop="name headline">{{ page.title }}</span>
+  {% else %}
+    <img class="cyan lighten-3" style="height:8rem">
+    <span class="card-title grey-text text-darken-4" itemprop="name headline">{{ page.title }}</span>
+  {% endif %}
+  </div>
+  <div class="card-content post" itemprop="articleBody">
+    {{ content }}
   </div>
 </div>

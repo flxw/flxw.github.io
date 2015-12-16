@@ -13,7 +13,7 @@
     margin: 1rem 0 !important;
     text-align: justify;
 
-    img {
+    img:not(.active) {
       display: block;
       margin: 0 auto;
       max-height: 20rem;

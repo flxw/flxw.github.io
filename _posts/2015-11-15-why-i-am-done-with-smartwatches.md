@@ -84,7 +84,7 @@ You will probably see yourself in one of those pictures.
 Even advertising has found this to be worthy a topic. It makes me feel guilty.
 Does it make you feel the same?
 
-![](/img/iphone-prison.jpg)
+<img class="materialboxed" src="/img/iphone-prison.jpg">
 
 There are numerous studies out there that will prove that emotional bonding
 and conversational variety will strongly decrease with smartphones on the table.
