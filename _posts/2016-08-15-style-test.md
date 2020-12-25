@@ -5,6 +5,7 @@ description: "Test post for style"
 date: 2016-08-15
 tags: test, style
 comments: true
+published: false
 ---
 
 Below is just about everything you'll need to style in the theme. Check the [source code](https://raw.githubusercontent.com/mkchoi212/paper-jekyll-theme/master/_posts/2016-08-15-style-test.md) to see the many embedded elements within paragraphs.

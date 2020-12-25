@@ -84,8 +84,6 @@ You will probably see yourself in one of those pictures.
 Even advertising has found this to be worthy a topic. It makes me feel guilty.
 Does it make you feel the same?
 
-<img class="materialboxed" src="/assets/iphone-prison.jpg">
-
 There are numerous studies out there that will prove that emotional bonding
 and conversational variety will strongly decrease with smartphones on the table.
 
@@ -99,5 +97,3 @@ exchange that you are missing because of coldly lit displays.
 Now put away the device with which you read this and say hello to the person next to you,
 even if it is a stranger. Conversation is beautiful, most notably if it shall not serve
 a higher purpose.
-
-I am done trying to talk to people who prefer their screens.
