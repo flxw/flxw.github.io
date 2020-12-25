@@ -1,17 +1,8 @@
 # Site settings
 title: "Felix Wolff"
-description: > 
-  On stuff that I think can help others
-
-author: Johnny Appleseed
-email: johnny@appleseed.com
-twitter_username: _HairForceOne
-github_username: mkchoi212
-
+description: On stuff that I think can help others
+author: Felix Wolff
 url: "https://flxw.de" # the base hostname & protocol for your site
-
-google_analytics_id: UA-1111111111-1
-disqus_id:
 
 # Build settings
 include: [_pages]
