@@ -7,16 +7,28 @@
 }
 
 .c-page__header {
-    margin-bottom: 10px
-
-    h1 {
-        margin-bottom: 2.5rem; // 25px
-        @include fs--heading-2;
-        color: $c-base__02;
+    margin-bottom: 10px;
+    
+    img {
+        display: inline-block;
+        height: 10rem;
     }
 
     p {
         @include fs--meta;
+    }
+
+    .headline-block {
+        padding: 5px;
+        display: inline-block;
+        
+        code {
+            font-size: 1.8rem;
+        }
+    
+        p {
+            color: #5C6E74;
+        }
     }
 }
 
