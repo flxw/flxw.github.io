@@ -1,6 +1,7 @@
 ---
 layout: post
 title: Using a colorful terminal
+description: The case for a terminal and colorschemes
 ---
 An appeal to everyone to use colored terminals
 and do their eyes a favor.

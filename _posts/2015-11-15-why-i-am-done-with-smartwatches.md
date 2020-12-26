@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Why I am done with smart watches
-image: /img/pixie-tube.jpg
+description: "A bit of a rant after I became disenchanted with smart watches and sold mine"
 ---
 
 It is a thing more and more common. People casually chatting, operating their
