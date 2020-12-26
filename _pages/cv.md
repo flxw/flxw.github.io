@@ -39,4 +39,4 @@ Finishing school and convincing my IT teacher that Python is in fact an object-o
 In hindsight I would have loved to replace religion as a subject with financial literacy.
 
 **2006 - Four year expat stay @ [DSKL](https://dskl.edu.my)**\\
-We (family and I) were abroad and I got pretty good at talking English and imitating Indian accents :D
+We (family and I) were abroad and I got pretty good at speaking English and imitating Indian accents :D
