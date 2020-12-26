@@ -1,8 +1,8 @@
 # Site settings
 title: "Felix Wolff"
-description: On stuff that I think can help others
+description: On stuff that might help others
 author: Felix Wolff
-url: "https://flxw.de" # the base hostname & protocol for your site
+url: "https://flxw.de"
 
 # Build settings
 include: [_pages]
