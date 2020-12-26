@@ -10,6 +10,8 @@ After brief stints in consulting and product management, I am back in software e
 Currently, I work as a Software Engineer at Celonis.
 You can also find me on <a href="https://www.linkedin.com/fe-lix-62" data-network="LinkedIn" data-proofer-ignore>LinkedIn.</a>
 
+Here is a short version of my CV.
+
 ----
 
 **08/2020 - now - Software Engineer @ [Celonis SE](https://celonis.com)**\\
