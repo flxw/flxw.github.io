@@ -8,16 +8,28 @@ Hi, I'm Felix. Thanks for visiting my site.
 I studied IT-Systems Engineering at the Hasso-Plattner-Institute (HPI) in Potsdam, Germany.
 After brief stints in consulting and product management, I am back in software engineering.
 Currently, I work as a Software Engineer at Celonis.
-You can also find me on <a href="https://www.linkedin.com/fe-lix-62" data-network="LinkedIn" data-proofer-ignore>LinkedIn.</a>
+You can also find me on <a href="https://de.linkedin.com/in/felix-wolff" data-network="LinkedIn" data-proofer-ignore>LinkedIn.</a>
 
-Here is a short version of my CV.
+Here is a short version of my CV, peppered with keywords on technologies I used and duties I carried out during that time.
 
 ----
 
 **08/2020 - now - Software Engineer @ [Celonis SE](https://celonis.com)**\\
+*Java, Spring Boot, Microservices, Kubernetes, Docker, Angular, Typescript, ArgoCD, SSO, OIDC, SAML*\\
+Work in the core team exposes me to thinking about developer experience, and then carrying out enablements,
+all while working on core services on the platform using the technologies mentioned above.
+
 **10/2019 - 08/2020 - Product Manager @ [Celonis SE](https://celonis.com)**\\
+*Scrum, Refinements, Retrospectives, Enablements, Stakeholder Management, Roadmaps*\\
+After starting the first full-time job as a PM, I felt that I could deliver more value as a developer.
+Hence I switched roles, but stayed on the same team. 
+
 **04/2018 - 09/2018 - Master's Project @ [HPI](https://hpi.de)**\\
-**10/2016 - 07/2017 - Global Team Based Innovation**\\
+*React, SAP HANA, BPMN, Interviewing, Process Mapping*
+As part of my studies, we tried to streamline the flow of knowledge in tumor boards and assist it with tool that we protoyped.
+The bulk of work in this project arose from interviews at DKFZ and Charité and dissecting the discovered processes.
+
+**10/2016 - 07/2017 - Global Team Based Innovation @ [HPI](https://hpi.de/uebernickel/teaching/global-team-based-innovation-gti-design-thinking.html)**\\
 **05/2016 - 07/2019 - Summer Trainee @ [A.T. Kearney](https://kearney.com)**\\
 **08/2015 - 03/2016 - Software Development Intern @ [SAP](https://sap.com)**
 
