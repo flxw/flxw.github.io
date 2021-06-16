@@ -15,19 +15,13 @@ Here is a short version of my CV, peppered with keywords on technologies I used 
 ----
 
 **08/2020 - now - Software Engineer @ [Celonis SE](https://celonis.com)**\\
-*Java, Spring Boot, Microservices, Kubernetes, Docker, Angular, Typescript, ArgoCD, SSO, OIDC, SAML*\\
-Work in the core team exposes me to thinking about developer experience, and then carrying out enablements,
-all while working on core services of the platform using the technologies mentioned above.
+*Java, Spring Boot, Microservices, Kubernetes, Docker, Angular, Typescript, ArgoCD, SSO, OIDC, SAML*
 
 **10/2019 - 08/2020 - Product Manager @ [Celonis SE](https://celonis.com)**\\
-*Scrum, Refinements, Retrospectives, Enablements, Stakeholder Management, Roadmaps*\\
-After starting the first full-time job as a PM, I felt that I could deliver more value as a developer.
-Hence I switched roles, but stayed on the same team. 
+*Scrum, Refinements, Retrospectives, Enablements, Stakeholder Management, Roadmaps*
 
 **04/2018 - 09/2018 - Master's Project @ [HPI](https://hpi.de)**\\
-*React, SAP HANA, BPMN, Interviewing, Process Mapping*\\
-As part of my studies, we tried to streamline the flow of knowledge in tumor boards and assist it with tool that we protoyped.
-The bulk of work in this project arose from interviews at DKFZ and Charité and dissecting the discovered processes.
+*React, SAP HANA, BPMN, Interviewing, Process Mapping*
 
 **10/2016 - 07/2017 - Global Team Based Innovation @ [HPI](https://hpi.de/uebernickel/teaching/global-team-based-innovation-gti-design-thinking.html)**\\
 **05/2016 - 07/2019 - Summer Trainee @ [A.T. Kearney](https://kearney.com)**\\
