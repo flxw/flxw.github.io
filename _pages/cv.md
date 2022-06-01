@@ -14,8 +14,11 @@ Here is a short version of my CV, peppered with keywords on technologies I used 
 
 ----
 
-**08/2020 - now - Software Engineer @ [Celonis SE](https://celonis.com)**\\
-*Java, Spring Boot, Microservices, Kubernetes, Docker, Angular, Typescript, ArgoCD, SSO, OIDC, SAML*
+**04/2022 - now - Senior Security Engineer @ [Celonis SE](https://celonis.com)\\
+*Veracode, Asset Inventory, Python, AWS*
+
+**08/2020 - 04/2022 - Software Engineer @ [Celonis SE](https://celonis.com)**\\
+*Java, Python, Rust, Spring Boot, Microservices, Kubernetes, Docker, Apereo CAS, Angular, Typescript, ArgoCD, SSO, OIDC, SAML*
 
 **10/2019 - 08/2020 - Product Manager @ [Celonis SE](https://celonis.com)**\\
 *Scrum, Refinements, Retrospectives, Enablements, Stakeholder Management, Roadmaps*
@@ -31,7 +34,7 @@ Here is a short version of my CV, peppered with keywords on technologies I used 
 
 **2019 - M.Sc. IT-Systems Engineering @ [Hasso-Plattner-Institute](https://hpi.de)**\\
 I wrote my thesis on *Next-Activity Prediction with Long-Short-Term Memory Recurrent Networks*.
-The topic got me in touch with my current employer.
+The topic piqued my interest in process mining and got me in touch with Celonis.
 
 **2015 - B.Sc. IT-Systems Engineering @ [Hasso-Plattner-Institute](https://hpi.de)**\\
 The six semesters here taught me a lot about natural curiousity on technology,
