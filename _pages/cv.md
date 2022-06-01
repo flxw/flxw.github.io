@@ -14,7 +14,7 @@ Here is a short version of my CV, peppered with keywords on technologies I used 
 
 ----
 
-**04/2022 - now - Senior Security Engineer @ [Celonis SE](https://celonis.com)\\
+**04/2022 - now - Senior Security Engineer @ [Celonis SE](https://celonis.com)**\\
 *Veracode, Asset Inventory, Python, AWS*
 
 **08/2020 - 04/2022 - Software Engineer @ [Celonis SE](https://celonis.com)**\\
