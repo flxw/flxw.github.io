@@ -22,12 +22,12 @@ In this article I will show you how to easily work with [beancount](https://bean
 First, you install [beancount](https://beancount.github.io/) from any source that works for your system.
 
 Second, create a file and folder structure like so:
-```
+{% highlight shell %}
 importers/
 raw/
 main.beancount
 import.config
-```
+{% endhighlight %}
 
 Third, open `main.beancount` and open some accounts. You can use [this article](https://docs.google.com/document/d/1Tss0IEzEyAPuKSGeNsfNgb0BfiW2ZHyP5nCFBW1uWlk) as a guide. It doesn't have to be perfect from the start, you can always retry.
 
@@ -36,7 +36,7 @@ Fourth, create folders for your bank accounts inside `raw` and create empty bean
 Fifth, use the `include` command inside `main.beancount` to pull in the account-specific beanfiles your just created.
 
 If you're like me, you have two accounts where money shuttle back and forth. Then you would have a folder structure similar to the following:
-```
+{% highlight shell %}
 import.config
 importers/
 main.beancount
@@ -45,7 +45,7 @@ sparkasse.beancount
 raw
  ├── N26
  └── Sparkasse               
-```
+{% endhighlight %}
 
 # Importer setup
 As mentioned in the introduction, I perceive the big strength of PTA that you can process anything.
@@ -60,7 +60,7 @@ It will process your input files line-by-line and create the appropriate account
 
 After having found and configured an importer, you can wire it up quite easily in `import.config`. Here is how it looks for me:
 
-```python
+{% highlight python %}
 import sys
 from os import path
 sys.path.insert(0, path.join(path.dirname(__file__))) 
@@ -80,8 +80,7 @@ CONFIG = [
         'Assets:Sparkasse'
     )
 ]
-
-```
+{% endhighlight %}
 
 This tells beancount the following:
 "Please use these two importers when importing transactions.
@@ -92,9 +91,9 @@ A month has passed while you tried to set this up, so now you have a month's wor
 
 Download it as CSV, and save it under `raw/n26-01-21.csv`.
 Then, you can append the plain text ledger to the `n26.beancount` file:
-```shell
+{% highlight shell %}
 bean-extract import.config raw/n26-01-21.csv >> n26.beancount
-```
+{% endhighlight %}
 
 I recommend checking the output in the beginning, as categories could be wrong. Maybe you notice some patterns that can help you automatically categorize transactions inside the importer. I did that and it saves quite a bit of work.
 
@@ -103,6 +102,6 @@ Here is why I picked beancount: [fava](https://beancount.github.io/fava/).
 It's a great visualization frontend for beancount ledgers. After adding a month's worth of data, I just fire it up and can analyze what happened.
 
 If you'd like to do so, too, simply install it and run:
-```
+{% highlight shell %}
 fava main.beancount
-```
+{% endhighlight %}
