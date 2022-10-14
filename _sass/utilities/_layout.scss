@@ -1,13 +1,17 @@
 /* ==========================================================================
    Layout
    ========================================================================== */
+body {
+    background-color: #ededed
+}
 
 .u-container {
-    max-width: 72rem; // 620px
+    max-width: 144rem; // 620px
     margin-right: auto;
     margin-left: auto;
-    padding-top: 10rem; // 100px
-    padding-right: 1rem; // 10px
-    padding-left: 1rem; // 10px
+    padding-top: 10px; // 100px
+
+    background-color: #ffd300;
+    box-shadow: 0 0 120px rgba(0,0,0,.15);
 }
 
