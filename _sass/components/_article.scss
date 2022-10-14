@@ -3,7 +3,7 @@
    ========================================================================== */
 
 .c-article {
-    margin-bottom: 10rem; // 100px
+    margin-top: 40px;
     @include fs--body;
 }
 
@@ -101,7 +101,6 @@
   border-right-color: transparent;
   font-size: 18px;
   overflow: hidden;
-  margin-bottom: 8rem;
 }
 
 .pagenav div {
