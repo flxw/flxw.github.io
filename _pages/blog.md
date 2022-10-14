@@ -7,12 +7,13 @@ permalink: /blog/
   <ul class="c-archives__list">
   {% for post in site.posts  %}
     <li class="c-archives__item">
-      <h3>
-        <a href="{{ post.url | prepend: site.baseurl }}">{{post.title}}</a>
-        <br>
-        <small>{{post.description}}</small>
-      </h3>
-      <p>{{ post.date | date: "%b %-d, %Y" }}</p>
+      <div class="c-archives__item-content">
+        <h3>
+          <a href="{{ post.url | prepend: site.baseurl }}">{{post.title}}</a>
+          <small>{{ post.date | date: "%b %-d, %Y" }}</small>
+        </h3>
+        <p>{{ post.description }}</p>
+      </div>
     </li>
   {% endfor %}
   </ul>
