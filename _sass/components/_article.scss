@@ -4,37 +4,26 @@
 
 .c-article {
     margin-bottom: 10rem; // 100px
+    @include fs--body;
 }
 
 .c-article__header {
+    color: white;
+    background-color: black;
+    margin-top: 2rem;
     margin-bottom: 2rem; // 50px
-    @media screen and (min-width: $bp__sm) {
-        display: -webkit-box;
-        display: -webkit-flex;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-flex-wrap: wrap;
-            -ms-flex-wrap: wrap;
-                flex-wrap: wrap;
-        -webkit-box-pack: justify;
-        -webkit-justify-content: space-between;
-            -ms-flex-pack: justify;
-                justify-content: space-between;
-        -webkit-box-align: baseline;
-        -webkit-align-items: baseline;
-            -ms-flex-align: baseline;
-                align-items: baseline;
+}
+
+.c-article__header-content {
+    width: 80ch;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 5rem;
+    padding-bottom: 2rem;
+
+    * { 
+        color: white !important;
     }
-}
-
-.c-article__title {
-    @include fs--heading-1;
-    color: $c-base__02;
-}
-
-.c-article__time {
-    @include fs--body;
-    color: $c-base__01;
 }
 
 .c-article__main {
@@ -42,7 +31,6 @@
     margin-left: auto;
     margin-right: auto;
     margin-bottom: 5rem; // 50px
-    @include fs--body;
     color: $article-body-color;
 
     > * {
