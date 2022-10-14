@@ -10,6 +10,6 @@ You can get in touch with me via [wolff.felix@protonmail.com](mailto:wolff.felix
 I am looking forward to receiving your message, it's always nice to hear about different points of view!
 
 You can get my public PGP key as follows from Protonmail:
-```bash
+{% highlight bash %}
 curl https://api.protonmail.ch/pks/lookup?op=get&search=wolff.felix@protonmail.com
-```
+{% endhighlight%}
