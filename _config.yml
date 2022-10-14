@@ -7,6 +7,7 @@ url: "https://flxw.de"
 # Build settings
 include: [_pages]
 markdown: kramdown
+highlighter: rouge
 permalink: /:year/:month/:title.html
 
 sass:
