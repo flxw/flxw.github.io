@@ -1,7 +1,6 @@
 ---
-layout: content
+layout: post-sans-titre
 ---
-
 A while ago, I came across [a website](https://sneak.berlin) that encouraged me to directly reach out to the author or join his mailing list.
 Since I have become disenchanted with the idea of social media, I am increasingly fond of this idea.
 
