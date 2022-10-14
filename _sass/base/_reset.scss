@@ -86,11 +86,10 @@ svg {
 }
 
 /* Links */
-
 a {
-    color: $c-accent__blue;
+    text-decoration: solid underline black 1px;
     background-color: transparent;
-    text-decoration: none;
+    color: $article-body-color;
 
     position: relative;
     display: inline-block;
@@ -116,7 +115,6 @@ a {
         height: 100%;
       }
     }
-
 }
 
 /* Override hover animation with no-hov class */
