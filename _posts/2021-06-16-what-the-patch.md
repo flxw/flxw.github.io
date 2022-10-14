@@ -32,7 +32,8 @@ but can deliver more complex operations on the patch target.
 These operations are specified in the JSON6902 format, hence the name.
 The actual patch is delivered via JSON (but can also be YAML), for instance like below.
 More examples can be found in the [documentation](https://github.com/kubernetes-sigs/cli-experimental/blob/e8661e62fbff9bb41703e663c5d6f9730f121a16/site/content/en/references/kustomize/kustomization/patchesjson6902/_index.md).
-```json
+
+{% highlight json %}
 [
   {
     "op": "remove",
@@ -44,7 +45,7 @@ More examples can be found in the [documentation](https://github.com/kubernetes-
     "value": "SOMEVALUE"
   }
 ]
-```
+{% endhighlight %}
 
 Finally, the `patches` directive is the new shiny swiss army knife.
 It needs a target, too, but the target can be a *regex*.
