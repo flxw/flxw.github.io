@@ -2,3 +2,6 @@ _site
 .sass-cache
 *.sublime-workspace
 .DS_STORE
+vendor/
+.bundle/
+.jekyll-cache/
