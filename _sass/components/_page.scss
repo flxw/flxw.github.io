@@ -10,7 +10,6 @@
     background-color: white;
     height: 70px;
     width: calc(100% - 40px);
-    margin-top: 20px;
     margin-bottom: 10px;
     margin-left: auto;
     margin-right: auto;
@@ -20,6 +19,9 @@
     font-family: 'Open Sans', sans-serif;
     font-size: 2rem;
     font-weight: 300;
+
+    position: relative;
+    top: 20px;
 
     .c-page__header_brand_section {
         width: 25%;
@@ -79,7 +81,6 @@
 }
 
 .c-page__footer {
-    margin-bottom: 10rem;
     display: -webkit-box;
     display: -webkit-flex;
     display: -ms-flexbox;
