@@ -23,6 +23,12 @@
     position: relative;
     top: 20px;
 
+    @media (max-width:600px) {
+        height: 30px;
+        width: calc(100% - 20px);
+        font-size: 1rem;
+    }
+
     .c-page__header_brand_section {
         width: 25%;
         float: left;
@@ -32,6 +38,10 @@
             height: 70px;
             border-top-left-radius: 6px;
             border-bottom-left-radius: 6px;
+
+            @media (max-width:600px) {
+                height: 30px;
+            }
         }
 
         p {
@@ -44,11 +54,20 @@
         width: 70%;
         display: block;
         height: 70px;
+        float: right;
+
+        @media (max-width:600px) {
+            height: 30px;
+        }
 
         li {
             display: inline-block;
             line-height: 69px;
             padding-right: 10px;
+
+            @media (max-width:600px) {
+                line-height: 29px;
+            }
         }
         
         li::after {
@@ -105,4 +124,6 @@
 figure.highlight {
     background: $syntax-highlighting-background;
     padding: 10px;
+
+    @include fs--meta
 }
