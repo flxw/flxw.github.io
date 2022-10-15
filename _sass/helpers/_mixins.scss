@@ -53,6 +53,10 @@
 @mixin fs--body {
     line-height: 1.5;
     font-size: 1.8rem; // 18px
+
+    @media (max-width:600px) {
+        font-size: 0.9rem;
+    }
 }
 
 @mixin fs--meta {
@@ -68,6 +72,11 @@
 @mixin fs--code {
     font-size: 1.4rem;
     line-height: 1.5;
+    white-space: pre-wrap;
+
+    @media (max-width:600px) {
+        font-size: 0.9rem;
+    }
 }
 
 // Visually hide content
