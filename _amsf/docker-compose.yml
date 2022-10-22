@@ -1,0 +1,20 @@
+# This file is for project maintainer only.
+# See https://sparanoid.com/lab/amsf/getting-started.html#method-run-in-docker to learn how to
+# create your own `docker-compose.yml`
+version: '3'
+
+x-defaults: &defaults
+  build:
+    context: .
+    dockerfile: Dockerfile
+  image: sparanoid/almace-scaffolding:latest
+  restart: always
+  volumes:
+    - ./:/app/
+  ports:
+    - "4321:4321"
+
+services:
+  amsf:
+    <<: *defaults
+    command: serve
