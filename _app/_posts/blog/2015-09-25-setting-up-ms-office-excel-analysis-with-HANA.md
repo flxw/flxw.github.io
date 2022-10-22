@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Connecting MS Office Excel Analysis with HANA
+title: Excel Analysis with HANA data
 category: blog
 ---
 

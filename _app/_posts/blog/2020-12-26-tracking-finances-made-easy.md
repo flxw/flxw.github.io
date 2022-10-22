@@ -3,6 +3,7 @@ layout: post
 title: "Tracking your money made easy"
 description: "An account system and the tools that allow you to track your expenses and your asset allocation easily"
 category: blog
+tags: beancount
 ---
 
 A couple of years ago, I started getting more and more into understanding how the financial system works,

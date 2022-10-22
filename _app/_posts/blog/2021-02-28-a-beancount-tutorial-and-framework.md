@@ -3,6 +3,7 @@ layout: post
 title: "A beancount tutorial and framework"
 description: "Getting beancount to run and analyze your transactions"
 category: blog
+tags: beancount
 ---
 
 As a financially avid reader, I am sure that you can roughly say how much money you need for a month.

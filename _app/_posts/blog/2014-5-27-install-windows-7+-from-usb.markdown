@@ -1,6 +1,6 @@
 ---
 layout: post
-title: How to boot Windows 7+ installation from USB
+title: Booting Windows 7+ from USB
 description: A few lines to make a bootable Windows USB stick
 category: blog
 ---

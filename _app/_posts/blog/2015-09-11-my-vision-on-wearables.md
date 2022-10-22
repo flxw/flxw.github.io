@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Vision: What wearable device applications should do next"
+title: Vision for wearable device apps
 category: blog
 ---
 
