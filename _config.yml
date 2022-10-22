@@ -8,7 +8,7 @@
 #
 source:         _app
 destination:    docs
-timezone:       America/Los_Angeles
+timezone:       Europe/Berlin
 permalink:      /:title.html
 markdown:       kramdown
 highlighter:    rouge

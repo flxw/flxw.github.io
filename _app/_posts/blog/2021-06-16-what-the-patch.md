@@ -1,7 +1,8 @@
 ---
 layout: post
-title: "What the patch?!"
 category: blog
+title: "What the patch?!"
+desc: Comparing patching mechanisms in kustomize
 ---
 
 At work I deal with Kubernetes and kustomize on a daily basis.

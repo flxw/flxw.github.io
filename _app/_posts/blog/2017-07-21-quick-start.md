@@ -5,7 +5,7 @@ description: "How to setup and use the blog"
 date: 2017-07-21
 tags: jekyll
 comments: true
-published: true
+published: false
 category: blog
 ---
 
