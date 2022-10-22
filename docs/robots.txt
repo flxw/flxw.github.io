@@ -1,0 +1,3 @@
+Sitemap: https://flxw.de/sitemap.xml
+
+User-agent: *
