@@ -1,0 +1,11 @@
+- title: __home__
+  url:   /
+
+- title: Blog
+  url:   /blog/
+
+- title: CV
+  url: /cv/
+
+- title: Imprint
+  url:   /imprint/
