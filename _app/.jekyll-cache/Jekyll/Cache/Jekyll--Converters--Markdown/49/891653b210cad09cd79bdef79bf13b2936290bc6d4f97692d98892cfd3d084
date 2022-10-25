@@ -1,0 +1,97 @@
+I"�<p>As a financially avid reader, I am sure that you can roughly say how much money you need for a month.
+You can assist your gut feeling with tools like Kmymoney, Homebank, GnuCash et al. to know exactly how much it is that you spend and earn per month.
+However, the aforementioned tools have a common shortcoming, at least in my opinion:
+They use different data formats to store data.
+If the software reaches end of life, you could lose months or even years of transactional data because you might not be able to extract it from the old storage format.</p>
+
+<p>Enter <a href="https://plaintextaccounting.org/">Plain Text Accounting</a> (PTA).
+A text file will store your transactions using a well-defined format.
+No matter what happens to the analytics software, you will always be able to manipulate and convert from text - solving the problem above.</p>
+
+<p>PTA tools tend to be designed for the command line, which can be somewhat counter-intuitive if you expect graphs and visualizations of the GUI tools.
+In this article I will show you how to easily work with <a href="https://beancount.github.io/">beancount</a> and visualize your numbers nicely.</p>
+
+<h1 id="directory-setup">Directory setup</h1>
+<p>First, you install <a href="https://beancount.github.io/">beancount</a> from any source that works for your system.</p>
+
+<p>Second, create a file and folder structure like so:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">importers/
+raw/
+main.beancount
+import.config</code></pre></figure>
+
+<p>Third, open <code class="language-plaintext highlighter-rouge">main.beancount</code> and open some accounts. You can use <a href="https://docs.google.com/document/d/1Tss0IEzEyAPuKSGeNsfNgb0BfiW2ZHyP5nCFBW1uWlk">this article</a> as a guide. It doesn’t have to be perfect from the start, you can always retry.</p>
+
+<p>Fourth, create folders for your bank accounts inside <code class="language-plaintext highlighter-rouge">raw</code> and create empty beanfiles for them.</p>
+
+<p>Fifth, use the <code class="language-plaintext highlighter-rouge">include</code> command inside <code class="language-plaintext highlighter-rouge">main.beancount</code> to pull in the account-specific beanfiles your just created.</p>
+
+<p>If you’re like me, you have two accounts where money shuttle back and forth. Then you would have a folder structure similar to the following:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">import.config
+importers/
+main.beancount
+n26.beancount
+sparkasse.beancount
+raw
+ ├── N26
+ └── Sparkasse               </code></pre></figure>
+
+<h1 id="importer-setup">Importer setup</h1>
+<p>As mentioned in the introduction, I perceive the big strength of PTA that you can process anything.
+For this job, beancount offers a so-called <a href="https://beancount.github.io/docs/importing_external_data.html#example-importers">Importer API</a>.
+You can either write your own Python importer or copy and expand on one from Github.
+I used the following two in my projects:</p>
+<ul>
+  <li>https://gitlab.hasi.it/seth/beancount-csv-camt</li>
+  <li>https://github.com/siddhantgoel/beancount-n26</li>
+</ul>
+
+<p>Either install the importer via <code class="language-plaintext highlighter-rouge">pip</code> or make it importable for Python from the <code class="language-plaintext highlighter-rouge">importers/</code> directory.
+It will process your input files line-by-line and create the appropriate accountin entries.</p>
+
+<p>After having found and configured an importer, you can wire it up quite easily in <code class="language-plaintext highlighter-rouge">import.config</code>. Here is how it looks for me:</p>
+
+<figure class="highlight"><pre><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
+<span class="n">sys</span><span class="p">.</span><span class="n">path</span><span class="p">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">path</span><span class="p">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)))</span> 
+
+<span class="kn">from</span> <span class="nn">importers.n26</span> <span class="kn">import</span> <span class="n">N26Importer</span>
+<span class="kn">from</span> <span class="nn">importers.csv_camt</span> <span class="kn">import</span> <span class="n">CsvCamtImporter</span>
+
+<span class="n">CONFIG</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">N26Importer</span><span class="p">(</span>
+        <span class="s">'XXXXXXMYIBANXXXXXXXXX'</span><span class="p">,</span>
+        <span class="s">'Assets:N26'</span><span class="p">,</span>
+        <span class="n">language</span><span class="o">=</span><span class="s">'de'</span><span class="p">,</span>
+        <span class="n">file_encoding</span><span class="o">=</span><span class="s">'utf-8'</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">CsvCamtImporter</span><span class="p">(</span>
+        <span class="s">'XXXXXXMYIBAN2XXXXXXXX'</span><span class="p">,</span>
+        <span class="s">'Assets:Sparkasse'</span>
+    <span class="p">)</span>
+<span class="p">]</span></code></pre></figure>
+
+<p>This tells beancount the following:
+“Please use these two importers when importing transactions.
+The importers will tell you whether they are capable of importing a given file, so the right one will get selected automatically.”</p>
+
+<h1 id="data-ingestion">Data ingestion</h1>
+<p>A month has passed while you tried to set this up, so now you have a month’s worth of data ;-)</p>
+
+<p>Download it as CSV, and save it under <code class="language-plaintext highlighter-rouge">raw/n26-01-21.csv</code>.
+Then, you can append the plain text ledger to the <code class="language-plaintext highlighter-rouge">n26.beancount</code> file:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">bean-extract import.config raw/n26-01-21.csv <span class="o">&gt;&gt;</span> n26.beancount</code></pre></figure>
+
+<p>I recommend checking the output in the beginning, as categories could be wrong. Maybe you notice some patterns that can help you automatically categorize transactions inside the importer. I did that and it saves quite a bit of work.</p>
+
+<h1 id="data-visualization">Data visualization</h1>
+<p>Here is why I picked beancount: <a href="https://beancount.github.io/fava/">fava</a>.
+It’s a great visualization frontend for beancount ledgers. After adding a month’s worth of data, I just fire it up and can analyze what happened.</p>
+
+<p>If you’d like to do so, too, simply install it and run:</p>
+
+<figure class="highlight"><pre><code class="language-shell" data-lang="shell">fava main.beancount</code></pre></figure>
+:ET
