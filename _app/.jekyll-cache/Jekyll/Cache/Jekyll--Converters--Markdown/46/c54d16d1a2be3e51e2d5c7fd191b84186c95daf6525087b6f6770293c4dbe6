@@ -1,0 +1,16 @@
+I";<p>When I started getting into computers in 2010, GitHub was not yet owned by Microsoft,
+and had several contenders:
+self-hosted gits, SourceForge, SVN and especially Gitorious.
+I remember really liking Gitorious.</p>
+
+<p>Well, that was over ten years ago, and now git and GitHub reign supreme.
+GitLab is the notable exception.</p>
+
+<p>I was very excited to learn that an alternative to GitHub is forming on my continent - Europe!
+It’s called <a href="https://codeberg.org">Codeberg</a>.
+I found it via <a href="https://ruky.me/2022/10/17/codeberg-a-github-alternative-from-europe/">this blog post</a>,
+and immediately created an <a href="https://codeberg.org/flxw">account</a>.</p>
+
+<p>In the wake of how GitHub handled OSS licenses with Copilot,
+I will start exploring the platform in the next weeks and blog about it.</p>
+:ET
