@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>Felix Wolff</title>
   <subtitle>Super-fast Jekyll framework</subtitle>
-  <updated>2022-10-25T12:32:24+02:00</updated>
+  <updated>2022-10-25T21:46:58+02:00</updated>
   <id>https://flxw.de/</id>
   <generator uri="https://sparanoid.com/lab/amsf/" version="2.0.22">Almace Scaffolding</generator>
 
@@ -21,13 +21,64 @@
       
 
       <entry>
-        <title>Oneliner: Merge kubectl configs</title>
-        <id>https://flxw.de/merge-kube-configurations.html</id>
-        <link rel="alternate" type="text/html" href="https://flxw.de/merge-kube-configurations.html" />
+        <title>Codeberg</title>
+        <id>https://flxw.de/codeberg-a-github-alternative-from-europe.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/codeberg-a-github-alternative-from-europe.html" />
         <published>2022-10-25T00:00:00+02:00</published>
 
         
-          <updated>2022-10-25T11:57:20+02:00</updated>
+          <updated>2022-10-25T21:46:33+02:00</updated>
+        
+
+        <author>
+          <name>Felix Wolff</name>
+          <uri>https://flxw.de/</uri>
+          <email>wolff.felix@proton.me</email>
+        </author>
+
+        <content type="html" xml:base="https://flxw.de/">
+          
+            &lt;p&gt;When I started getting into computers in 2010, GitHub was not yet owned by Microsoft,
+and had several contenders:
+self-hosted gits, SourceForge, SVN and especially Gitorious.
+I remember really liking Gitorious.&lt;/p&gt;
+
+&lt;p&gt;Well, that was over ten years ago, and now git and GitHub reign supreme.
+GitLab is the notable exception.&lt;/p&gt;
+
+&lt;p&gt;I was very excited to learn that an alternative to GitHub is forming on my continent - Europe!
+It’s called &lt;a href=&quot;https://codeberg.org&quot;&gt;Codeberg&lt;/a&gt;.
+I found it via &lt;a href=&quot;https://ruky.me/2022/10/17/codeberg-a-github-alternative-from-europe/&quot;&gt;this blog post&lt;/a&gt;,
+and immediately created an &lt;a href=&quot;https://codeberg.org/flxw&quot;&gt;account&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;In the wake of how GitHub handled OSS licenses with Copilot,
+I will start exploring the platform in the next weeks and write about it.&lt;/p&gt;
+
+          
+          
+        
+      
+        </content>
+
+        
+          <summary>When I started getting into computers in 2010, GitHub was not yet owned by Microsoft,and had several contenders:self-hosted gits, SourceForge, SVN and especially Gitorious.I remember really liking Gitorious.</summary>
+        
+      </entry>
+    
+  
+    
+      
+
+      
+
+      <entry>
+        <title>Oneliner: Merge kubectl configs</title>
+        <id>https://flxw.de/merge-kube-configurations.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/merge-kube-configurations.html" />
+        <published>2022-10-14T00:00:00+02:00</published>
+
+        
+          <updated>2022-10-25T21:46:33+02:00</updated>
         
 
         <author>
@@ -238,14 +289,14 @@ It will process your input files line-by-line and create the appropriate account
 
 &lt;span class=&quot;n&quot;&gt;CONFIG&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;N26Importer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;'XXXXXXMYIBANXXXXXXXXX'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;'Assets:N26'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;language&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'de'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;file_encoding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'utf-8'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&apos;XXXXXXMYIBANXXXXXXXXX&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&apos;Assets:N26&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;language&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;de&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;file_encoding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;utf-8&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;CsvCamtImporter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;'XXXXXXMYIBAN2XXXXXXXX'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;'Assets:Sparkasse'&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&apos;XXXXXXMYIBAN2XXXXXXXX&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&apos;Assets:Sparkasse&apos;&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
@@ -623,7 +674,7 @@ bad documentation, and I want to note down my approach here for getting it to wo
 &lt;p&gt;The following is for Analysis for Excel versions &lt;strong&gt;2.0 and greater&lt;/strong&gt; (&lt;a href=&quot;http://scn.sap.com/docs/DOC-63785&quot;&gt;why&lt;/a&gt;)&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;Make sure Analysis for Excel is up to date. An obvious step but you don't want any version conflicts after having it set up.&lt;/li&gt;
+&lt;li&gt;Make sure Analysis for Excel is up to date. An obvious step but you don&apos;t want any version conflicts after having it set up.&lt;/li&gt;
 &lt;li&gt;Install the &lt;em&gt;HANA Client for Excel&lt;/em&gt; from &lt;a href=&quot;https://support.sap.com/software/installations.html&quot;&gt;here&lt;/a&gt; (Click &lt;em&gt;Search for Software&lt;/em&gt;)&lt;/li&gt;
 &lt;li&gt;Grant your database user the required privileges for accessing HANA via Excel through HTTP (&lt;a href=&quot;http://scn.sap.com/community/businessobjects-analysis-ms-office/blog&quot;&gt;why&lt;/a&gt;)
 
@@ -871,7 +922,7 @@ server {
         <published>2014-05-27T00:00:00+02:00</published>
 
         
-          <updated>2022-10-25T11:57:20+02:00</updated>
+          <updated>2022-10-25T12:32:35+02:00</updated>
         
 
         <author>

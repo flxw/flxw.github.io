@@ -4,12 +4,36 @@
   
     
     {
+      "title": "Codeberg",
+      "permalink": "https://flxw.de/codeberg-a-github-alternative-from-europe.html",
+      "link": "https://flxw.de/codeberg-a-github-alternative-from-europe.html",
+      "date": "2022-10-25T00:00:00+02:00",
+      
+        "modified": "2022-10-25T21:46:33+02:00",
+      
+      "author": {
+        "name": "Felix Wolff",
+        "url": "https://flxw.de/",
+        "email": "wolff.felix@proton.me"
+      },
+      "content": "<p>When I started getting into computers in 2010, GitHub was not yet owned by Microsoft,\nand had several contenders:\nself-hosted gits, SourceForge, SVN and especially Gitorious.\nI remember really liking Gitorious.</p>\n\n<p>Well, that was over ten years ago, and now git and GitHub reign supreme.\nGitLab is the notable exception.</p>\n\n<p>I was very excited to learn that an alternative to GitHub is forming on my continent - Europe!\nIt’s called <a href=\"https://codeberg.org\">Codeberg</a>.\nI found it via <a href=\"https://ruky.me/2022/10/17/codeberg-a-github-alternative-from-europe/\">this blog post</a>,\nand immediately created an <a href=\"https://codeberg.org/flxw\">account</a>.</p>\n\n<p>In the wake of how GitHub handled OSS licenses with Copilot,\nI will start exploring the platform in the next weeks and write about it.</p>",
+      "excerpt": "When I started getting into computers in 2010, GitHub was not yet owned by Microsoft,\nand had several contenders:\nself-hosted gits, SourceForge, SVN and especially Gitorious.\nI remember really liking Gitorious.",
+      "languages": null,
+      "categories": ["blog"],
+      "tags": []
+    }
+    
+  
+
+  
+    ,
+    {
       "title": "Oneliner: Merge kubectl configs",
       "permalink": "https://flxw.de/merge-kube-configurations.html",
       "link": "https://flxw.de/merge-kube-configurations.html",
-      "date": "2022-10-25T00:00:00+02:00",
+      "date": "2022-10-14T00:00:00+02:00",
       
-        "modified": "2022-10-25T11:57:20+02:00",
+        "modified": "2022-10-25T21:46:33+02:00",
       
       "author": {
         "name": "Felix Wolff",
@@ -225,7 +249,7 @@
       "link": "https://flxw.de/install-windows-7+-from-usb.html",
       "date": "2014-05-27T00:00:00+02:00",
       
-        "modified": "2022-10-25T11:57:20+02:00",
+        "modified": "2022-10-25T12:32:35+02:00",
       
       "author": {
         "name": "Felix Wolff",
