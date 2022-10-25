@@ -3,6 +3,7 @@ layout: post
 title: Booting Windows 7+ from USB
 description: A few lines to make a bootable Windows USB stick
 category: blog
+tags: oneliner
 ---
 Everytime I try to install Windows from a USB stick, I forget a simple step
 in making the stick bootable and another few minutes are wasted searching for the solution.

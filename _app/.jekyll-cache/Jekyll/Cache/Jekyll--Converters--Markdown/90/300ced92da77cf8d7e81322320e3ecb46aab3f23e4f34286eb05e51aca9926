@@ -1,0 +1,3 @@
+I"—<p>To test an application out in the wild I had to host it on my server.
+As it receives and processes email via SMTP, it needed access to port 25.</p>
+:ET

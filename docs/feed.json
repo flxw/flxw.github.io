@@ -4,6 +4,30 @@
   
     
     {
+      "title": "Oneliner: Merge kubectl configs",
+      "permalink": "https://flxw.de/merge-kube-configurations.html",
+      "link": "https://flxw.de/merge-kube-configurations.html",
+      "date": "2022-10-25T00:00:00+02:00",
+      
+        "modified": "2022-10-25T11:57:20+02:00",
+      
+      "author": {
+        "name": "Felix Wolff",
+        "url": "https://flxw.de/",
+        "email": "wolff.felix@proton.me"
+      },
+      "content": "<p>Todays oneliner is for merging two kubectl configuration files into one.\nThis can be useful when creating new clusters and exchanging small config files with your colleagues:</p>\n\n<div class=\"language-bash highlighter-rouge\"><div class=\"highlight\"><pre class=\"highlight\"><code><span class=\"nb\">export </span><span class=\"nv\">KUBECONFIG</span><span class=\"o\">=</span>~/.kube/config.old:~/cluster\n<span class=\"nb\">mv</span> ~/.kube/config ~/.kube/config.old\nkubectl config view <span class=\"nt\">--flatten</span> <span class=\"o\">&gt;</span> ~/.kube/config\n</code></pre></div></div>\n\n<p>Note the colon that seperates the filepaths in <code class=\"language-plaintext highlighter-rouge\">KUBECONFIG</code> - you can pass in more than one file.</p>",
+      "excerpt": "Todays oneliner is for merging two kubectl configuration files into one.\nThis can be useful when creating new clusters and exchanging small config files with your colleagues:",
+      "languages": null,
+      "categories": ["blog"],
+      "tags": ["oneliner"]
+    }
+    
+  
+
+  
+    ,
+    {
       "title": "What the patch?!",
       "permalink": "https://flxw.de/what-the-patch.html",
       "link": "https://flxw.de/what-the-patch.html",
@@ -201,7 +225,7 @@
       "link": "https://flxw.de/install-windows-7+-from-usb.html",
       "date": "2014-05-27T00:00:00+02:00",
       
-        "modified": "2022-10-22T15:52:11+02:00",
+        "modified": "2022-10-25T11:57:20+02:00",
       
       "author": {
         "name": "Felix Wolff",
@@ -212,7 +236,7 @@
       "excerpt": "Everytime I try to install Windows from a USB stick, I forget a simple step\nin making the stick bootable and another few minutes are wasted searching for the solution.\nThis is just a short note on how to get your USB-Stick set up for installing Windows from it.",
       "languages": null,
       "categories": ["blog"],
-      "tags": []
+      "tags": ["oneliner"]
     }
     
   

@@ -1,0 +1,56 @@
+I"<p>At work I deal with Kubernetes and kustomize on a daily basis.
+Today I have pulled my hair about how I could patch a value in a job that was included in the base kustomization.
+I knew that there were several ways to do it, and I realized that I could not tell the difference between <code class="language-plaintext highlighter-rouge">patches</code>, <code class="language-plaintext highlighter-rouge">patchesJson6902</code> and <code class="language-plaintext highlighter-rouge">patchesStrategicMerge</code>.</p>
+
+<p>It turns out that the three directives can be regarded as variations of the same patching mechanism.
+They differ in terms of customizability, and hence the number of things you can do (and break) with them.
+To me, the hierarchy feels as follows, starting with the least versatile and powerful directive:</p>
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">patchesStrategicMerge</code></li>
+  <li><code class="language-plaintext highlighter-rouge">patchesJson6902</code></li>
+  <li><code class="language-plaintext highlighter-rouge">patches</code></li>
+</ol>
+
+<hr />
+
+<p>Why is <code class="language-plaintext highlighter-rouge">patchesStrategicMerge</code> the least powerful and versatile?
+Because it’s simple! Try to use it, the reviewers will be thankful.</p>
+
+<p>Check the <a href="https://github.com/kubernetes-sigs/cli-experimental/blob/e8661e62fbff9bb41703e663c5d6f9730f121a16/site/content/en/references/kustomize/kustomization/patchesStrategicMerge/_index.md">documentation here</a>.
+It tells us that <em>each patch should be either a relative file path or an inline content resolving to a partial or complete resource definition</em>. 
+That means these patches do what we are used to from git, for example. 
+They patch a single thing, so are ideal for correcting environment variables, names, paths, and the likes.</p>
+
+<hr />
+
+<p>It turns out that the <code class="language-plaintext highlighter-rouge">patchJson6902</code> directive is an older keyword, that must also target a specific resource,
+but can deliver more complex operations on the patch target.
+These operations are specified in the JSON6902 format, hence the name.
+The actual patch is delivered via JSON (but can also be YAML), for instance like below.
+More examples can be found in the <a href="https://github.com/kubernetes-sigs/cli-experimental/blob/e8661e62fbff9bb41703e663c5d6f9730f121a16/site/content/en/references/kustomize/kustomization/patchesjson6902/_index.md">documentation</a>.</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"op"</span><span class="p">:</span><span class="w"> </span><span class="s2">"remove"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/spec/template/spec/containers/0/env/0/valueFrom"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"op"</span><span class="p">:</span><span class="w"> </span><span class="s2">"add"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/spec/template/spec/containers/0/env/0/value"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SOMEVALUE"</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span></code></pre></figure>
+
+<p>Finally, the <code class="language-plaintext highlighter-rouge">patches</code> directive is the new shiny swiss army knife.
+It needs a target, too, but the target can be a <em>regex</em>.
+The patch instructions are delivered in the JSON6902 format introduced above.
+In short, this directive allows you to patch multiple targets using complex operations all in a single directive.
+Truly powerful, and truly tricky to review.
+You can find the <a href="https://github.com/kubernetes-sigs/cli-experimental/blob/e8661e62fbff9bb41703e663c5d6f9730f121a16/site/content/en/references/kustomize/kustomization/patches/_index.md">whole documention for this directive here</a>.</p>
+
+<h3 id="sources">Sources</h3>
+<ul>
+  <li>https://github.com/kubernetes-sigs/kustomize/issues/2705</li>
+  <li>https://stackoverflow.com/questions/63604579/what-is-the-difference-between-patches-vs-patchesjson6902-in-kustomize</li>
+</ul>
+:ET

@@ -1,0 +1,19 @@
+I"D<p>Everytime I try to install Windows from a USB stick, I forget a simple step
+in making the stick bootable and another few minutes are wasted searching for the solution.
+This is just a short note on how to get your USB-Stick set up for installing Windows from it.</p>
+
+<p>Read these few lines to save yourself some time:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fdisk /dev/sdb
+<span class="c"># create a single new partition taking all the space on the stick</span>
+<span class="c"># make it of type 7 (Windows/NTFS) and set its bootable flag</span>
+mkfs.ntfs <span class="nt">-f</span> /dev/sdb1
+ms-sys <span class="nt">-7</span> /dev/sdb
+<span class="nb">mkdir</span> /tmp/winiso
+mount <span class="nt">-o</span> loop winimage.iso /tmp/winiso
+mount /dev/sdb1 /mnt/usb1
+<span class="nb">cp</span> <span class="nt">-rav</span> /tmp/winiso/<span class="k">*</span> /mnt/usb1
+</code></pre></div></div>
+
+<p>In case you do not have <em>ms-sys</em> installed, you can get it from <a href="http://ms-sys.sourceforge.net/">here</a>.</p>
+:ET

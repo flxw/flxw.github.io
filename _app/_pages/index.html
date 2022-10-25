@@ -37,5 +37,10 @@ thumb_force_logo: true
     {% for post in site.tags.sscs %}
       {%- include themes/{{ site.amsf_theme }}/includes/page-item.html -%}
     {% endfor %}
+
+    <h2>Oneliner solutions</h2>
+    {% for post in site.tags.oneliner %}
+      {%- include themes/{{ site.amsf_theme }}/includes/page-item.html -%}
+    {% endfor %}
   </div>
 </article>
