@@ -15,8 +15,8 @@ Here is a short version of my CV, peppered with keywords on technologies I used 
 
 ----
 
-**04/2022 - now** - Senior Security Engineer @ [Celonis SE](https://celonis.com)\\
-*Veracode, Asset Inventory, Python, AWS*
+**04/2022 - today - Senior Security Engineer @ [Celonis SE](https://celonis.com)**\\
+*Veracode, Asset Inventory, Python, AWS, GCP, Sigstore, Rapid-Risk-Assessment, Shift-left, SDLC optimization*
 
 **08/2020 - 04/2022 - Software Engineer @ [Celonis SE](https://celonis.com)**\\
 *Java, Python, Rust, Spring Boot, Microservices, Kubernetes, Docker, Apereo CAS, Angular, Typescript, ArgoCD, SSO, OIDC, SAML*
