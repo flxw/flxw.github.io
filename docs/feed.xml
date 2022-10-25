@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>Felix Wolff</title>
   <subtitle>Super-fast Jekyll framework</subtitle>
-  <updated>2022-10-22T15:51:59+02:00</updated>
+  <updated>2022-10-25T09:43:28+02:00</updated>
   <id>https://flxw.de/</id>
   <generator uri="https://sparanoid.com/lab/amsf/" version="2.0.22">Almace Scaffolding</generator>
 
@@ -27,7 +27,7 @@
         <published>2021-06-16T00:00:00+02:00</published>
 
         
-          <updated>2022-10-22T15:05:10+02:00</updated>
+          <updated>2022-10-22T15:52:11+02:00</updated>
         
 
         <author>
@@ -118,7 +118,7 @@ You can find the &lt;a href=&quot;https://github.com/kubernetes-sigs/cli-experim
         <published>2021-02-28T00:00:00+01:00</published>
 
         
-          <updated>2022-10-22T15:05:10+02:00</updated>
+          <updated>2022-10-22T15:52:11+02:00</updated>
         
 
         <author>
@@ -250,7 +250,7 @@ It’s a great visualization frontend for beancount ledgers. After adding a mont
         <published>2020-12-26T00:00:00+01:00</published>
 
         
-          <updated>2022-10-22T15:05:10+02:00</updated>
+          <updated>2022-10-25T09:43:01+02:00</updated>
         
 
         <author>
@@ -283,7 +283,7 @@ If not or you need a refresher, just google &lt;em&gt;Cashflow Quadrant&lt;/em&g
 &lt;h1 id=&quot;what-a-cashflow-system-could-look-like&quot;&gt;What a cashflow system could look like&lt;/h1&gt;
 &lt;p&gt;What I described in general terms above looks like this for me:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/cashflow-system.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/cashflow-system.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The income goes to an account that I refer to as &lt;em&gt;reserve account&lt;/em&gt;.
 It always holds 2-3 salaries that should only be touched as a last resort, e.g. when I lose my job or something serious happens.
@@ -560,7 +560,7 @@ a higher purpose.&lt;/p&gt;
         <published>2015-09-25T00:00:00+02:00</published>
 
         
-          <updated>2022-10-22T15:05:10+02:00</updated>
+          <updated>2022-10-22T15:52:11+02:00</updated>
         
 
         <author>
@@ -621,7 +621,7 @@ bad documentation, and I want to note down my approach here for getting it to wo
         <published>2015-09-11T00:00:00+02:00</published>
 
         
-          <updated>2022-10-22T15:05:10+02:00</updated>
+          <updated>2022-10-25T09:43:01+02:00</updated>
         
 
         <author>
@@ -644,7 +644,7 @@ visualizing the collected data.&lt;/p&gt;
 &lt;p&gt;Just take a look at the gorgeous graph web-based Google Fit draws for
 my step data (as of September 2015):&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/wearables-walk-stat.png&quot; alt=&quot;Google Fit walking statistics&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/wearables-walk-stat.png&quot; alt=&quot;Google Fit walking statistics&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The data displayed is very clear. It displays how many steps I have made
 each day within a week.
@@ -675,7 +675,7 @@ but that analytics should give actionable advice, if it can be given. This way, 
 for information overload is reduced and the matter is only brought to our attention if
 it is demanding. One possibility might be via simple Google Now Card:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/assets/wearables-google-now-advice.png&quot; alt=&quot;Google Now Card sleep advice&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/img/wearables-google-now-advice.png&quot; alt=&quot;Google Now Card sleep advice&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;There is already an app that does something in that direction. &lt;a href=&quot;https://play.google.com/store/apps/details?id=com.urbandroid.sleep&quot;&gt;Sleep as Android&lt;/a&gt; gives recommendations on how to catch up on sleep deficit, although
 these tips are standardized and not tailored to ones demands.&lt;/p&gt;
@@ -826,7 +826,7 @@ server {
         <published>2014-05-27T00:00:00+02:00</published>
 
         
-          <updated>2022-10-22T15:05:10+02:00</updated>
+          <updated>2022-10-22T15:52:11+02:00</updated>
         
 
         <author>
