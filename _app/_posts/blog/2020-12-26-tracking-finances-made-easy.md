@@ -26,7 +26,7 @@ If not or you need a refresher, just google *Cashflow Quadrant*.
 # What a cashflow system could look like
 What I described in general terms above looks like this for me:
 
-![](/assets/cashflow-system.jpg)
+![](/assets/img/cashflow-system.jpg)
 
 The income goes to an account that I refer to as *reserve account*.
 It always holds 2-3 salaries that should only be touched as a last resort, e.g. when I lose my job or something serious happens.
