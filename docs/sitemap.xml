@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://flxw.de/</loc>
-    <lastmod>2022-10-22</lastmod>
+    <lastmod>2022-10-25</lastmod>
   </url>
 
   
@@ -16,9 +16,18 @@
   
     
       <url>
+        <loc>https://flxw.de/blog/</loc>
+        
+          <lastmod>2022-10-25</lastmod>
+        
+      </url>
+    
+  
+    
+      <url>
         <loc>https://flxw.de/cv/</loc>
         
-          <lastmod>2022-10-22</lastmod>
+          <lastmod>2022-10-25</lastmod>
         
       </url>
     
@@ -38,16 +47,7 @@
       <url>
         <loc>https://flxw.de/</loc>
         
-          <lastmod>2022-10-22</lastmod>
-        
-      </url>
-    
-  
-    
-      <url>
-        <loc>https://flxw.de/blog/</loc>
-        
-          <lastmod>2022-10-22</lastmod>
+          <lastmod>2022-10-25</lastmod>
         
       </url>
     
@@ -76,7 +76,7 @@
       <url>
         <loc>https://flxw.de/tracking-finances-made-easy.html</loc>
         
-          <lastmod>2022-10-22</lastmod>
+          <lastmod>2022-10-25</lastmod>
         
       </url>
     
@@ -112,7 +112,7 @@
       <url>
         <loc>https://flxw.de/my-vision-on-wearables.html</loc>
         
-          <lastmod>2022-10-22</lastmod>
+          <lastmod>2022-10-25</lastmod>
         
       </url>
     
