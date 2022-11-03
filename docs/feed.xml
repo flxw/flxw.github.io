@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>Felix Wolff</title>
   <subtitle>Super-fast Jekyll framework</subtitle>
-  <updated>2022-10-25T21:46:58+02:00</updated>
+  <updated>2022-11-03T10:08:13+01:00</updated>
   <id>https://flxw.de/</id>
   <generator uri="https://sparanoid.com/lab/amsf/" version="2.0.22">Almace Scaffolding</generator>
 
@@ -21,13 +21,57 @@
       
 
       <entry>
+        <title>No silver bullet: Cloud computing</title>
+        <id>https://flxw.de/cloud-computing-isnt-the-silver-bullet.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/cloud-computing-isnt-the-silver-bullet.html" />
+        <published>2022-11-03T00:00:00+01:00</published>
+
+        
+          <updated>2022-11-03T09:58:47+01:00</updated>
+        
+
+        <author>
+          <name>Felix Wolff</name>
+          <uri>https://flxw.de/</uri>
+          <email>wolff.felix@proton.me</email>
+        </author>
+
+        <content type="html" xml:base="https://flxw.de/">
+          
+            &lt;p&gt;As companies re-evaluate their supply chains, they tend to turn a blind eye
+on partially massive vendor lock-ins with their cloud providers.
+Here’s a great post from a company that had their product in the cloud,
+and is moving it back into their own data center now:&lt;/p&gt;
+
+&lt;p&gt;[https://world.hey.com/dhh/why-we-re-leaving-the-cloud-654b47e0]&lt;/p&gt;
+
+&lt;p&gt;I award bonus points for thinking about power distribution on the Internet :)&lt;/p&gt;
+
+          
+          
+        
+      
+        </content>
+
+        
+          <summary>As companies re-evaluate their supply chains, they tend to turn a blind eyeon partially massive vendor lock-ins with their cloud providers.Here’s a great post from a company that had their product in the cloud,and is moving it back into their own data center now:</summary>
+        
+      </entry>
+    
+  
+    
+      
+
+      
+
+      <entry>
         <title>Codeberg</title>
         <id>https://flxw.de/codeberg-a-github-alternative-from-europe.html</id>
         <link rel="alternate" type="text/html" href="https://flxw.de/codeberg-a-github-alternative-from-europe.html" />
         <published>2022-10-25T00:00:00+02:00</published>
 
         
-          <updated>2022-10-25T21:46:33+02:00</updated>
+          <updated>2022-10-25T21:47:03+02:00</updated>
         
 
         <author>
@@ -78,7 +122,7 @@ I will start exploring the platform in the next weeks and write about it.&lt;/p&
         <published>2022-10-14T00:00:00+02:00</published>
 
         
-          <updated>2022-10-25T21:46:33+02:00</updated>
+          <updated>2022-10-25T21:47:03+02:00</updated>
         
 
         <author>
