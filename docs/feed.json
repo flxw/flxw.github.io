@@ -4,12 +4,36 @@
   
     
     {
+      "title": "No silver bullet: Cloud computing",
+      "permalink": "https://flxw.de/cloud-computing-isnt-the-silver-bullet.html",
+      "link": "https://flxw.de/cloud-computing-isnt-the-silver-bullet.html",
+      "date": "2022-11-03T00:00:00+01:00",
+      
+        "modified": "2022-11-03T09:58:47+01:00",
+      
+      "author": {
+        "name": "Felix Wolff",
+        "url": "https://flxw.de/",
+        "email": "wolff.felix@proton.me"
+      },
+      "content": "<p>As companies re-evaluate their supply chains, they tend to turn a blind eye\non partially massive vendor lock-ins with their cloud providers.\nHere’s a great post from a company that had their product in the cloud,\nand is moving it back into their own data center now:</p>\n\n<p>[https://world.hey.com/dhh/why-we-re-leaving-the-cloud-654b47e0]</p>\n\n<p>I award bonus points for thinking about power distribution on the Internet :)</p>",
+      "excerpt": "As companies re-evaluate their supply chains, they tend to turn a blind eye\non partially massive vendor lock-ins with their cloud providers.\nHere’s a great post from a company that had their product in the cloud,\nand is moving it back into their own data center now:",
+      "languages": null,
+      "categories": ["blog"],
+      "tags": []
+    }
+    
+  
+
+  
+    ,
+    {
       "title": "Codeberg",
       "permalink": "https://flxw.de/codeberg-a-github-alternative-from-europe.html",
       "link": "https://flxw.de/codeberg-a-github-alternative-from-europe.html",
       "date": "2022-10-25T00:00:00+02:00",
       
-        "modified": "2022-10-25T21:46:33+02:00",
+        "modified": "2022-10-25T21:47:03+02:00",
       
       "author": {
         "name": "Felix Wolff",
@@ -33,7 +57,7 @@
       "link": "https://flxw.de/merge-kube-configurations.html",
       "date": "2022-10-14T00:00:00+02:00",
       
-        "modified": "2022-10-25T21:46:33+02:00",
+        "modified": "2022-10-25T21:47:03+02:00",
       
       "author": {
         "name": "Felix Wolff",
