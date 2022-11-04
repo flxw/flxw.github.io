@@ -4,12 +4,36 @@
   
     
     {
+      "title": "Oneliner: External secret decoding",
+      "permalink": "https://flxw.de/external-secret-encoding.html",
+      "link": "https://flxw.de/external-secret-encoding.html",
+      "date": "2022-11-04T00:00:00+01:00",
+      
+        "modified": "2022-11-04T17:34:31+01:00",
+      
+      "author": {
+        "name": "Felix Wolff",
+        "url": "https://flxw.de/",
+        "email": "wolff.felix@proton.me"
+      },
+      "content": "<p>If you use <code class=\"language-plaintext highlighter-rouge\">external-secrets</code> to sync secrets from some a key management\nsystem like AWS KMS or Vault into your cluster,\nyou have become familiar with the <code class=\"language-plaintext highlighter-rouge\">ExternalSecret</code> object introduced by it.</p>\n\n<p>In case you want to sync a secret that has multiple lines,\nyou need to encode the secret <em>inside</em> your KMS,\nand decode it inside the <code class=\"language-plaintext highlighter-rouge\">ExternalSecret</code> using a <code class=\"language-plaintext highlighter-rouge\">decodingStrategy</code>.\nThe values will be base64-encoded again by k8s when the <code class=\"language-plaintext highlighter-rouge\">Secret</code> gets created.</p>\n\n<p>An example would as follows (taken from <a href=\"https://external-secrets.io/v0.6.1/guides/decoding-strategy/\">here</a>):</p>\n<div class=\"language-plaintext highlighter-rouge\"><div class=\"highlight\"><pre class=\"highlight\"><code>KMS secret value: aGFwcHkgc3RyZWV0\nExternalSecret decodes it: happy street\nk8s Secret data: aGFwcHkgc3RyZWV0\nApplication reads: happy street\n</code></pre></div></div>\n\n<p>Please see the following object definition for a complete definition:</p>\n<div class=\"language-yaml highlighter-rouge\"><div class=\"highlight\"><pre class=\"highlight\"><code><span class=\"na\">apiVersion</span><span class=\"pi\">:</span> <span class=\"s\">external-secrets.io/v1beta1</span>\n<span class=\"na\">kind</span><span class=\"pi\">:</span> <span class=\"s\">ExternalSecret</span>\n<span class=\"na\">metadata</span><span class=\"pi\">:</span>\n  <span class=\"na\">name</span><span class=\"pi\">:</span> <span class=\"s\">your-access-credentials</span>\n<span class=\"na\">spec</span><span class=\"pi\">:</span>\n  <span class=\"na\">refreshInterval</span><span class=\"pi\">:</span> <span class=\"s\">1m</span>\n  <span class=\"na\">secretStoreRef</span><span class=\"pi\">:</span>\n    <span class=\"na\">name</span><span class=\"pi\">:</span> <span class=\"s\">cluster-secrets-store</span>\n    <span class=\"na\">kind</span><span class=\"pi\">:</span> <span class=\"s\">ClusterSecretStore</span>\n  <span class=\"na\">target</span><span class=\"pi\">:</span>\n    <span class=\"na\">name</span><span class=\"pi\">:</span> <span class=\"s\">your-access-credentials</span>\n  <span class=\"na\">dataFrom</span><span class=\"pi\">:</span>\n  <span class=\"pi\">-</span> <span class=\"na\">extract</span><span class=\"pi\">:</span>\n      <span class=\"na\">key</span><span class=\"pi\">:</span> <span class=\"s\">svc/app/secret</span>\n      <span class=\"na\">decodingStrategy</span><span class=\"pi\">:</span> <span class=\"s\">Base64</span>\n</code></pre></div></div>\n\n<p>Note the colon that seperates the filepaths in <code class=\"language-plaintext highlighter-rouge\">KUBECONFIG</code> - you can pass in more than one file.</p>",
+      "excerpt": "If you use external-secrets to sync secrets from some a key management\nsystem like AWS KMS or Vault into your cluster,\nyou have become familiar with the ExternalSecret object introduced by it.",
+      "languages": null,
+      "categories": ["blog"],
+      "tags": ["oneliner"]
+    }
+    
+  
+
+  
+    ,
+    {
       "title": "No silver bullet: Cloud computing",
       "permalink": "https://flxw.de/cloud-computing-isnt-the-silver-bullet.html",
       "link": "https://flxw.de/cloud-computing-isnt-the-silver-bullet.html",
       "date": "2022-11-03T00:00:00+01:00",
       
-        "modified": "2022-11-03T09:58:47+01:00",
+        "modified": "2022-11-03T10:08:22+01:00",
       
       "author": {
         "name": "Felix Wolff",
@@ -64,8 +88,8 @@
         "url": "https://flxw.de/",
         "email": "wolff.felix@proton.me"
       },
-      "content": "<p>Todays oneliner is for merging two kubectl configuration files into one.\nThis can be useful when creating new clusters and exchanging small config files with your colleagues:</p>\n\n<div class=\"language-bash highlighter-rouge\"><div class=\"highlight\"><pre class=\"highlight\"><code><span class=\"nb\">export </span><span class=\"nv\">KUBECONFIG</span><span class=\"o\">=</span>~/.kube/config.old:~/cluster\n<span class=\"nb\">mv</span> ~/.kube/config ~/.kube/config.old\nkubectl config view <span class=\"nt\">--flatten</span> <span class=\"o\">&gt;</span> ~/.kube/config\n</code></pre></div></div>\n\n<p>Note the colon that seperates the filepaths in <code class=\"language-plaintext highlighter-rouge\">KUBECONFIG</code> - you can pass in more than one file.</p>",
-      "excerpt": "Todays oneliner is for merging two kubectl configuration files into one.\nThis can be useful when creating new clusters and exchanging small config files with your colleagues:",
+      "content": "<p>Today’s oneliner is for merging two kubectl configuration files into one.\nThis can be useful when creating new clusters and exchanging small config files with your colleagues:</p>\n\n<div class=\"language-bash highlighter-rouge\"><div class=\"highlight\"><pre class=\"highlight\"><code><span class=\"nb\">export </span><span class=\"nv\">KUBECONFIG</span><span class=\"o\">=</span>~/.kube/config.old:~/cluster\n<span class=\"nb\">mv</span> ~/.kube/config ~/.kube/config.old\nkubectl config view <span class=\"nt\">--flatten</span> <span class=\"o\">&gt;</span> ~/.kube/config\n</code></pre></div></div>\n\n<p>Note the colon that seperates the filepaths in <code class=\"language-plaintext highlighter-rouge\">KUBECONFIG</code> - you can pass in more than one file.</p>",
+      "excerpt": "Today’s oneliner is for merging two kubectl configuration files into one.\nThis can be useful when creating new clusters and exchanging small config files with your colleagues:",
       "languages": null,
       "categories": ["blog"],
       "tags": ["oneliner"]

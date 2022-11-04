@@ -1,0 +1,10 @@
+I"ë<p>Todayâ€™s oneliner is for merging two kubectl configuration files into one.
+This can be useful when creating new clusters and exchanging small config files with your colleagues:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">export </span><span class="nv">KUBECONFIG</span><span class="o">=</span>~/.kube/config.old:~/cluster
+<span class="nb">mv</span> ~/.kube/config ~/.kube/config.old
+kubectl config view <span class="nt">--flatten</span> <span class="o">&gt;</span> ~/.kube/config
+</code></pre></div></div>
+
+<p>Note the colon that seperates the filepaths in <code class="language-plaintext highlighter-rouge">KUBECONFIG</code> - you can pass in more than one file.</p>
+:ET
