@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>Felix Wolff</title>
   <subtitle>Super-fast Jekyll framework</subtitle>
-  <updated>2022-11-03T10:08:13+01:00</updated>
+  <updated>2022-11-04T17:34:38+01:00</updated>
   <id>https://flxw.de/</id>
   <generator uri="https://sparanoid.com/lab/amsf/" version="2.0.22">Almace Scaffolding</generator>
 
@@ -21,13 +21,84 @@
       
 
       <entry>
+        <title>Oneliner: External secret decoding</title>
+        <id>https://flxw.de/external-secret-encoding.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/external-secret-encoding.html" />
+        <published>2022-11-04T00:00:00+01:00</published>
+
+        
+          <updated>2022-11-04T17:34:31+01:00</updated>
+        
+
+        <author>
+          <name>Felix Wolff</name>
+          <uri>https://flxw.de/</uri>
+          <email>wolff.felix@proton.me</email>
+        </author>
+
+        <content type="html" xml:base="https://flxw.de/">
+          
+            &lt;p&gt;If you use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;external-secrets&lt;/code&gt; to sync secrets from some a key management
+system like AWS KMS or Vault into your cluster,
+you have become familiar with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ExternalSecret&lt;/code&gt; object introduced by it.&lt;/p&gt;
+
+&lt;p&gt;In case you want to sync a secret that has multiple lines,
+you need to encode the secret &lt;em&gt;inside&lt;/em&gt; your KMS,
+and decode it inside the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ExternalSecret&lt;/code&gt; using a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;decodingStrategy&lt;/code&gt;.
+The values will be base64-encoded again by k8s when the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Secret&lt;/code&gt; gets created.&lt;/p&gt;
+
+&lt;p&gt;An example would as follows (taken from &lt;a href=&quot;https://external-secrets.io/v0.6.1/guides/decoding-strategy/&quot;&gt;here&lt;/a&gt;):&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;KMS secret value: aGFwcHkgc3RyZWV0
+ExternalSecret decodes it: happy street
+k8s Secret data: aGFwcHkgc3RyZWV0
+Application reads: happy street
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Please see the following object definition for a complete definition:&lt;/p&gt;
+&lt;div class=&quot;language-yaml highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;external-secrets.io/v1beta1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ExternalSecret&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;your-access-credentials&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;refreshInterval&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;1m&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;secretStoreRef&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;cluster-secrets-store&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ClusterSecretStore&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;target&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;your-access-credentials&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;dataFrom&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;extract&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;svc/app/secret&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;decodingStrategy&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Base64&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Note the colon that seperates the filepaths in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;KUBECONFIG&lt;/code&gt; - you can pass in more than one file.&lt;/p&gt;
+
+          
+          
+        
+      
+        </content>
+
+        
+          <summary>If you use external-secrets to sync secrets from some a key managementsystem like AWS KMS or Vault into your cluster,you have become familiar with the ExternalSecret object introduced by it.</summary>
+        
+      </entry>
+    
+  
+    
+      
+
+      
+
+      <entry>
         <title>No silver bullet: Cloud computing</title>
         <id>https://flxw.de/cloud-computing-isnt-the-silver-bullet.html</id>
         <link rel="alternate" type="text/html" href="https://flxw.de/cloud-computing-isnt-the-silver-bullet.html" />
         <published>2022-11-03T00:00:00+01:00</published>
 
         
-          <updated>2022-11-03T09:58:47+01:00</updated>
+          <updated>2022-11-03T10:08:22+01:00</updated>
         
 
         <author>
@@ -133,7 +204,7 @@ I will start exploring the platform in the next weeks and write about it.&lt;/p&
 
         <content type="html" xml:base="https://flxw.de/">
           
-            &lt;p&gt;Todays oneliner is for merging two kubectl configuration files into one.
+            &lt;p&gt;Today’s oneliner is for merging two kubectl configuration files into one.
 This can be useful when creating new clusters and exchanging small config files with your colleagues:&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;KUBECONFIG&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;~/.kube/config.old:~/cluster
@@ -150,7 +221,7 @@ kubectl config view &lt;span class=&quot;nt&quot;&gt;--flatten&lt;/span&gt; &lt;
         </content>
 
         
-          <summary>Todays oneliner is for merging two kubectl configuration files into one.This can be useful when creating new clusters and exchanging small config files with your colleagues:</summary>
+          <summary>Today’s oneliner is for merging two kubectl configuration files into one.This can be useful when creating new clusters and exchanging small config files with your colleagues:</summary>
         
       </entry>
     

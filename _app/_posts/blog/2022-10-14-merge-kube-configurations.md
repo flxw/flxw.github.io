@@ -5,7 +5,7 @@ desc: A oneliner for merging two kubectl configuration files
 category: blog
 tags: oneliner
 ---
-Todays oneliner is for merging two kubectl configuration files into one.
+Today's oneliner is for merging two kubectl configuration files into one.
 This can be useful when creating new clusters and exchanging small config files with your colleagues:
 
 ```bash
