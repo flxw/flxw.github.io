@@ -5,10 +5,10 @@ desc: Instructions for running a Sigstore deployment on your machine in k8s
 tags: sscs
 ---
 
-In this post, I describe steps how to stand up a Sigstore deployment on your Kubernetes cluster,
+In this post, I describe steps on how to stand up a Sigstore deployment on your Kubernetes cluster,
 adding detail and background information where I feel that it is needed.
 The post is aimed at the early adopter of the project who is roughly familiar with how Sigstore works internally.
-If you follow right through the end, you will have a working Sigstore deployment on your machine - 
+If you follow right through to the end, you will have a working Sigstore deployment on your machine - 
 usable in the same manner as you would a remote deployment.
 
 As usual, I stand on the shoulders of giants, as I have benefitted a lot from
@@ -18,14 +18,14 @@ As usual, I stand on the shoulders of giants, as I have benefitted a lot from
 I hope that this updated version of a setup guide helps with getting up to speed with Sigstore quickly.
 
 All you need to follow along is a working Docker installation on your machine, and Internet connectivity.
-Throughout the next steps I will sometimes refer to files that aren't printed out here.
+Throughout the next steps, I will sometimes refer to files that aren't printed out here.
 You can find them in this repository: [flxw/sigstore-local-setup](https://github.com/flxw/sigstore-local-setup).
 
 # Step 1: Set up KinD and Ingress
-Now, we set up our kubernetes cluster, using kind.
-I find it to be an awesome tool for quickly prototyping and testing cluster.
+Now, we set up our Kubernetes cluster, using kind.
+I find it to be an awesome tool for quickly prototyping and testing clusters.
 If you are unfamiliar with it, here's the description from their [website](https://kind.sigs.k8s.io/).
-Kind is a shorthand for *kubernetes in docker*:
+Kind is a shorthand for *Kubernetes in docker*:
 
 > kind is a tool for running local Kubernetes clusters using Docker container “nodes”.
 > kind was primarily designed for testing Kubernetes itself, but may be used for local development or CI.
@@ -54,14 +54,14 @@ helm upgrade \
     --values scaffold-values.yaml
 ```
 
-This `scaffold` chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog and trillian with an underlying MySQL database.
-Additionally, it generates all of the required signing keys as secrets, configmaps, services and ingresses.
+This `scaffold` chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog, and trillian with an underlying MySQL database.
+Additionally, it generates all of the required signing keys as secrets, configmaps, services, and ingresses.
 
 ## Step 2.1 Set up TUF
 **Attention: This step is a workaround for a bug in the scaffold chart. I'll remove it from the manual once it's fixed**
 
 You can understand TUF as the component that is involved in distributing information about the involved signing keys to the Sigstore clients.
-It's a key part of having a servicable deployment, in the event that the signing keys need to be changed.
+It's a key part of having a serviceable deployment if the signing keys need to be changed.
 For our crude example, we also need to copy over the keys from the other service namespaces.
 Without the secrets, the TUF deployment won't come up.
 
@@ -86,12 +86,12 @@ curl -k rekor.sigstore.local/api/v1/log/publicKey -o /tmp/key -v && \
 # Step 3: Certificate chain and domains
 To make Sigstore clients work with the cluster, you need to generate a chain of certificates with a self-signed root.
 You then need to add the root certificate to your OS's trust store.
-Alternatively, you can work with independent certificates, but I find it easer to add only one certificate to the trust store.
+Alternatively, you can work with independent certificates, but I find it easier to add only one certificate to the trust store.
 Finally, you need to add four entries to your `/etc/hosts` file.
 
 ```bash
 #!/bin/sh
-# create self-signed CA certificate (add ca.cert.pem to trust store and configure explicit trust)
+# create a self-signed CA certificate (add ca.cert.pem to trust store and configure explicit trust)
 openssl req -x509 -newkey rsa:4096 -keyout ca.private.pem -out ca.cert.pem -sha256 -days 365 -nodes
 
 for service_name in rekor fulcio tuf; do
@@ -141,11 +141,11 @@ kubectl -n tuf-system get secrets tuf-root -ojsonpath='{.data.root}' \
 cosign initialize --root root.json --mirror https://tuf.sigstore.local
 ```
 
-# Step 4: Test
+# Step 5: Test
 
 From now on, it's just testing and enjoying what you have built. :)
-In our test, we shall put a container into a locally runnning registry and sign it.
-Afterwards, we shall verify it.
+In our test, we shall put a container into a locally running registry and sign it.
+Afterward, we shall verify it.
 
 
 ```bash
@@ -196,12 +196,12 @@ cosign verify \
 
 Congratulations - you have now mastered the deployment of Sigstore on your machine!
 Running such a setup in production is a bit more complex,
-and we are currently hard at work at documenting the efforts involved.
+and we are currently hard at work documenting the efforts involved.
 If you're curious about what's next and how to help, read on in the next section.
 
 # Getting involved
 This is the shortest and fastest way to set up Sigstore I know - until now!
-The Sigstore project is just getting started, and there's tons of ways to [contribute](https://docs.sigstore.dev/contributing).
+The Sigstore project is just getting started, and there are tons of ways to [contribute](https://docs.sigstore.dev/contributing).
 You can meet me and many others in the Sigstore Slack channel `private-sigstore-users`, putting together a manual for operating a deployment for a longer duration.
 
-This is a living document, and I'll edit in the future to remove the TUF section, and add one for including DEX as an OIDC token forwarder.
+This is a living document, and I'll edit it in the future to remove the TUF section and add one for including DEX as an OIDC token forwarder.

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>Felix Wolff</title>
   <subtitle>Super-fast Jekyll framework</subtitle>
-  <updated>2022-11-11T15:38:26+01:00</updated>
+  <updated>2022-11-11T16:20:53+01:00</updated>
   <id>https://flxw.de/</id>
   <generator uri="https://sparanoid.com/lab/amsf/" version="2.0.22">Almace Scaffolding</generator>
 
@@ -27,7 +27,7 @@
         <published>2022-11-10T00:00:00+01:00</published>
 
         
-          <updated>2022-11-11T14:55:53+01:00</updated>
+          <updated>2022-11-11T16:07:59+01:00</updated>
         
 
         <author>
@@ -38,10 +38,10 @@
 
         <content type="html" xml:base="https://flxw.de/">
           
-            &lt;p&gt;In this post, I describe steps how to stand up a Sigstore deployment on your Kubernetes cluster,
+            &lt;p&gt;In this post, I describe steps on how to stand up a Sigstore deployment on your Kubernetes cluster,
 adding detail and background information where I feel that it is needed.
 The post is aimed at the early adopter of the project who is roughly familiar with how Sigstore works internally.
-If you follow right through the end, you will have a working Sigstore deployment on your machine - 
+If you follow right through to the end, you will have a working Sigstore deployment on your machine - 
 usable in the same manner as you would a remote deployment.&lt;/p&gt;
 
 &lt;p&gt;As usual, I stand on the shoulders of giants, as I have benefitted a lot from
@@ -51,14 +51,14 @@ usable in the same manner as you would a remote deployment.&lt;/p&gt;
 I hope that this updated version of a setup guide helps with getting up to speed with Sigstore quickly.&lt;/p&gt;
 
 &lt;p&gt;All you need to follow along is a working Docker installation on your machine, and Internet connectivity.
-Throughout the next steps I will sometimes refer to files that aren’t printed out here.
+Throughout the next steps, I will sometimes refer to files that aren’t printed out here.
 You can find them in this repository: &lt;a href=&quot;https://github.com/flxw/sigstore-local-setup&quot;&gt;flxw/sigstore-local-setup&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h1 id=&quot;step-1-set-up-kind-and-ingress&quot;&gt;Step 1: Set up KinD and Ingress&lt;/h1&gt;
-&lt;p&gt;Now, we set up our kubernetes cluster, using kind.
-I find it to be an awesome tool for quickly prototyping and testing cluster.
+&lt;p&gt;Now, we set up our Kubernetes cluster, using kind.
+I find it to be an awesome tool for quickly prototyping and testing clusters.
 If you are unfamiliar with it, here’s the description from their &lt;a href=&quot;https://kind.sigs.k8s.io/&quot;&gt;website&lt;/a&gt;.
-Kind is a shorthand for &lt;em&gt;kubernetes in docker&lt;/em&gt;:&lt;/p&gt;
+Kind is a shorthand for &lt;em&gt;Kubernetes in docker&lt;/em&gt;:&lt;/p&gt;
 
 &lt;blockquote&gt;
   &lt;p&gt;kind is a tool for running local Kubernetes clusters using Docker container “nodes”.
@@ -87,14 +87,14 @@ helm upgrade &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;--values&lt;/span&gt; scaffold-values.yaml
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;This &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scaffold&lt;/code&gt; chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog and trillian with an underlying MySQL database.
-Additionally, it generates all of the required signing keys as secrets, configmaps, services and ingresses.&lt;/p&gt;
+&lt;p&gt;This &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scaffold&lt;/code&gt; chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog, and trillian with an underlying MySQL database.
+Additionally, it generates all of the required signing keys as secrets, configmaps, services, and ingresses.&lt;/p&gt;
 
 &lt;h2 id=&quot;step-21-set-up-tuf&quot;&gt;Step 2.1 Set up TUF&lt;/h2&gt;
 &lt;p&gt;&lt;strong&gt;Attention: This step is a workaround for a bug in the scaffold chart. I’ll remove it from the manual once it’s fixed&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;You can understand TUF as the component that is involved in distributing information about the involved signing keys to the Sigstore clients.
-It’s a key part of having a servicable deployment, in the event that the signing keys need to be changed.
+It’s a key part of having a serviceable deployment if the signing keys need to be changed.
 For our crude example, we also need to copy over the keys from the other service namespaces.
 Without the secrets, the TUF deployment won’t come up.&lt;/p&gt;
 
@@ -118,11 +118,11 @@ curl &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; rekor.sigstore.local/api/v
 &lt;h1 id=&quot;step-3-certificate-chain-and-domains&quot;&gt;Step 3: Certificate chain and domains&lt;/h1&gt;
 &lt;p&gt;To make Sigstore clients work with the cluster, you need to generate a chain of certificates with a self-signed root.
 You then need to add the root certificate to your OS’s trust store.
-Alternatively, you can work with independent certificates, but I find it easer to add only one certificate to the trust store.
+Alternatively, you can work with independent certificates, but I find it easier to add only one certificate to the trust store.
 Finally, you need to add four entries to your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/etc/hosts&lt;/code&gt; file.&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# create self-signed CA certificate (add ca.cert.pem to trust store and configure explicit trust)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# create a self-signed CA certificate (add ca.cert.pem to trust store and configure explicit trust)&lt;/span&gt;
 openssl req &lt;span class=&quot;nt&quot;&gt;-x509&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-newkey&lt;/span&gt; rsa:4096 &lt;span class=&quot;nt&quot;&gt;-keyout&lt;/span&gt; ca.private.pem &lt;span class=&quot;nt&quot;&gt;-out&lt;/span&gt; ca.cert.pem &lt;span class=&quot;nt&quot;&gt;-sha256&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-days&lt;/span&gt; 365 &lt;span class=&quot;nt&quot;&gt;-nodes&lt;/span&gt;
 
 &lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;service_name &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;rekor fulcio tuf&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do
@@ -171,11 +171,11 @@ kubectl &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; tuf-system get secrets 
 cosign initialize &lt;span class=&quot;nt&quot;&gt;--root&lt;/span&gt; root.json &lt;span class=&quot;nt&quot;&gt;--mirror&lt;/span&gt; https://tuf.sigstore.local
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;step-4-test&quot;&gt;Step 4: Test&lt;/h1&gt;
+&lt;h1 id=&quot;step-5-test&quot;&gt;Step 5: Test&lt;/h1&gt;
 
 &lt;p&gt;From now on, it’s just testing and enjoying what you have built. :)
-In our test, we shall put a container into a locally runnning registry and sign it.
-Afterwards, we shall verify it.&lt;/p&gt;
+In our test, we shall put a container into a locally running registry and sign it.
+Afterward, we shall verify it.&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
 
@@ -224,15 +224,15 @@ cosign verify &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
 
 &lt;p&gt;Congratulations - you have now mastered the deployment of Sigstore on your machine!
 Running such a setup in production is a bit more complex,
-and we are currently hard at work at documenting the efforts involved.
+and we are currently hard at work documenting the efforts involved.
 If you’re curious about what’s next and how to help, read on in the next section.&lt;/p&gt;
 
 &lt;h1 id=&quot;getting-involved&quot;&gt;Getting involved&lt;/h1&gt;
 &lt;p&gt;This is the shortest and fastest way to set up Sigstore I know - until now!
-The Sigstore project is just getting started, and there’s tons of ways to &lt;a href=&quot;https://docs.sigstore.dev/contributing&quot;&gt;contribute&lt;/a&gt;.
+The Sigstore project is just getting started, and there are tons of ways to &lt;a href=&quot;https://docs.sigstore.dev/contributing&quot;&gt;contribute&lt;/a&gt;.
 You can meet me and many others in the Sigstore Slack channel &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;private-sigstore-users&lt;/code&gt;, putting together a manual for operating a deployment for a longer duration.&lt;/p&gt;
 
-&lt;p&gt;This is a living document, and I’ll edit in the future to remove the TUF section, and add one for including DEX as an OIDC token forwarder.&lt;/p&gt;
+&lt;p&gt;This is a living document, and I’ll edit it in the future to remove the TUF section and add one for including DEX as an OIDC token forwarder.&lt;/p&gt;
 
           
           
@@ -241,7 +241,7 @@ You can meet me and many others in the Sigstore Slack channel &lt;code class=&qu
         </content>
 
         
-          <summary>In this post, I describe steps how to stand up a Sigstore deployment on your Kubernetes cluster,adding detail and background information where I feel that it is needed.The post is aimed at the early adopter of the project who is roughly familiar with how Sigstore works internally.If you follow right through the end, you will have a working Sigstore deployment on your machine - usable in the same manner as you would a remote deployment.</summary>
+          <summary>In this post, I describe steps on how to stand up a Sigstore deployment on your Kubernetes cluster,adding detail and background information where I feel that it is needed.The post is aimed at the early adopter of the project who is roughly familiar with how Sigstore works internally.If you follow right through to the end, you will have a working Sigstore deployment on your machine - usable in the same manner as you would a remote deployment.</summary>
         
       </entry>
     
