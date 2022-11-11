@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>Felix Wolff</title>
   <subtitle>Super-fast Jekyll framework</subtitle>
-  <updated>2022-11-11T12:24:09+01:00</updated>
-  <id>http://0.0.0.0:4321/</id>
+  <updated>2022-11-11T15:38:26+01:00</updated>
+  <id>https://flxw.de/</id>
   <generator uri="https://sparanoid.com/lab/amsf/" version="2.0.22">Almace Scaffolding</generator>
 
-  <link rel="alternate" type="text/html" hreflang="en" href="http://0.0.0.0:4321/" />
-  <link rel="self" type="application/atom+xml" href="http://0.0.0.0:4321/feed.xml" />
+  <link rel="alternate" type="text/html" hreflang="en" href="https://flxw.de/" />
+  <link rel="self" type="application/atom+xml" href="https://flxw.de/feed.xml" />
 
   <author>
     <name>Felix Wolff</name>
-    <uri>http://0.0.0.0:4321/</uri>
+    <uri>https://flxw.de/</uri>
     <email>wolff.felix@proton.me</email>
   </author>
 
@@ -22,12 +22,12 @@
 
       <entry>
         <title>Standing up Sigstore locally</title>
-        <id>http://0.0.0.0:4321/standing-up-sigstore-locally.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/standing-up-sigstore-locally.html" />
+        <id>https://flxw.de/standing-up-sigstore-locally.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/standing-up-sigstore-locally.html" />
         <published>2022-11-10T00:00:00+01:00</published>
 
         
-          <updated>2022-11-11T12:23:37+01:00</updated>
+          <updated>2022-11-11T14:55:53+01:00</updated>
         
 
         <author>
@@ -36,7 +36,7 @@
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;In this post, I describe steps how to stand up a Sigstore deployment on your Kubernetes cluster,
 adding detail and background information where I feel that it is needed.
@@ -50,14 +50,108 @@ usable in the same manner as you would a remote deployment.&lt;/p&gt;
 &lt;a href=&quot;https://blog.sigstore.dev/scaffolding-sigstore-e893eb962f22&quot;&gt;articles&lt;/a&gt; on this subject out there.
 I hope that this updated version of a setup guide helps with getting up to speed with Sigstore quickly.&lt;/p&gt;
 
-&lt;p&gt;All you need to follow along is a working Docker installation on your machine, and Internet connectivity.&lt;/p&gt;
+&lt;p&gt;All you need to follow along is a working Docker installation on your machine, and Internet connectivity.
+Throughout the next steps I will sometimes refer to files that aren’t printed out here.
+You can find them in this repository: &lt;a href=&quot;https://github.com/flxw/sigstore-local-setup&quot;&gt;flxw/sigstore-local-setup&lt;/a&gt;.&lt;/p&gt;
 
-&lt;h1 id=&quot;step-1-certificate-chain-and-domains&quot;&gt;Step 1: Certificate chain and domains&lt;/h1&gt;
-&lt;p&gt;First, we&lt;/p&gt;
+&lt;h1 id=&quot;step-1-set-up-kind-and-ingress&quot;&gt;Step 1: Set up KinD and Ingress&lt;/h1&gt;
+&lt;p&gt;Now, we set up our kubernetes cluster, using kind.
+I find it to be an awesome tool for quickly prototyping and testing cluster.
+If you are unfamiliar with it, here’s the description from their &lt;a href=&quot;https://kind.sigs.k8s.io/&quot;&gt;website&lt;/a&gt;.
+Kind is a shorthand for &lt;em&gt;kubernetes in docker&lt;/em&gt;:&lt;/p&gt;
 
-&lt;p&gt;Add domains to /etc/hosts&lt;/p&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;kind is a tool for running local Kubernetes clusters using Docker container “nodes”.
+kind was primarily designed for testing Kubernetes itself, but may be used for local development or CI.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Along with the cluster, we shall also set up an nginx ingress, in line with the &lt;a href=&quot;https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx&quot;&gt;official instructions&lt;/a&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;kind &lt;span class=&quot;c&quot;&gt;# only for brew users ;)&lt;/span&gt;
+kind create cluster &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; kind-for-helm &lt;span class=&quot;nt&quot;&gt;--config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;cluster-config.yaml
+kubectl apply &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;step-20-install-sigstore&quot;&gt;Step 2.0: Install Sigstore&lt;/h1&gt;
+
+&lt;p&gt;After checking that our cluster and ingress are ready, we can install the bulk of Sigstore via &lt;a href=&quot;https://helm.sh&quot;&gt;helm&lt;/a&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+helm repo add sigstore https://sigstore.github.io/helm-charts
+helm upgrade &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; scaffold &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    sigstore/scaffold &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; sigstore &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;--create-namespace&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;--values&lt;/span&gt; scaffold-values.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scaffold&lt;/code&gt; chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog and trillian with an underlying MySQL database.
+Additionally, it generates all of the required signing keys as secrets, configmaps, services and ingresses.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-21-set-up-tuf&quot;&gt;Step 2.1 Set up TUF&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;Attention: This step is a workaround for a bug in the scaffold chart. I’ll remove it from the manual once it’s fixed&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;You can understand TUF as the component that is involved in distributing information about the involved signing keys to the Sigstore clients.
+It’s a key part of having a servicable deployment, in the event that the signing keys need to be changed.
+For our crude example, we also need to copy over the keys from the other service namespaces.
+Without the secrets, the TUF deployment won’t come up.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+helm upgrade &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; tuf &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    sigstore/tuf &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; tuf-system &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;--create-namespace&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;--values&lt;/span&gt; tuf-values.yaml
+
+kubectl &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; fulcio-system get secrets fulcio-server-secret &lt;span class=&quot;nt&quot;&gt;-oyaml&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    | &lt;span class=&quot;nb&quot;&gt;sed&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'s/namespace: .*/namespace: tuf-system/'&lt;/span&gt; | kubectl apply &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; -
+kubectl &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; ctlog-system get secrets ctlog-secret &lt;span class=&quot;nt&quot;&gt;-oyaml&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    | &lt;span class=&quot;nb&quot;&gt;sed&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'s/namespace: .*/namespace: tuf-system/'&lt;/span&gt; | kubectl apply &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; -
+curl &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; rekor.sigstore.local/api/v1/log/publicKey &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; /tmp/key &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    kubectl create secret generic rekor-public-key &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;--from-file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/tmp/key
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;step-3-certificate-chain-and-domains&quot;&gt;Step 3: Certificate chain and domains&lt;/h1&gt;
+&lt;p&gt;To make Sigstore clients work with the cluster, you need to generate a chain of certificates with a self-signed root.
+You then need to add the root certificate to your OS’s trust store.
+Alternatively, you can work with independent certificates, but I find it easer to add only one certificate to the trust store.
+Finally, you need to add four entries to your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/etc/hosts&lt;/code&gt; file.&lt;/p&gt;
+
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;EOF&lt;/span&gt;&lt;span class=&quot;sh&quot;&gt; &amp;gt;&amp;gt; /etc/hosts
+&lt;span class=&quot;c&quot;&gt;# create self-signed CA certificate (add ca.cert.pem to trust store and configure explicit trust)&lt;/span&gt;
+openssl req &lt;span class=&quot;nt&quot;&gt;-x509&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-newkey&lt;/span&gt; rsa:4096 &lt;span class=&quot;nt&quot;&gt;-keyout&lt;/span&gt; ca.private.pem &lt;span class=&quot;nt&quot;&gt;-out&lt;/span&gt; ca.cert.pem &lt;span class=&quot;nt&quot;&gt;-sha256&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-days&lt;/span&gt; 365 &lt;span class=&quot;nt&quot;&gt;-nodes&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;service_name &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;rekor fulcio tuf&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do
+    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;EOF&lt;/span&gt;&lt;span class=&quot;sh&quot;&gt; &amp;gt; &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;&lt;span class=&quot;sh&quot;&gt;.cert.ext
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;&lt;span class=&quot;sh&quot;&gt;.sigstore.local
+&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;EOF
+
+&lt;/span&gt;    openssl req &lt;span class=&quot;nt&quot;&gt;-new&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-newkey&lt;/span&gt; rsa:4096 &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;-keyout&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.private.pem &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;-out&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.req.pem &lt;span class=&quot;nt&quot;&gt;-nodes&lt;/span&gt;
+
+    openssl x509 &lt;span class=&quot;nt&quot;&gt;-req&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-in&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.req.pem &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;-days&lt;/span&gt; 365 &lt;span class=&quot;nt&quot;&gt;-CA&lt;/span&gt; ca.cert.pem &lt;span class=&quot;nt&quot;&gt;-CAkey&lt;/span&gt; ca.private.pem &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;-CAcreateserial&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-out&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.signed.cert.pem &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;-extfile&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.cert.ext
+
+    kubectl create secret tls &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-system&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;--namespace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-system&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;--cert&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.cert.pem &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;--key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.private.pem
+&lt;span class=&quot;k&quot;&gt;done
+
+&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;EOF&lt;/span&gt;&lt;span class=&quot;sh&quot;&gt; &amp;gt;&amp;gt; /etc/hosts
 127.0.0.1 fulcio.sigstore.local
 127.0.0.1 rekor.sigstore.local 
 127.0.0.1 tuf.sigstore.local
@@ -65,60 +159,36 @@ I hope that this updated version of a setup guide helps with getting up to speed
 &lt;/span&gt;&lt;span class=&quot;no&quot;&gt;EOF
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;Then generate the certificate chain&lt;/p&gt;
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/sh&lt;/span&gt;
-&lt;span class=&quot;c&quot;&gt;# create self-signed CA certificate (add this guy to trust store and trust everything)&lt;/span&gt;
-openssl req &lt;span class=&quot;nt&quot;&gt;-x509&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-newkey&lt;/span&gt; rsa:4096 &lt;span class=&quot;nt&quot;&gt;-keyout&lt;/span&gt; ca.private.pem &lt;span class=&quot;nt&quot;&gt;-out&lt;/span&gt; ca.cert.pem &lt;span class=&quot;nt&quot;&gt;-sha256&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-days&lt;/span&gt; 365 &lt;span class=&quot;nt&quot;&gt;-nodes&lt;/span&gt;
+&lt;h1 id=&quot;step-4-cosign-initialization&quot;&gt;Step 4: Cosign initialization&lt;/h1&gt;
+&lt;p&gt;Out of the box, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cosign&lt;/code&gt; is configured to work with the public infrastructure.
+Hence, we need to tell it about the certificates used in our cluster.
+To do that, tuf compiles a JSON file that needs to be extracted from the cluster.
+It only needs to be used once for every initialization.&lt;/p&gt;
 
-&lt;span class=&quot;k&quot;&gt;for &lt;/span&gt;service_name &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;rekor fulcio tuf&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do
-    &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;authorityKeyIdentifier=keyid,issuer
-basicConstraints=CA:FALSE
-keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
-subjectAltName = @alt_names
-
-[alt_names]
-DNS.1 = &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;.sigstore.local&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.cert.ext
-
-    openssl req &lt;span class=&quot;nt&quot;&gt;-new&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-newkey&lt;/span&gt; rsa:4096 &lt;span class=&quot;nt&quot;&gt;-keyout&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.private.pem &lt;span class=&quot;nt&quot;&gt;-out&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.req.pem &lt;span class=&quot;nt&quot;&gt;-nodes&lt;/span&gt;
-    openssl x509 &lt;span class=&quot;nt&quot;&gt;-req&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-in&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.req.pem &lt;span class=&quot;nt&quot;&gt;-days&lt;/span&gt; 365 &lt;span class=&quot;nt&quot;&gt;-CA&lt;/span&gt; ca.cert.pem &lt;span class=&quot;nt&quot;&gt;-CAkey&lt;/span&gt; ca.private.pem &lt;span class=&quot;nt&quot;&gt;-CAcreateserial&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-out&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.signed.cert.pem &lt;span class=&quot;nt&quot;&gt;-extfile&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.cert.ext
-&lt;span class=&quot;k&quot;&gt;done&lt;/span&gt;
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+kubectl &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; tuf-system get secrets tuf-root &lt;span class=&quot;nt&quot;&gt;-ojsonpath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'{.data.root}'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    | &lt;span class=&quot;nb&quot;&gt;base64&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; root.json
+cosign initialize &lt;span class=&quot;nt&quot;&gt;--root&lt;/span&gt; root.json &lt;span class=&quot;nt&quot;&gt;--mirror&lt;/span&gt; https://tuf.sigstore.local
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;step-2-set-up-kind&quot;&gt;Step 2: Set up KinD&lt;/h1&gt;
-&lt;p&gt;Spin up &lt;a href=&quot;https://kind.sigs.k8s.io/&quot;&gt;kind&lt;/a&gt;
-Set up nginx-ingress&lt;/p&gt;
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;kubectl apply &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;step-3-install-sigstore&quot;&gt;Step 3: Install Sigstore&lt;/h1&gt;
-&lt;p&gt;Set up helm chart repo
-Install scaffold helm chart
-Copy TUF secrets&lt;/p&gt;
-
-&lt;h2 id=&quot;set-up-tuf-tuf-helm-chart&quot;&gt;Set up TUF tuf helm chart&lt;/h2&gt;
-
-&lt;h2 id=&quot;initialize-cosign&quot;&gt;Initialize cosign&lt;/h2&gt;
-&lt;p&gt;Extract root.json&lt;/p&gt;
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;kubectl &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; tuf-system get secrets tuf-root &lt;span class=&quot;nt&quot;&gt;-ojsonpath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'{.data.root}'&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;base64&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; ./root.json
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Initialize cosign&lt;/p&gt;
 
 &lt;h1 id=&quot;step-4-test&quot;&gt;Step 4: Test&lt;/h1&gt;
 
-&lt;h2 id=&quot;local-registry&quot;&gt;Local registry&lt;/h2&gt;
-&lt;p&gt;Spin up a local registry&lt;/p&gt;
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# complete with info from: https://github.com/sigstore/scaffolding/blob/main/hack/setup-kind.sh#L253&lt;/span&gt;
-docker run &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+&lt;p&gt;From now on, it’s just testing and enjoying what you have built. :)
+In our test, we shall put a container into a locally runnning registry and sign it.
+Afterwards, we shall verify it.&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# First, we'll spin up the local registry&lt;/span&gt;
+docker run &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;--restart&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;always &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 5000:5000 &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; registry.local &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     registry:2
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;test-container&quot;&gt;Test container&lt;/h2&gt;
-&lt;p&gt;Create a test container&lt;/p&gt;
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;KO_DOCKER_REPO&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;registry.local:5000/sigstore
+&lt;span class=&quot;c&quot;&gt;# Second, a test container is created&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# Make sure you have go installed for this&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;KO_DOCKER_REPO&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;registry.local:5000/sigstore
 &lt;span class=&quot;nb&quot;&gt;pushd&lt;/span&gt; &lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;mktemp&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;)&lt;/span&gt;
 go mod init example.com/demo
 &lt;span class=&quot;nb&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;no&quot;&gt;EOF&lt;/span&gt;&lt;span class=&quot;sh&quot;&gt; &amp;gt; main.go
@@ -131,29 +201,38 @@ func main() {
 &lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;IMAGE&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;ko publish &lt;span class=&quot;nt&quot;&gt;-B&lt;/span&gt; example.com/demo&lt;span class=&quot;sb&quot;&gt;`&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Created image &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$IMAGE&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;popd&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h2 id=&quot;sign&quot;&gt;Sign&lt;/h2&gt;
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;REKOR_URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;https://rekor.sigstore.local
+&lt;span class=&quot;c&quot;&gt;# Third, we shall sign the container&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;REKOR_URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;https://rekor.sigstore.local
 &lt;span class=&quot;nv&quot;&gt;FULCIO_URL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;https://fulcio.sigstore.local
-
 &lt;span class=&quot;nb&quot;&gt;export &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;COSIGN_EXPERIMENTAL&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;1
 
+&lt;span class=&quot;c&quot;&gt;# add --verbose if you are curious ;)&lt;/span&gt;
 cosign sign &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;--verbose&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
   &lt;span class=&quot;nt&quot;&gt;--fulcio-url&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$FULCIO_URL&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
   &lt;span class=&quot;nt&quot;&gt;--rekor-url&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$REKOR_URL&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
   &lt;span class=&quot;nt&quot;&gt;--force&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
   &lt;span class=&quot;nt&quot;&gt;--allow-insecure-registry&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
   &lt;span class=&quot;nv&quot;&gt;$IMAGE&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# Fourth and last - signature verification!&lt;/span&gt;
+cosign verify &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;--allow-insecure-registry&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;--rekor-url&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;https://rekor.sigstore.local &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$IMAGE&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;p&gt;Sign it&lt;/p&gt;
 
-&lt;p&gt;Enjoy&lt;/p&gt;
+&lt;p&gt;Congratulations - you have now mastered the deployment of Sigstore on your machine!
+Running such a setup in production is a bit more complex,
+and we are currently hard at work at documenting the efforts involved.
+If you’re curious about what’s next and how to help, read on in the next section.&lt;/p&gt;
 
-&lt;h1 id=&quot;improvements&quot;&gt;Improvements&lt;/h1&gt;
-&lt;p&gt;TUF integration
-DEX&lt;/p&gt;
+&lt;h1 id=&quot;getting-involved&quot;&gt;Getting involved&lt;/h1&gt;
+&lt;p&gt;This is the shortest and fastest way to set up Sigstore I know - until now!
+The Sigstore project is just getting started, and there’s tons of ways to &lt;a href=&quot;https://docs.sigstore.dev/contributing&quot;&gt;contribute&lt;/a&gt;.
+You can meet me and many others in the Sigstore Slack channel &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;private-sigstore-users&lt;/code&gt;, putting together a manual for operating a deployment for a longer duration.&lt;/p&gt;
+
+&lt;p&gt;This is a living document, and I’ll edit in the future to remove the TUF section, and add one for including DEX as an OIDC token forwarder.&lt;/p&gt;
 
           
           
@@ -174,8 +253,8 @@ DEX&lt;/p&gt;
 
       <entry>
         <title>Oneliner: External secret decoding</title>
-        <id>http://0.0.0.0:4321/external-secret-encoding.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/external-secret-encoding.html" />
+        <id>https://flxw.de/external-secret-encoding.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/external-secret-encoding.html" />
         <published>2022-11-04T00:00:00+01:00</published>
 
         
@@ -188,7 +267,7 @@ DEX&lt;/p&gt;
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;If you use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;external-secrets&lt;/code&gt; to sync secrets from some a key management
 system like AWS KMS or Vault into your cluster,
@@ -245,8 +324,8 @@ Application reads: happy street
 
       <entry>
         <title>No silver bullet: Cloud computing</title>
-        <id>http://0.0.0.0:4321/cloud-computing-isnt-the-silver-bullet.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/cloud-computing-isnt-the-silver-bullet.html" />
+        <id>https://flxw.de/cloud-computing-isnt-the-silver-bullet.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/cloud-computing-isnt-the-silver-bullet.html" />
         <published>2022-11-03T00:00:00+01:00</published>
 
         
@@ -259,7 +338,7 @@ Application reads: happy street
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;As companies re-evaluate their supply chains, they tend to turn a blind eye
 on partially massive vendor lock-ins with their cloud providers.
@@ -289,8 +368,8 @@ and is moving it back into their own data center now:&lt;/p&gt;
 
       <entry>
         <title>Codeberg</title>
-        <id>http://0.0.0.0:4321/codeberg-a-github-alternative-from-europe.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/codeberg-a-github-alternative-from-europe.html" />
+        <id>https://flxw.de/codeberg-a-github-alternative-from-europe.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/codeberg-a-github-alternative-from-europe.html" />
         <published>2022-10-25T00:00:00+02:00</published>
 
         
@@ -303,7 +382,7 @@ and is moving it back into their own data center now:&lt;/p&gt;
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;When I started getting into computers in 2010, GitHub was not yet owned by Microsoft,
 and had several contenders:
@@ -340,8 +419,8 @@ I will start exploring the platform in the next weeks and write about it.&lt;/p&
 
       <entry>
         <title>Oneliner: Merge kubectl configs</title>
-        <id>http://0.0.0.0:4321/merge-kube-configurations.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/merge-kube-configurations.html" />
+        <id>https://flxw.de/merge-kube-configurations.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/merge-kube-configurations.html" />
         <published>2022-10-14T00:00:00+02:00</published>
 
         
@@ -354,7 +433,7 @@ I will start exploring the platform in the next weeks and write about it.&lt;/p&
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;Today’s oneliner is for merging two kubectl configuration files into one.
 This can be useful when creating new clusters and exchanging small config files with your colleagues:&lt;/p&gt;
@@ -385,8 +464,8 @@ kubectl config view &lt;span class=&quot;nt&quot;&gt;--flatten&lt;/span&gt; &lt;
 
       <entry>
         <title>What the patch?!</title>
-        <id>http://0.0.0.0:4321/what-the-patch.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/what-the-patch.html" />
+        <id>https://flxw.de/what-the-patch.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/what-the-patch.html" />
         <published>2021-06-16T00:00:00+02:00</published>
 
         
@@ -399,7 +478,7 @@ kubectl config view &lt;span class=&quot;nt&quot;&gt;--flatten&lt;/span&gt; &lt;
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;At work I deal with Kubernetes and kustomize on a daily basis.
 Today I have pulled my hair about how I could patch a value in a job that was included in the base kustomization.
@@ -476,8 +555,8 @@ You can find the &lt;a href=&quot;https://github.com/kubernetes-sigs/cli-experim
 
       <entry>
         <title>A beancount tutorial and framework</title>
-        <id>http://0.0.0.0:4321/a-beancount-tutorial-and-framework.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/a-beancount-tutorial-and-framework.html" />
+        <id>https://flxw.de/a-beancount-tutorial-and-framework.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/a-beancount-tutorial-and-framework.html" />
         <published>2021-02-28T00:00:00+01:00</published>
 
         
@@ -490,7 +569,7 @@ You can find the &lt;a href=&quot;https://github.com/kubernetes-sigs/cli-experim
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;As a financially avid reader, I am sure that you can roughly say how much money you need for a month.
 You can assist your gut feeling with tools like Kmymoney, Homebank, GnuCash et al. to know exactly how much it is that you spend and earn per month.
@@ -608,8 +687,8 @@ It’s a great visualization frontend for beancount ledgers. After adding a mont
 
       <entry>
         <title>Tracking your money made easy</title>
-        <id>http://0.0.0.0:4321/tracking-finances-made-easy.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/tracking-finances-made-easy.html" />
+        <id>https://flxw.de/tracking-finances-made-easy.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/tracking-finances-made-easy.html" />
         <published>2020-12-26T00:00:00+01:00</published>
 
         
@@ -622,7 +701,7 @@ It’s a great visualization frontend for beancount ledgers. After adding a mont
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;A couple of years ago, I started getting more and more into understanding how the financial system works,
 what inflation is, what the central banks do, etc, pp.
@@ -735,8 +814,8 @@ If you have any comments, please reach out to me via the contact details on the 
 
       <entry>
         <title>Upgrading Guide: v1.1.0</title>
-        <id>http://0.0.0.0:4321/upgrading-guide-v1.1.0.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/upgrading-guide-v1.1.0.html" />
+        <id>https://flxw.de/upgrading-guide-v1.1.0.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/upgrading-guide-v1.1.0.html" />
         <published>2017-01-07T00:00:00+01:00</published>
 
         
@@ -749,7 +828,7 @@ If you have any comments, please reach out to me via the contact details on the 
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;There’re some significant changes in update v1.1.0, action required after you upgrade Almace Scaffolding.&lt;/p&gt;
 
@@ -789,8 +868,8 @@ If you have any comments, please reach out to me via the contact details on the 
 
       <entry>
         <title>Why I am done with smart watches</title>
-        <id>http://0.0.0.0:4321/why-i-am-done-with-smartwatches.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/why-i-am-done-with-smartwatches.html" />
+        <id>https://flxw.de/why-i-am-done-with-smartwatches.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/why-i-am-done-with-smartwatches.html" />
         <published>2015-11-15T00:00:00+01:00</published>
 
         
@@ -803,7 +882,7 @@ If you have any comments, please reach out to me via the contact details on the 
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;It is a thing more and more common. People casually chatting, operating their
 various electronic devices simultaneously. When was the last time that you felt you had
@@ -918,8 +997,8 @@ a higher purpose.&lt;/p&gt;
 
       <entry>
         <title>Excel Analysis with HANA data</title>
-        <id>http://0.0.0.0:4321/setting-up-ms-office-excel-analysis-with-HANA.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/setting-up-ms-office-excel-analysis-with-HANA.html" />
+        <id>https://flxw.de/setting-up-ms-office-excel-analysis-with-HANA.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/setting-up-ms-office-excel-analysis-with-HANA.html" />
         <published>2015-09-25T00:00:00+02:00</published>
 
         
@@ -932,7 +1011,7 @@ a higher purpose.&lt;/p&gt;
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;Here at my SAP internship, I want to connect Analysis for Excel with
 SAP HANA. Unfortunately, this fairly simple procedure is the ultimate example for
@@ -979,8 +1058,8 @@ bad documentation, and I want to note down my approach here for getting it to wo
 
       <entry>
         <title>Vision for wearable device apps</title>
-        <id>http://0.0.0.0:4321/my-vision-on-wearables.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/my-vision-on-wearables.html" />
+        <id>https://flxw.de/my-vision-on-wearables.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/my-vision-on-wearables.html" />
         <published>2015-09-11T00:00:00+02:00</published>
 
         
@@ -993,7 +1072,7 @@ bad documentation, and I want to note down my approach here for getting it to wo
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;Having looked at wearables intensively for several weeks, I want to share my vision
 of how they should be developed further. Being mere data displays until now, wearable technology
@@ -1069,8 +1148,8 @@ your applications!&lt;/p&gt;
 
       <entry>
         <title>Making nginx act as an SMTP relay</title>
-        <id>http://0.0.0.0:4321/nginx-smtp-relay.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/nginx-smtp-relay.html" />
+        <id>https://flxw.de/nginx-smtp-relay.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/nginx-smtp-relay.html" />
         <published>2014-09-04T00:00:00+02:00</published>
 
         
@@ -1083,7 +1162,7 @@ your applications!&lt;/p&gt;
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;To test an application out in the wild I had to host it on my server.
 As it receives and processes email via SMTP, it needed access to port 25.&lt;/p&gt;
@@ -1184,8 +1263,8 @@ server {
 
       <entry>
         <title>Booting Windows 7+ from USB</title>
-        <id>http://0.0.0.0:4321/install-windows-7+-from-usb.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/install-windows-7+-from-usb.html" />
+        <id>https://flxw.de/install-windows-7+-from-usb.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/install-windows-7+-from-usb.html" />
         <published>2014-05-27T00:00:00+02:00</published>
 
         
@@ -1198,7 +1277,7 @@ server {
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;Everytime I try to install Windows from a USB stick, I forget a simple step
 in making the stick bootable and another few minutes are wasted searching for the solution.
@@ -1238,8 +1317,8 @@ mount /dev/sdb1 /mnt/usb1
 
       <entry>
         <title>Using a colorful terminal</title>
-        <id>http://0.0.0.0:4321/color-your-term.html</id>
-        <link rel="alternate" type="text/html" href="http://0.0.0.0:4321/color-your-term.html" />
+        <id>https://flxw.de/color-your-term.html</id>
+        <link rel="alternate" type="text/html" href="https://flxw.de/color-your-term.html" />
         <published>2014-05-05T00:00:00+02:00</published>
 
         
@@ -1252,7 +1331,7 @@ mount /dev/sdb1 /mnt/usb1
           <email>wolff.felix@proton.me</email>
         </author>
 
-        <content type="html" xml:base="http://0.0.0.0:4321/">
+        <content type="html" xml:base="https://flxw.de/">
           
             &lt;p&gt;An appeal to everyone to use colored terminals
 and do their eyes a favor.&lt;/p&gt;

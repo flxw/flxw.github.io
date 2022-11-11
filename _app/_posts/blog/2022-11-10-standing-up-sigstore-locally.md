@@ -21,7 +21,7 @@ All you need to follow along is a working Docker installation on your machine, a
 Throughout the next steps I will sometimes refer to files that aren't printed out here.
 You can find them in this repository: [flxw/sigstore-local-setup](https://github.com/flxw/sigstore-local-setup).
 
-# Step 1: Set up KinD and Ingreess
+# Step 1: Set up KinD and Ingress
 Now, we set up our kubernetes cluster, using kind.
 I find it to be an awesome tool for quickly prototyping and testing cluster.
 If you are unfamiliar with it, here's the description from their [website](https://kind.sigs.k8s.io/).
