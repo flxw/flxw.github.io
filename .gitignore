@@ -8,3 +8,4 @@ vendor/
 node_modules/
 docs/
 .jekyll-metadata
+.jekyll-cache/

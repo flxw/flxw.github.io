@@ -4,12 +4,36 @@
   
     
     {
+      "title": "Standing up Sigstore locally",
+      "permalink": "http://0.0.0.0:4321/standing-up-sigstore-locally.html",
+      "link": "http://0.0.0.0:4321/standing-up-sigstore-locally.html",
+      "date": "2022-11-10T00:00:00+01:00",
+      
+        "modified": "2022-11-11T12:23:37+01:00",
+      
+      "author": {
+        "name": "Felix Wolff",
+        "url": "https://flxw.de/",
+        "email": "wolff.felix@proton.me"
+      },
+      "content": "<p>In this post, I describe steps how to stand up a Sigstore deployment on your Kubernetes cluster,\nadding detail and background information where I feel that it is needed.\nThe post is aimed at the early adopter of the project who is roughly familiar with how Sigstore works internally.\nIf you follow right through the end, you will have a working Sigstore deployment on your machine - \nusable in the same manner as you would a remote deployment.</p>\n\n<p>As usual, I stand on the shoulders of giants, as I have benefitted a lot from\n<a href=\"https://github.com/sigstore/scaffolding/blob/main/getting-started.md\">other</a>\n<a href=\"https://sthw.decodebytes.sh/\">earlier</a>\n<a href=\"https://blog.sigstore.dev/scaffolding-sigstore-e893eb962f22\">articles</a> on this subject out there.\nI hope that this updated version of a setup guide helps with getting up to speed with Sigstore quickly.</p>\n\n<p>All you need to follow along is a working Docker installation on your machine, and Internet connectivity.</p>\n\n<h1 id=\"step-1-certificate-chain-and-domains\">Step 1: Certificate chain and domains</h1>\n<p>First, we</p>\n\n<p>Add domains to /etc/hosts</p>\n<div class=\"language-bash highlighter-rouge\"><div class=\"highlight\"><pre class=\"highlight\"><code><span class=\"c\">#!/bin/sh</span>\n<span class=\"nb\">cat</span> <span class=\"o\">&lt;&lt;</span><span class=\"no\">EOF</span><span class=\"sh\"> &gt;&gt; /etc/hosts\n127.0.0.1 fulcio.sigstore.local\n127.0.0.1 rekor.sigstore.local \n127.0.0.1 tuf.sigstore.local\n127.0.0.1 registry.local\n</span><span class=\"no\">EOF\n</span></code></pre></div></div>\n\n<p>Then generate the certificate chain</p>\n<div class=\"language-bash highlighter-rouge\"><div class=\"highlight\"><pre class=\"highlight\"><code><span class=\"c\">#!/bin/sh</span>\n<span class=\"c\"># create self-signed CA certificate (add this guy to trust store and trust everything)</span>\nopenssl req <span class=\"nt\">-x509</span> <span class=\"nt\">-newkey</span> rsa:4096 <span class=\"nt\">-keyout</span> ca.private.pem <span class=\"nt\">-out</span> ca.cert.pem <span class=\"nt\">-sha256</span> <span class=\"nt\">-days</span> 365 <span class=\"nt\">-nodes</span>\n\n<span class=\"k\">for </span>service_name <span class=\"k\">in </span>rekor fulcio tuf<span class=\"p\">;</span> <span class=\"k\">do\n    </span><span class=\"nb\">echo</span> <span class=\"s2\">\"authorityKeyIdentifier=keyid,issuer\nbasicConstraints=CA:FALSE\nkeyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment\nsubjectAltName = @alt_names\n\n[alt_names]\nDNS.1 = </span><span class=\"nv\">$service_name</span><span class=\"s2\">.sigstore.local\"</span> <span class=\"o\">&gt;</span> <span class=\"nv\">$service_name</span>.cert.ext\n\n    openssl req <span class=\"nt\">-new</span> <span class=\"nt\">-newkey</span> rsa:4096 <span class=\"nt\">-keyout</span> <span class=\"nv\">$service_name</span>.private.pem <span class=\"nt\">-out</span> <span class=\"nv\">$service_name</span>.req.pem <span class=\"nt\">-nodes</span>\n    openssl x509 <span class=\"nt\">-req</span> <span class=\"nt\">-in</span> <span class=\"nv\">$service_name</span>.req.pem <span class=\"nt\">-days</span> 365 <span class=\"nt\">-CA</span> ca.cert.pem <span class=\"nt\">-CAkey</span> ca.private.pem <span class=\"nt\">-CAcreateserial</span> <span class=\"nt\">-out</span> <span class=\"nv\">$service_name</span>.signed.cert.pem <span class=\"nt\">-extfile</span> <span class=\"nv\">$service_name</span>.cert.ext\n<span class=\"k\">done</span>\n</code></pre></div></div>\n\n<h1 id=\"step-2-set-up-kind\">Step 2: Set up KinD</h1>\n<p>Spin up <a href=\"https://kind.sigs.k8s.io/\">kind</a>\nSet up nginx-ingress</p>\n<div class=\"language-bash highlighter-rouge\"><div class=\"highlight\"><pre class=\"highlight\"><code>kubectl apply <span class=\"nt\">-f</span> https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml\n</code></pre></div></div>\n\n<h1 id=\"step-3-install-sigstore\">Step 3: Install Sigstore</h1>\n<p>Set up helm chart repo\nInstall scaffold helm chart\nCopy TUF secrets</p>\n\n<h2 id=\"set-up-tuf-tuf-helm-chart\">Set up TUF tuf helm chart</h2>\n\n<h2 id=\"initialize-cosign\">Initialize cosign</h2>\n<p>Extract root.json</p>\n<div class=\"language-bash highlighter-rouge\"><div class=\"highlight\"><pre class=\"highlight\"><code>kubectl <span class=\"nt\">-n</span> tuf-system get secrets tuf-root <span class=\"nt\">-ojsonpath</span><span class=\"o\">=</span><span class=\"s1\">'{.data.root}'</span> | <span class=\"nb\">base64</span> <span class=\"nt\">-d</span> <span class=\"o\">&gt;</span> ./root.json\n</code></pre></div></div>\n<p>Initialize cosign</p>\n\n<h1 id=\"step-4-test\">Step 4: Test</h1>\n\n<h2 id=\"local-registry\">Local registry</h2>\n<p>Spin up a local registry</p>\n<div class=\"language-bash highlighter-rouge\"><div class=\"highlight\"><pre class=\"highlight\"><code><span class=\"c\"># complete with info from: https://github.com/sigstore/scaffolding/blob/main/hack/setup-kind.sh#L253</span>\ndocker run <span class=\"se\">\\</span>\n    <span class=\"nt\">-d</span> <span class=\"se\">\\</span>\n    <span class=\"nt\">--restart</span><span class=\"o\">=</span>always <span class=\"se\">\\</span>\n    <span class=\"nt\">-p</span> 5000:5000 <span class=\"se\">\\</span>\n    <span class=\"nt\">--name</span> registry.local <span class=\"se\">\\</span>\n    registry:2\n</code></pre></div></div>\n\n<h2 id=\"test-container\">Test container</h2>\n<p>Create a test container</p>\n<div class=\"language-bash highlighter-rouge\"><div class=\"highlight\"><pre class=\"highlight\"><code><span class=\"nv\">KO_DOCKER_REPO</span><span class=\"o\">=</span>registry.local:5000/sigstore\n<span class=\"nb\">pushd</span> <span class=\"si\">$(</span><span class=\"nb\">mktemp</span> <span class=\"nt\">-d</span><span class=\"si\">)</span>\ngo mod init example.com/demo\n<span class=\"nb\">cat</span> <span class=\"o\">&lt;&lt;</span><span class=\"no\">EOF</span><span class=\"sh\"> &gt; main.go\npackage main\nimport \"fmt\"\nfunc main() {\n   fmt.Println(\"hello world\")\n}\n</span><span class=\"no\">EOF\n</span><span class=\"nb\">export </span><span class=\"nv\">IMAGE</span><span class=\"o\">=</span><span class=\"sb\">`</span>ko publish <span class=\"nt\">-B</span> example.com/demo<span class=\"sb\">`</span>\n<span class=\"nb\">echo</span> <span class=\"s2\">\"Created image </span><span class=\"nv\">$IMAGE</span><span class=\"s2\">\"</span>\n<span class=\"nb\">popd</span>\n</code></pre></div></div>\n\n<h2 id=\"sign\">Sign</h2>\n<div class=\"language-bash highlighter-rouge\"><div class=\"highlight\"><pre class=\"highlight\"><code><span class=\"nv\">REKOR_URL</span><span class=\"o\">=</span>https://rekor.sigstore.local\n<span class=\"nv\">FULCIO_URL</span><span class=\"o\">=</span>https://fulcio.sigstore.local\n\n<span class=\"nb\">export </span><span class=\"nv\">COSIGN_EXPERIMENTAL</span><span class=\"o\">=</span>1\n\ncosign sign <span class=\"se\">\\</span>\n  <span class=\"nt\">--verbose</span> <span class=\"se\">\\</span>\n  <span class=\"nt\">--fulcio-url</span><span class=\"o\">=</span><span class=\"nv\">$FULCIO_URL</span> <span class=\"se\">\\</span>\n  <span class=\"nt\">--rekor-url</span><span class=\"o\">=</span><span class=\"nv\">$REKOR_URL</span> <span class=\"se\">\\</span>\n  <span class=\"nt\">--force</span> <span class=\"se\">\\</span>\n  <span class=\"nt\">--allow-insecure-registry</span> <span class=\"se\">\\</span>\n  <span class=\"nv\">$IMAGE</span>\n</code></pre></div></div>\n<p>Sign it</p>\n\n<p>Enjoy</p>\n\n<h1 id=\"improvements\">Improvements</h1>\n<p>TUF integration\nDEX</p>",
+      "excerpt": "In this post, I describe steps how to stand up a Sigstore deployment on your Kubernetes cluster,\nadding detail and background information where I feel that it is needed.\nThe post is aimed at the early adopter of the project who is roughly familiar with how Sigstore works internally.\nIf you follow right through the end, you will have a working Sigstore deployment on your machine - \nusable in the same manner as you would a remote deployment.",
+      "languages": null,
+      "categories": [],
+      "tags": ["sscs"]
+    }
+    
+  
+
+  
+    ,
+    {
       "title": "Oneliner: External secret decoding",
-      "permalink": "https://flxw.de/external-secret-encoding.html",
-      "link": "https://flxw.de/external-secret-encoding.html",
+      "permalink": "http://0.0.0.0:4321/external-secret-encoding.html",
+      "link": "http://0.0.0.0:4321/external-secret-encoding.html",
       "date": "2022-11-04T00:00:00+01:00",
       
-        "modified": "2022-11-04T17:34:31+01:00",
+        "modified": "2022-11-04T17:34:47+01:00",
       
       "author": {
         "name": "Felix Wolff",
@@ -29,8 +53,8 @@
     ,
     {
       "title": "No silver bullet: Cloud computing",
-      "permalink": "https://flxw.de/cloud-computing-isnt-the-silver-bullet.html",
-      "link": "https://flxw.de/cloud-computing-isnt-the-silver-bullet.html",
+      "permalink": "http://0.0.0.0:4321/cloud-computing-isnt-the-silver-bullet.html",
+      "link": "http://0.0.0.0:4321/cloud-computing-isnt-the-silver-bullet.html",
       "date": "2022-11-03T00:00:00+01:00",
       
         "modified": "2022-11-03T10:08:22+01:00",
@@ -53,8 +77,8 @@
     ,
     {
       "title": "Codeberg",
-      "permalink": "https://flxw.de/codeberg-a-github-alternative-from-europe.html",
-      "link": "https://flxw.de/codeberg-a-github-alternative-from-europe.html",
+      "permalink": "http://0.0.0.0:4321/codeberg-a-github-alternative-from-europe.html",
+      "link": "http://0.0.0.0:4321/codeberg-a-github-alternative-from-europe.html",
       "date": "2022-10-25T00:00:00+02:00",
       
         "modified": "2022-10-25T21:47:03+02:00",
@@ -77,11 +101,11 @@
     ,
     {
       "title": "Oneliner: Merge kubectl configs",
-      "permalink": "https://flxw.de/merge-kube-configurations.html",
-      "link": "https://flxw.de/merge-kube-configurations.html",
+      "permalink": "http://0.0.0.0:4321/merge-kube-configurations.html",
+      "link": "http://0.0.0.0:4321/merge-kube-configurations.html",
       "date": "2022-10-14T00:00:00+02:00",
       
-        "modified": "2022-10-25T21:47:03+02:00",
+        "modified": "2022-11-04T17:34:47+01:00",
       
       "author": {
         "name": "Felix Wolff",
@@ -101,8 +125,8 @@
     ,
     {
       "title": "What the patch?!",
-      "permalink": "https://flxw.de/what-the-patch.html",
-      "link": "https://flxw.de/what-the-patch.html",
+      "permalink": "http://0.0.0.0:4321/what-the-patch.html",
+      "link": "http://0.0.0.0:4321/what-the-patch.html",
       "date": "2021-06-16T00:00:00+02:00",
       
         "modified": "2022-10-22T15:52:11+02:00",
@@ -125,8 +149,8 @@
     ,
     {
       "title": "A beancount tutorial and framework",
-      "permalink": "https://flxw.de/a-beancount-tutorial-and-framework.html",
-      "link": "https://flxw.de/a-beancount-tutorial-and-framework.html",
+      "permalink": "http://0.0.0.0:4321/a-beancount-tutorial-and-framework.html",
+      "link": "http://0.0.0.0:4321/a-beancount-tutorial-and-framework.html",
       "date": "2021-02-28T00:00:00+01:00",
       
         "modified": "2022-10-22T15:52:11+02:00",
@@ -149,8 +173,8 @@
     ,
     {
       "title": "Tracking your money made easy",
-      "permalink": "https://flxw.de/tracking-finances-made-easy.html",
-      "link": "https://flxw.de/tracking-finances-made-easy.html",
+      "permalink": "http://0.0.0.0:4321/tracking-finances-made-easy.html",
+      "link": "http://0.0.0.0:4321/tracking-finances-made-easy.html",
       "date": "2020-12-26T00:00:00+01:00",
       
         "modified": "2022-10-25T09:43:01+02:00",
@@ -173,8 +197,8 @@
     ,
     {
       "title": "Upgrading Guide: v1.1.0",
-      "permalink": "https://flxw.de/upgrading-guide-v1.1.0.html",
-      "link": "https://flxw.de/upgrading-guide-v1.1.0.html",
+      "permalink": "http://0.0.0.0:4321/upgrading-guide-v1.1.0.html",
+      "link": "http://0.0.0.0:4321/upgrading-guide-v1.1.0.html",
       "date": "2017-01-07T00:00:00+01:00",
       
         "modified": "2022-10-22T15:05:10+02:00",
@@ -197,8 +221,8 @@
     ,
     {
       "title": "Why I am done with smart watches",
-      "permalink": "https://flxw.de/why-i-am-done-with-smartwatches.html",
-      "link": "https://flxw.de/why-i-am-done-with-smartwatches.html",
+      "permalink": "http://0.0.0.0:4321/why-i-am-done-with-smartwatches.html",
+      "link": "http://0.0.0.0:4321/why-i-am-done-with-smartwatches.html",
       "date": "2015-11-15T00:00:00+01:00",
       
         "modified": "2022-10-22T15:05:10+02:00",
@@ -221,8 +245,8 @@
     ,
     {
       "title": "Excel Analysis with HANA data",
-      "permalink": "https://flxw.de/setting-up-ms-office-excel-analysis-with-HANA.html",
-      "link": "https://flxw.de/setting-up-ms-office-excel-analysis-with-HANA.html",
+      "permalink": "http://0.0.0.0:4321/setting-up-ms-office-excel-analysis-with-HANA.html",
+      "link": "http://0.0.0.0:4321/setting-up-ms-office-excel-analysis-with-HANA.html",
       "date": "2015-09-25T00:00:00+02:00",
       
         "modified": "2022-10-22T15:52:11+02:00",
@@ -245,8 +269,8 @@
     ,
     {
       "title": "Vision for wearable device apps",
-      "permalink": "https://flxw.de/my-vision-on-wearables.html",
-      "link": "https://flxw.de/my-vision-on-wearables.html",
+      "permalink": "http://0.0.0.0:4321/my-vision-on-wearables.html",
+      "link": "http://0.0.0.0:4321/my-vision-on-wearables.html",
       "date": "2015-09-11T00:00:00+02:00",
       
         "modified": "2022-10-25T09:43:01+02:00",
@@ -269,8 +293,8 @@
     ,
     {
       "title": "Making nginx act as an SMTP relay",
-      "permalink": "https://flxw.de/nginx-smtp-relay.html",
-      "link": "https://flxw.de/nginx-smtp-relay.html",
+      "permalink": "http://0.0.0.0:4321/nginx-smtp-relay.html",
+      "link": "http://0.0.0.0:4321/nginx-smtp-relay.html",
       "date": "2014-09-04T00:00:00+02:00",
       
         "modified": "2022-10-22T15:05:10+02:00",
@@ -293,8 +317,8 @@
     ,
     {
       "title": "Booting Windows 7+ from USB",
-      "permalink": "https://flxw.de/install-windows-7+-from-usb.html",
-      "link": "https://flxw.de/install-windows-7+-from-usb.html",
+      "permalink": "http://0.0.0.0:4321/install-windows-7+-from-usb.html",
+      "link": "http://0.0.0.0:4321/install-windows-7+-from-usb.html",
       "date": "2014-05-27T00:00:00+02:00",
       
         "modified": "2022-10-25T12:32:35+02:00",
@@ -317,8 +341,8 @@
     ,
     {
       "title": "Using a colorful terminal",
-      "permalink": "https://flxw.de/color-your-term.html",
-      "link": "https://flxw.de/color-your-term.html",
+      "permalink": "http://0.0.0.0:4321/color-your-term.html",
+      "link": "http://0.0.0.0:4321/color-your-term.html",
       "date": "2014-05-05T00:00:00+02:00",
       
         "modified": "2022-10-22T15:05:10+02:00",

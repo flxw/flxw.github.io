@@ -1,0 +1,397 @@
+<!doctype html>
+
+<html lang="en">
+
+<!--
+  Apply head only for dev environment, this is required for jekyll to
+  insert livereload scripts
+-->
+
+  <head>
+
+
+
+  <meta charset="utf-8">
+
+
+<title>Standing up Sigstore locally - Felix Wolff</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<!-- Define a description for better SEO result -->
+<meta name="description" content="Instructions for running a Sigstore deployment on your machine in k8s">
+
+<!-- Cheome Web App theme color -->
+<meta name="theme-color" content="#ff00b4">
+
+<!-- Feed URL -->
+<link rel="alternate" href="/feed.xml" type="application/atom+xml">
+
+<!-- Site icons -->
+<link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="icon" href="/favicon.png" type="image/png"><link rel="icon" href="/favicon.svg?assets-inline-assets-keep" sizes="any" type="image/svg+xml"><link rel="mask-icon" href="/mask-icon.svg" color="#ff00b4">
+
+<!-- Chrome Web App manifest -->
+<link rel="manifest" href="/manifest.json">
+
+<!-- Main CSS -->
+<link rel="stylesheet" href="/assets/themes/curtana/css/app.css?assets-inline">
+
+<!-- Canonical links, avoid duplicate content problems -->
+<link rel="canonical" href="http://0.0.0.0:4321/standing-up-sigstore-locally.html">
+
+<!-- DNS prefetching for static files -->
+
+
+<!-- Head hooks -->
+
+
+
+  </head>
+
+<!-- Open Graph and Twitter Cards support -->
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Felix Wolff">
+<meta property="og:title" content="Standing up Sigstore locally">
+<meta property="og:url" content="http://0.0.0.0:4321/standing-up-sigstore-locally.html">
+<meta property="og:description" content="Instructions for running a Sigstore deployment on your machine in k8s">
+<meta property="og:image" content="http://0.0.0.0:4321/logo.png">
+
+<meta name="twitter:card" content="summary_large_image">
+
+
+  <meta name="twitter:site" content="@sparanoid">
+
+
+
+
+
+  <meta property="article:published_time" content="2022-11-10T00:00:00+01:00">
+  <meta property="article:modified_time" content="2022-11-11T14:51:48+01:00">
+  <meta name="twitter:label1" value="Words">
+  <meta name="twitter:data1" value="1319 words">
+  <meta name="twitter:label2" value="Reading time">
+  <meta name="twitter:data2" value="6 mins">
+
+<!-- Post specified styles -->
+<style data-assets-inline>
+  :root {
+    
+
+    
+
+    
+
+    
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --text-color-l: 95%;
+      --bg-color-l: 14%;
+      --bg-color-s: 2%;
+      --code-color-l: calc(var(--link-color-l) * 1.3);
+    }
+  }
+  
+
+  body {
+    
+  }
+
+  
+  
+    
+</style>
+<!-- Main navigation with current page / categoriy highlighted -->
+<nav class="navigation">
+  <ul>
+    <li >
+        <a href="/">Felix Wolff</a>
+      </li>
+    <li >
+        <a href="/blog/">Blog</a>
+      </li>
+    <li >
+        <a href="/cv/">CV</a>
+      </li>
+    <li >
+        <a href="/imprint/">Imprint</a>
+      </li>
+    
+  </ul>
+</nav>
+<!-- Main content wrap -->
+<main class="content " role=main>
+  <!-- Post-wide custom CSS -->
+
+
+<!-- Article wrapper, limit width -->
+<article lang="en">
+
+  <!-- Post title -->
+  <header style="     ">
+
+    <h1 class="" title="Standing up Sigstore locally" data-title="Standing up Sigstore locally">
+      Standing up Sigstore locally<span class="dot dot--post"> </span>
+    </h1>
+
+    
+      <small>
+        By <span rel="author">Felix Wolff</span>
+        on <time datetime="2022-11-10T00:00:00+01:00">Nov 10, 2022</time>
+      </small>
+    
+
+    
+      <small>Instructions for running a Sigstore deployment on your machine in k8s</small>
+    
+
+  </header>
+
+  <!-- Post content -->
+  <div class="post-content">
+    <p>In this post, I describe steps how to stand up a Sigstore deployment on your Kubernetes cluster,
+adding detail and background information where I feel that it is needed.
+The post is aimed at the early adopter of the project who is roughly familiar with how Sigstore works internally.
+If you follow right through the end, you will have a working Sigstore deployment on your machine - 
+usable in the same manner as you would a remote deployment.</p>
+
+<p>As usual, I stand on the shoulders of giants, as I have benefitted a lot from
+<a href="https://github.com/sigstore/scaffolding/blob/main/getting-started.md">other</a>
+<a href="https://sthw.decodebytes.sh/">earlier</a>
+<a href="https://blog.sigstore.dev/scaffolding-sigstore-e893eb962f22">articles</a> on this subject out there.
+I hope that this updated version of a setup guide helps with getting up to speed with Sigstore quickly.</p>
+
+<p>All you need to follow along is a working Docker installation on your machine, and Internet connectivity.
+Throughout the next steps I will sometimes refer to files that aren’t printed out here.
+You can find them in this repository: <a href="https://github.com/flxw/sigstore-local-setup">flxw/sigstore-local-setup</a>.</p>
+
+<h1 id="step-1-set-up-kind-and-ingreess">Step 1: Set up KinD and Ingreess</h1>
+<p>Now, we set up our kubernetes cluster, using kind.
+I find it to be an awesome tool for quickly prototyping and testing cluster.
+If you are unfamiliar with it, here’s the description from their <a href="https://kind.sigs.k8s.io/">website</a>.
+Kind is a shorthand for <em>kubernetes in docker</em>:</p>
+
+<blockquote>
+  <p>kind is a tool for running local Kubernetes clusters using Docker container “nodes”.
+kind was primarily designed for testing Kubernetes itself, but may be used for local development or CI.</p>
+</blockquote>
+
+<p>Along with the cluster, we shall also set up an nginx ingress, in line with the <a href="https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx">official instructions</a>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+brew <span class="nb">install </span>kind <span class="c"># only for brew users ;)</span>
+kind create cluster <span class="nt">--name</span> kind-for-helm <span class="nt">--config</span><span class="o">=</span>cluster-config.yaml
+kubectl apply <span class="nt">-f</span> https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+</code></pre></div></div>
+
+<h1 id="step-20-install-sigstore">Step 2.0: Install Sigstore</h1>
+
+<p>After checking that our cluster and ingress are ready, we can install the bulk of Sigstore via <a href="https://helm.sh">helm</a>:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+helm repo add sigstore https://sigstore.github.io/helm-charts
+helm upgrade <span class="se">\</span>
+    <span class="nt">-i</span> scaffold <span class="se">\</span>
+    sigstore/scaffold <span class="se">\</span>
+    <span class="nt">-n</span> sigstore <span class="se">\</span>
+    <span class="nt">--create-namespace</span> <span class="se">\</span>
+    <span class="nt">--values</span> scaffold-values.yaml
+</code></pre></div></div>
+
+<p>This <code class="language-plaintext highlighter-rouge">scaffold</code> chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog and trillian with an underlying MySQL database.
+Additionally, it generates all of the required signing keys as secrets, configmaps, services and ingresses.</p>
+
+<h2 id="step-21-set-up-tuf">Step 2.1 Set up TUF</h2>
+<p><strong>Attention: This step is a workaround for a bug in the scaffold chart. I’ll remove it from the manual once it’s fixed</strong></p>
+
+<p>You can understand TUF as the component that is involved in distributing information about the involved signing keys to the Sigstore clients.
+It’s a key part of having a servicable deployment, in the event that the signing keys need to be changed.
+For our crude example, we also need to copy over the keys from the other service namespaces.
+Without the secrets, the TUF deployment won’t come up.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+helm upgrade <span class="se">\</span>
+    <span class="nt">-i</span> tuf <span class="se">\</span>
+    sigstore/tuf <span class="se">\</span>
+    <span class="nt">-n</span> tuf-system <span class="se">\</span>
+    <span class="nt">--create-namespace</span> <span class="se">\</span>
+    <span class="nt">--values</span> tuf-values.yaml
+
+kubectl <span class="nt">-n</span> fulcio-system get secrets fulcio-server-secret <span class="nt">-oyaml</span> <span class="se">\</span>
+    | <span class="nb">sed</span> <span class="s1">'s/namespace: .*/namespace: tuf-system/'</span> | kubectl apply <span class="nt">-f</span> -
+kubectl <span class="nt">-n</span> ctlog-system get secrets ctlog-secret <span class="nt">-oyaml</span> <span class="se">\</span>
+    | <span class="nb">sed</span> <span class="s1">'s/namespace: .*/namespace: tuf-system/'</span> | kubectl apply <span class="nt">-f</span> -
+curl <span class="nt">-k</span> rekor.sigstore.local/api/v1/log/publicKey <span class="nt">-o</span> /tmp/key <span class="nt">-v</span> <span class="o">&amp;&amp;</span> <span class="se">\</span>
+    kubectl create secret generic rekor-public-key <span class="se">\</span>
+        <span class="nt">--from-file</span><span class="o">=</span><span class="nv">key</span><span class="o">=</span>/tmp/key
+</code></pre></div></div>
+
+<h1 id="step-3-certificate-chain-and-domains">Step 3: Certificate chain and domains</h1>
+<p>To make Sigstore clients work with the cluster, you need to generate a chain of certificates with a self-signed root.
+You then need to add the root certificate to your OS’s trust store.
+Alternatively, you can work with independent certificates, but I find it easer to add only one certificate to the trust store.
+Finally, you need to add four entries to your <code class="language-plaintext highlighter-rouge">/etc/hosts</code> file.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/sh</span>
+<span class="c"># create self-signed CA certificate (add ca.cert.pem to trust store and configure explicit trust)</span>
+openssl req <span class="nt">-x509</span> <span class="nt">-newkey</span> rsa:4096 <span class="nt">-keyout</span> ca.private.pem <span class="nt">-out</span> ca.cert.pem <span class="nt">-sha256</span> <span class="nt">-days</span> 365 <span class="nt">-nodes</span>
+
+<span class="k">for </span>service_name <span class="k">in </span>rekor fulcio tuf<span class="p">;</span> <span class="k">do
+    </span><span class="nb">cat</span> <span class="o">&lt;&lt;</span> <span class="no">EOF</span><span class="sh"> &gt; </span><span class="nv">$service_name</span><span class="sh">.cert.ext
+authorityKeyIdentifier=keyid,issuer
+basicConstraints=CA:FALSE
+keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
+subjectAltName = @alt_names
+
+[alt_names]
+DNS.1 = </span><span class="nv">$service_name</span><span class="sh">.sigstore.local
+</span><span class="no">EOF
+
+</span>    openssl req <span class="nt">-new</span> <span class="nt">-newkey</span> rsa:4096 <span class="se">\</span>
+        <span class="nt">-keyout</span> <span class="nv">$service_name</span>.private.pem <span class="se">\</span>
+        <span class="nt">-out</span> <span class="nv">$service_name</span>.req.pem <span class="nt">-nodes</span>
+
+    openssl x509 <span class="nt">-req</span> <span class="nt">-in</span> <span class="nv">$service_name</span>.req.pem <span class="se">\</span>
+        <span class="nt">-days</span> 365 <span class="nt">-CA</span> ca.cert.pem <span class="nt">-CAkey</span> ca.private.pem <span class="se">\</span>
+        <span class="nt">-CAcreateserial</span> <span class="nt">-out</span> <span class="nv">$service_name</span>.signed.cert.pem <span class="se">\</span>
+        <span class="nt">-extfile</span> <span class="nv">$service_name</span>.cert.ext
+
+    kubectl create secret tls <span class="nv">$service_name</span><span class="nt">-system</span> <span class="se">\</span>
+        <span class="nt">--namespace</span><span class="o">=</span><span class="nv">$service_name</span><span class="nt">-system</span> <span class="se">\</span>
+        <span class="nt">--cert</span><span class="o">=</span><span class="nv">$service_name</span>.cert.pem <span class="se">\</span>
+        <span class="nt">--key</span><span class="o">=</span><span class="nv">$service_name</span>.private.pem
+<span class="k">done
+
+</span><span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> &gt;&gt; /etc/hosts
+127.0.0.1 fulcio.sigstore.local
+127.0.0.1 rekor.sigstore.local 
+127.0.0.1 tuf.sigstore.local
+127.0.0.1 registry.local
+</span><span class="no">EOF
+</span></code></pre></div></div>
+
+<h1 id="step-4-cosign-initialization">Step 4: Cosign initialization</h1>
+<p>Out of the box, <code class="language-plaintext highlighter-rouge">cosign</code> is configured to work with the public infrastructure.
+Hence, we need to tell it about the certificates used in our cluster.
+To do that, tuf compiles a JSON file that needs to be extracted from the cluster.
+It only needs to be used once for every initialization.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+kubectl <span class="nt">-n</span> tuf-system get secrets tuf-root <span class="nt">-ojsonpath</span><span class="o">=</span><span class="s1">'{.data.root}'</span> <span class="se">\</span>
+    | <span class="nb">base64</span> <span class="nt">-d</span> <span class="o">&gt;</span> root.json
+cosign initialize <span class="nt">--root</span> root.json <span class="nt">--mirror</span> https://tuf.sigstore.local
+</code></pre></div></div>
+
+<h1 id="step-4-test">Step 4: Test</h1>
+
+<p>From now on, it’s just testing and enjoying what you have built. :)
+In our test, we shall put a container into a locally runnning registry and sign it.
+Afterwards, we shall verify it.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
+
+<span class="c"># First, we'll spin up the local registry</span>
+docker run <span class="nt">-d</span> <span class="se">\</span>
+    <span class="nt">--restart</span><span class="o">=</span>always <span class="se">\</span>
+    <span class="nt">-p</span> 5000:5000 <span class="se">\</span>
+    <span class="nt">--name</span> registry.local <span class="se">\</span>
+    registry:2
+
+<span class="c"># Second, a test container is created</span>
+<span class="c"># Make sure you have go installed for this</span>
+<span class="nv">KO_DOCKER_REPO</span><span class="o">=</span>registry.local:5000/sigstore
+<span class="nb">pushd</span> <span class="si">$(</span><span class="nb">mktemp</span> <span class="nt">-d</span><span class="si">)</span>
+go mod init example.com/demo
+<span class="nb">cat</span> <span class="o">&lt;&lt;</span><span class="no">EOF</span><span class="sh"> &gt; main.go
+package main
+import "fmt"
+func main() {
+   fmt.Println("hello world")
+}
+</span><span class="no">EOF
+</span><span class="nb">export </span><span class="nv">IMAGE</span><span class="o">=</span><span class="sb">`</span>ko publish <span class="nt">-B</span> example.com/demo<span class="sb">`</span>
+<span class="nb">echo</span> <span class="s2">"Created image </span><span class="nv">$IMAGE</span><span class="s2">"</span>
+<span class="nb">popd</span>
+
+<span class="c"># Third, we shall sign the container</span>
+<span class="nv">REKOR_URL</span><span class="o">=</span>https://rekor.sigstore.local
+<span class="nv">FULCIO_URL</span><span class="o">=</span>https://fulcio.sigstore.local
+<span class="nb">export </span><span class="nv">COSIGN_EXPERIMENTAL</span><span class="o">=</span>1
+
+<span class="c"># add --verbose if you are curious ;)</span>
+cosign sign <span class="se">\</span>
+  <span class="nt">--fulcio-url</span><span class="o">=</span><span class="nv">$FULCIO_URL</span> <span class="se">\</span>
+  <span class="nt">--rekor-url</span><span class="o">=</span><span class="nv">$REKOR_URL</span> <span class="se">\</span>
+  <span class="nt">--force</span> <span class="se">\</span>
+  <span class="nt">--allow-insecure-registry</span> <span class="se">\</span>
+  <span class="nv">$IMAGE</span>
+
+<span class="c"># Fourth and last - signature verification!</span>
+cosign verify <span class="se">\</span>
+    <span class="nt">--allow-insecure-registry</span> <span class="se">\</span>
+    <span class="nt">--rekor-url</span><span class="o">=</span>https://rekor.sigstore.local <span class="se">\</span>
+    <span class="nv">$IMAGE</span>
+</code></pre></div></div>
+
+<p>Congratulations - you have now mastered the deployment of Sigstore on your machine!
+Running such a setup in production is a bit more complex,
+and we are currently hard at work at documenting the efforts involved.
+If you’re curious about what’s next and how to help, read on in the next section.</p>
+
+<h1 id="getting-involved">Getting involved</h1>
+<p>This is the shortest and fastest way to set up Sigstore I know - until now!
+The Sigstore project is just getting started, and there’s tons of ways to <a href="https://docs.sigstore.dev/contributing">contribute</a>.
+You can meet me and many others in the Sigstore Slack channel <code class="language-plaintext highlighter-rouge">private-sigstore-users</code>, putting together a manual for operating a deployment for a longer duration.</p>
+
+<p>This is a living document, and I’ll edit in the future to remove the TUF section, and add one for including DEX as an OIDC token forwarder.</p>
+
+
+    
+    
+
+    
+  </div>
+
+</article>
+
+</main>
+<!-- Footer section -->
+
+  <footer class="footer">
+    <ul>
+      <li><a href="/">Felix Wolff</a></li>
+
+      
+        <li>
+          <a href="https://sparanoid.com/lab/amsf/" title="Almace Scaffolding with theme Curtana">AMSF</a>
+        </li>
+      
+
+      <li>
+          <a href="/feed.xml">feed</a>
+        </li>
+      
+    </ul>
+  </footer>
+
+
+<!-- Theme scripts -->
+<script src="/assets/themes/curtana/js/app.js?assets-inline"></script>
+
+<!-- User scripts -->
+<script src="/assets/js/user.js?assets-inline"></script>
+
+<!-- Lightense Images -->
+
+
+<!-- Service Worker  -->
+
+
+<!-- Google Analytics -->
+
+
+<!-- Foot hooks -->
+
+
+<!-- Finale -->
+</html>
