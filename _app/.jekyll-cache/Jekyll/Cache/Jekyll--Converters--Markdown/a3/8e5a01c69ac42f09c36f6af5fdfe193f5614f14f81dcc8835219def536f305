@@ -1,4 +1,0 @@
-I"<p>At work I deal with Kubernetes and kustomize on a daily basis.
-Today I have pulled my hair about how I could patch a value in a job that was included in the base kustomization.
-I knew that there were several ways to do it, and I realized that I could not tell the difference between <code class="language-plaintext highlighter-rouge">patches</code>, <code class="language-plaintext highlighter-rouge">patchesJson6902</code> and <code class="language-plaintext highlighter-rouge">patchesStrategicMerge</code>.</p>
-:ET

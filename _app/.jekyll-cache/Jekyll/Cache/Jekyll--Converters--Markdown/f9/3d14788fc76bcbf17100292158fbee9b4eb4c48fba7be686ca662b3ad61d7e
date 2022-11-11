@@ -1,4 +1,0 @@
-I"<<p>If you use <code class="language-plaintext highlighter-rouge">external-secrets</code> to sync secrets from some a key management
-system like AWS KMS or Vault into your cluster,
-you have become familiar with the <code class="language-plaintext highlighter-rouge">ExternalSecret</code> object introduced by it.</p>
-:ET
