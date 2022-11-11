@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://0.0.0.0:4321/</loc>
+    <loc>https://flxw.de/</loc>
     <lastmod>2022-11-11</lastmod>
   </url>
 
   
     
       <url>
-        <loc>http://0.0.0.0:4321/about/</loc>
+        <loc>https://flxw.de/about/</loc>
         
           <lastmod>2022-10-22</lastmod>
         
@@ -16,7 +16,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/blog/</loc>
+        <loc>https://flxw.de/blog/</loc>
         
           <lastmod>2022-10-25</lastmod>
         
@@ -25,7 +25,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/cv/</loc>
+        <loc>https://flxw.de/cv/</loc>
         
           <lastmod>2022-10-25</lastmod>
         
@@ -35,12 +35,8 @@
     
   
     
-  
-    
-  
-    
       <url>
-        <loc>http://0.0.0.0:4321/imprint/</loc>
+        <loc>https://flxw.de/imprint/</loc>
         
           <lastmod>2022-10-22</lastmod>
         
@@ -49,7 +45,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/</loc>
+        <loc>https://flxw.de/</loc>
         
           <lastmod>2022-10-25</lastmod>
         
@@ -60,7 +56,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/standing-up-sigstore-locally.html</loc>
+        <loc>https://flxw.de/standing-up-sigstore-locally.html</loc>
         
           <lastmod>2022-11-11</lastmod>
         
@@ -69,7 +65,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/external-secret-encoding.html</loc>
+        <loc>https://flxw.de/external-secret-encoding.html</loc>
         
           <lastmod>2022-11-04</lastmod>
         
@@ -78,7 +74,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/cloud-computing-isnt-the-silver-bullet.html</loc>
+        <loc>https://flxw.de/cloud-computing-isnt-the-silver-bullet.html</loc>
         
           <lastmod>2022-11-03</lastmod>
         
@@ -87,7 +83,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/codeberg-a-github-alternative-from-europe.html</loc>
+        <loc>https://flxw.de/codeberg-a-github-alternative-from-europe.html</loc>
         
           <lastmod>2022-10-25</lastmod>
         
@@ -96,7 +92,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/merge-kube-configurations.html</loc>
+        <loc>https://flxw.de/merge-kube-configurations.html</loc>
         
           <lastmod>2022-11-04</lastmod>
         
@@ -105,7 +101,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/what-the-patch.html</loc>
+        <loc>https://flxw.de/what-the-patch.html</loc>
         
           <lastmod>2022-10-22</lastmod>
         
@@ -114,7 +110,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/a-beancount-tutorial-and-framework.html</loc>
+        <loc>https://flxw.de/a-beancount-tutorial-and-framework.html</loc>
         
           <lastmod>2022-10-22</lastmod>
         
@@ -123,7 +119,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/tracking-finances-made-easy.html</loc>
+        <loc>https://flxw.de/tracking-finances-made-easy.html</loc>
         
           <lastmod>2022-10-25</lastmod>
         
@@ -132,7 +128,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/upgrading-guide-v1.1.0.html</loc>
+        <loc>https://flxw.de/upgrading-guide-v1.1.0.html</loc>
         
           <lastmod>2022-10-22</lastmod>
         
@@ -141,7 +137,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/why-i-am-done-with-smartwatches.html</loc>
+        <loc>https://flxw.de/why-i-am-done-with-smartwatches.html</loc>
         
           <lastmod>2022-10-22</lastmod>
         
@@ -150,7 +146,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/setting-up-ms-office-excel-analysis-with-HANA.html</loc>
+        <loc>https://flxw.de/setting-up-ms-office-excel-analysis-with-HANA.html</loc>
         
           <lastmod>2022-10-22</lastmod>
         
@@ -159,7 +155,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/my-vision-on-wearables.html</loc>
+        <loc>https://flxw.de/my-vision-on-wearables.html</loc>
         
           <lastmod>2022-10-25</lastmod>
         
@@ -168,7 +164,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/nginx-smtp-relay.html</loc>
+        <loc>https://flxw.de/nginx-smtp-relay.html</loc>
         
           <lastmod>2022-10-22</lastmod>
         
@@ -177,7 +173,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/install-windows-7+-from-usb.html</loc>
+        <loc>https://flxw.de/install-windows-7+-from-usb.html</loc>
         
           <lastmod>2022-10-25</lastmod>
         
@@ -186,7 +182,7 @@
   
     
       <url>
-        <loc>http://0.0.0.0:4321/color-your-term.html</loc>
+        <loc>https://flxw.de/color-your-term.html</loc>
         
           <lastmod>2022-10-22</lastmod>
         
