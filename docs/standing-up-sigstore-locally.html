@@ -54,9 +54,9 @@
 
 
   <meta property="article:published_time" content="2022-11-10T00:00:00+01:00">
-  <meta property="article:modified_time" content="2022-11-11T14:55:53+01:00">
+  <meta property="article:modified_time" content="2022-11-11T16:07:59+01:00">
   <meta name="twitter:label1" value="Words">
-  <meta name="twitter:data1" value="1319 words">
+  <meta name="twitter:data1" value="1320 words">
   <meta name="twitter:label2" value="Reading time">
   <meta name="twitter:data2" value="6 mins">
 
@@ -137,10 +137,10 @@
 
   <!-- Post content -->
   <div class="post-content">
-    <p>In this post, I describe steps how to stand up a Sigstore deployment on your Kubernetes cluster,
+    <p>In this post, I describe steps on how to stand up a Sigstore deployment on your Kubernetes cluster,
 adding detail and background information where I feel that it is needed.
 The post is aimed at the early adopter of the project who is roughly familiar with how Sigstore works internally.
-If you follow right through the end, you will have a working Sigstore deployment on your machine - 
+If you follow right through to the end, you will have a working Sigstore deployment on your machine - 
 usable in the same manner as you would a remote deployment.</p>
 
 <p>As usual, I stand on the shoulders of giants, as I have benefitted a lot from
@@ -150,14 +150,14 @@ usable in the same manner as you would a remote deployment.</p>
 I hope that this updated version of a setup guide helps with getting up to speed with Sigstore quickly.</p>
 
 <p>All you need to follow along is a working Docker installation on your machine, and Internet connectivity.
-Throughout the next steps I will sometimes refer to files that aren’t printed out here.
+Throughout the next steps, I will sometimes refer to files that aren’t printed out here.
 You can find them in this repository: <a href="https://github.com/flxw/sigstore-local-setup">flxw/sigstore-local-setup</a>.</p>
 
 <h1 id="step-1-set-up-kind-and-ingress">Step 1: Set up KinD and Ingress</h1>
-<p>Now, we set up our kubernetes cluster, using kind.
-I find it to be an awesome tool for quickly prototyping and testing cluster.
+<p>Now, we set up our Kubernetes cluster, using kind.
+I find it to be an awesome tool for quickly prototyping and testing clusters.
 If you are unfamiliar with it, here’s the description from their <a href="https://kind.sigs.k8s.io/">website</a>.
-Kind is a shorthand for <em>kubernetes in docker</em>:</p>
+Kind is a shorthand for <em>Kubernetes in docker</em>:</p>
 
 <blockquote>
   <p>kind is a tool for running local Kubernetes clusters using Docker container “nodes”.
@@ -186,14 +186,14 @@ helm upgrade <span class="se">\</span>
     <span class="nt">--values</span> scaffold-values.yaml
 </code></pre></div></div>
 
-<p>This <code class="language-plaintext highlighter-rouge">scaffold</code> chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog and trillian with an underlying MySQL database.
-Additionally, it generates all of the required signing keys as secrets, configmaps, services and ingresses.</p>
+<p>This <code class="language-plaintext highlighter-rouge">scaffold</code> chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog, and trillian with an underlying MySQL database.
+Additionally, it generates all of the required signing keys as secrets, configmaps, services, and ingresses.</p>
 
 <h2 id="step-21-set-up-tuf">Step 2.1 Set up TUF</h2>
 <p><strong>Attention: This step is a workaround for a bug in the scaffold chart. I’ll remove it from the manual once it’s fixed</strong></p>
 
 <p>You can understand TUF as the component that is involved in distributing information about the involved signing keys to the Sigstore clients.
-It’s a key part of having a servicable deployment, in the event that the signing keys need to be changed.
+It’s a key part of having a serviceable deployment if the signing keys need to be changed.
 For our crude example, we also need to copy over the keys from the other service namespaces.
 Without the secrets, the TUF deployment won’t come up.</p>
 
@@ -217,11 +217,11 @@ curl <span class="nt">-k</span> rekor.sigstore.local/api/v1/log/publicKey <span 
 <h1 id="step-3-certificate-chain-and-domains">Step 3: Certificate chain and domains</h1>
 <p>To make Sigstore clients work with the cluster, you need to generate a chain of certificates with a self-signed root.
 You then need to add the root certificate to your OS’s trust store.
-Alternatively, you can work with independent certificates, but I find it easer to add only one certificate to the trust store.
+Alternatively, you can work with independent certificates, but I find it easier to add only one certificate to the trust store.
 Finally, you need to add four entries to your <code class="language-plaintext highlighter-rouge">/etc/hosts</code> file.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/sh</span>
-<span class="c"># create self-signed CA certificate (add ca.cert.pem to trust store and configure explicit trust)</span>
+<span class="c"># create a self-signed CA certificate (add ca.cert.pem to trust store and configure explicit trust)</span>
 openssl req <span class="nt">-x509</span> <span class="nt">-newkey</span> rsa:4096 <span class="nt">-keyout</span> ca.private.pem <span class="nt">-out</span> ca.cert.pem <span class="nt">-sha256</span> <span class="nt">-days</span> 365 <span class="nt">-nodes</span>
 
 <span class="k">for </span>service_name <span class="k">in </span>rekor fulcio tuf<span class="p">;</span> <span class="k">do
@@ -270,11 +270,11 @@ kubectl <span class="nt">-n</span> tuf-system get secrets tuf-root <span class="
 cosign initialize <span class="nt">--root</span> root.json <span class="nt">--mirror</span> https://tuf.sigstore.local
 </code></pre></div></div>
 
-<h1 id="step-4-test">Step 4: Test</h1>
+<h1 id="step-5-test">Step 5: Test</h1>
 
 <p>From now on, it’s just testing and enjoying what you have built. :)
-In our test, we shall put a container into a locally runnning registry and sign it.
-Afterwards, we shall verify it.</p>
+In our test, we shall put a container into a locally running registry and sign it.
+Afterward, we shall verify it.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 
@@ -323,15 +323,15 @@ cosign verify <span class="se">\</span>
 
 <p>Congratulations - you have now mastered the deployment of Sigstore on your machine!
 Running such a setup in production is a bit more complex,
-and we are currently hard at work at documenting the efforts involved.
+and we are currently hard at work documenting the efforts involved.
 If you’re curious about what’s next and how to help, read on in the next section.</p>
 
 <h1 id="getting-involved">Getting involved</h1>
 <p>This is the shortest and fastest way to set up Sigstore I know - until now!
-The Sigstore project is just getting started, and there’s tons of ways to <a href="https://docs.sigstore.dev/contributing">contribute</a>.
+The Sigstore project is just getting started, and there are tons of ways to <a href="https://docs.sigstore.dev/contributing">contribute</a>.
 You can meet me and many others in the Sigstore Slack channel <code class="language-plaintext highlighter-rouge">private-sigstore-users</code>, putting together a manual for operating a deployment for a longer duration.</p>
 
-<p>This is a living document, and I’ll edit in the future to remove the TUF section, and add one for including DEX as an OIDC token forwarder.</p>
+<p>This is a living document, and I’ll edit it in the future to remove the TUF section and add one for including DEX as an OIDC token forwarder.</p>
 
 
     
@@ -341,7 +341,7 @@ You can meet me and many others in the Sigstore Slack channel <code class="langu
       <footer class="post-modified-date">
         <p>
           Updated
-          <time datetime=" 2022-11-11T14:55:53+08:00 ">
+          <time datetime=" 2022-11-11T16:07:59+08:00 ">
             Friday, Nov 11, 2022
           </time>
         </p>
