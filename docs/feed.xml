@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>Felix Wolff</title>
   <subtitle>Super-fast Jekyll framework</subtitle>
-  <updated>2022-11-11T16:20:53+01:00</updated>
+  <updated>2022-11-16T17:21:07+01:00</updated>
   <id>https://flxw.de/</id>
   <generator uri="https://sparanoid.com/lab/amsf/" version="2.0.22">Almace Scaffolding</generator>
 
@@ -27,7 +27,7 @@
         <published>2022-11-10T00:00:00+01:00</published>
 
         
-          <updated>2022-11-11T16:07:59+01:00</updated>
+          <updated>2022-11-11T16:21:05+01:00</updated>
         
 
         <author>
@@ -69,7 +69,7 @@ kind was primarily designed for testing Kubernetes itself, but may be used for l
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
 brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;kind &lt;span class=&quot;c&quot;&gt;# only for brew users ;)&lt;/span&gt;
-kind create cluster &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; kind-for-helm &lt;span class=&quot;nt&quot;&gt;--config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;cluster-config.yaml
+kind create cluster &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; kind-for-helm &lt;span class=&quot;nt&quot;&gt;--config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;kind-cluster-config.yaml
 kubectl apply &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -87,33 +87,8 @@ helm upgrade &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;--values&lt;/span&gt; scaffold-values.yaml
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;This &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scaffold&lt;/code&gt; chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog, and trillian with an underlying MySQL database.
+&lt;p&gt;This &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;scaffold&lt;/code&gt; chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog, trillian, and TUF with an underlying MySQL database.
 Additionally, it generates all of the required signing keys as secrets, configmaps, services, and ingresses.&lt;/p&gt;
-
-&lt;h2 id=&quot;step-21-set-up-tuf&quot;&gt;Step 2.1 Set up TUF&lt;/h2&gt;
-&lt;p&gt;&lt;strong&gt;Attention: This step is a workaround for a bug in the scaffold chart. I’ll remove it from the manual once it’s fixed&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;You can understand TUF as the component that is involved in distributing information about the involved signing keys to the Sigstore clients.
-It’s a key part of having a serviceable deployment if the signing keys need to be changed.
-For our crude example, we also need to copy over the keys from the other service namespaces.
-Without the secrets, the TUF deployment won’t come up.&lt;/p&gt;
-
-&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-helm upgrade &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; tuf &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    sigstore/tuf &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; tuf-system &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;--create-namespace&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;--values&lt;/span&gt; tuf-values.yaml
-
-kubectl &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; fulcio-system get secrets fulcio-server-secret &lt;span class=&quot;nt&quot;&gt;-oyaml&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    | &lt;span class=&quot;nb&quot;&gt;sed&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'s/namespace: .*/namespace: tuf-system/'&lt;/span&gt; | kubectl apply &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; -
-kubectl &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; ctlog-system get secrets ctlog-secret &lt;span class=&quot;nt&quot;&gt;-oyaml&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    | &lt;span class=&quot;nb&quot;&gt;sed&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'s/namespace: .*/namespace: tuf-system/'&lt;/span&gt; | kubectl apply &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; -
-curl &lt;span class=&quot;nt&quot;&gt;-k&lt;/span&gt; rekor.sigstore.local/api/v1/log/publicKey &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; /tmp/key &lt;span class=&quot;nt&quot;&gt;-v&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    kubectl create secret generic rekor-public-key &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;--from-file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;/tmp/key
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h1 id=&quot;step-3-certificate-chain-and-domains&quot;&gt;Step 3: Certificate chain and domains&lt;/h1&gt;
 &lt;p&gt;To make Sigstore clients work with the cluster, you need to generate a chain of certificates with a self-signed root.
@@ -147,7 +122,7 @@ DNS.1 = &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;
 
     kubectl create secret tls &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-system&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;--namespace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-system&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;--cert&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.cert.pem &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;--cert&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.signed.cert.pem &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;--key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.private.pem
 &lt;span class=&quot;k&quot;&gt;done
 
@@ -232,7 +207,7 @@ If you’re curious about what’s next and how to help, read on in the next sec
 The Sigstore project is just getting started, and there are tons of ways to &lt;a href=&quot;https://docs.sigstore.dev/contributing&quot;&gt;contribute&lt;/a&gt;.
 You can meet me and many others in the Sigstore Slack channel &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;private-sigstore-users&lt;/code&gt;, putting together a manual for operating a deployment for a longer duration.&lt;/p&gt;
 
-&lt;p&gt;This is a living document, and I’ll edit it in the future to remove the TUF section and add one for including DEX as an OIDC token forwarder.&lt;/p&gt;
+&lt;p&gt;This is a living document, and I’ll edit it in the future to include DEX as an OIDC token forwarder.&lt;/p&gt;
 
           
           

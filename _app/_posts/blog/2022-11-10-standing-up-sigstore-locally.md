@@ -35,7 +35,7 @@ Along with the cluster, we shall also set up an nginx ingress, in line with the 
 ```bash
 #!/bin/bash
 brew install kind # only for brew users ;)
-kind create cluster --name kind-for-helm --config=cluster-config.yaml
+kind create cluster --name kind-for-helm --config=kind-cluster-config.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 ```
 
@@ -54,34 +54,8 @@ helm upgrade \
     --values scaffold-values.yaml
 ```
 
-This `scaffold` chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog, and trillian with an underlying MySQL database.
+This `scaffold` chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog, trillian, and TUF with an underlying MySQL database.
 Additionally, it generates all of the required signing keys as secrets, configmaps, services, and ingresses.
-
-## Step 2.1 Set up TUF
-**Attention: This step is a workaround for a bug in the scaffold chart. I'll remove it from the manual once it's fixed**
-
-You can understand TUF as the component that is involved in distributing information about the involved signing keys to the Sigstore clients.
-It's a key part of having a serviceable deployment if the signing keys need to be changed.
-For our crude example, we also need to copy over the keys from the other service namespaces.
-Without the secrets, the TUF deployment won't come up.
-
-```bash
-#!/bin/bash
-helm upgrade \
-    -i tuf \
-    sigstore/tuf \
-    -n tuf-system \
-    --create-namespace \
-    --values tuf-values.yaml
-
-kubectl -n fulcio-system get secrets fulcio-server-secret -oyaml \
-    | sed 's/namespace: .*/namespace: tuf-system/' | kubectl apply -f -
-kubectl -n ctlog-system get secrets ctlog-secret -oyaml \
-    | sed 's/namespace: .*/namespace: tuf-system/' | kubectl apply -f -
-curl -k rekor.sigstore.local/api/v1/log/publicKey -o /tmp/key -v && \
-    kubectl create secret generic rekor-public-key \
-        --from-file=key=/tmp/key
-```
 
 # Step 3: Certificate chain and domains
 To make Sigstore clients work with the cluster, you need to generate a chain of certificates with a self-signed root.
@@ -116,7 +90,7 @@ EOF
 
     kubectl create secret tls $service_name-system \
         --namespace=$service_name-system \
-        --cert=$service_name.cert.pem \
+        --cert=$service_name.signed.cert.pem \
         --key=$service_name.private.pem
 done
 
@@ -204,4 +178,4 @@ This is the shortest and fastest way to set up Sigstore I know - until now!
 The Sigstore project is just getting started, and there are tons of ways to [contribute](https://docs.sigstore.dev/contributing).
 You can meet me and many others in the Sigstore Slack channel `private-sigstore-users`, putting together a manual for operating a deployment for a longer duration.
 
-This is a living document, and I'll edit it in the future to remove the TUF section and add one for including DEX as an OIDC token forwarder.
+This is a living document, and I'll edit it in the future to include DEX as an OIDC token forwarder.

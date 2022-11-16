@@ -54,11 +54,11 @@
 
 
   <meta property="article:published_time" content="2022-11-10T00:00:00+01:00">
-  <meta property="article:modified_time" content="2022-11-11T16:07:59+01:00">
+  <meta property="article:modified_time" content="2022-11-11T16:21:05+01:00">
   <meta name="twitter:label1" value="Words">
-  <meta name="twitter:data1" value="1320 words">
+  <meta name="twitter:data1" value="1116 words">
   <meta name="twitter:label2" value="Reading time">
-  <meta name="twitter:data2" value="6 mins">
+  <meta name="twitter:data2" value="5 mins">
 
 <!-- Post specified styles -->
 <style data-assets-inline="">
@@ -168,7 +168,7 @@ kind was primarily designed for testing Kubernetes itself, but may be used for l
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
 brew <span class="nb">install </span>kind <span class="c"># only for brew users ;)</span>
-kind create cluster <span class="nt">--name</span> kind-for-helm <span class="nt">--config</span><span class="o">=</span>cluster-config.yaml
+kind create cluster <span class="nt">--name</span> kind-for-helm <span class="nt">--config</span><span class="o">=</span>kind-cluster-config.yaml
 kubectl apply <span class="nt">-f</span> https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 </code></pre></div></div>
 
@@ -186,33 +186,8 @@ helm upgrade <span class="se">\</span>
     <span class="nt">--values</span> scaffold-values.yaml
 </code></pre></div></div>
 
-<p>This <code class="language-plaintext highlighter-rouge">scaffold</code> chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog, and trillian with an underlying MySQL database.
+<p>This <code class="language-plaintext highlighter-rouge">scaffold</code> chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog, trillian, and TUF with an underlying MySQL database.
 Additionally, it generates all of the required signing keys as secrets, configmaps, services, and ingresses.</p>
-
-<h2 id="step-21-set-up-tuf">Step 2.1 Set up TUF</h2>
-<p><strong>Attention: This step is a workaround for a bug in the scaffold chart. I’ll remove it from the manual once it’s fixed</strong></p>
-
-<p>You can understand TUF as the component that is involved in distributing information about the involved signing keys to the Sigstore clients.
-It’s a key part of having a serviceable deployment if the signing keys need to be changed.
-For our crude example, we also need to copy over the keys from the other service namespaces.
-Without the secrets, the TUF deployment won’t come up.</p>
-
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-helm upgrade <span class="se">\</span>
-    <span class="nt">-i</span> tuf <span class="se">\</span>
-    sigstore/tuf <span class="se">\</span>
-    <span class="nt">-n</span> tuf-system <span class="se">\</span>
-    <span class="nt">--create-namespace</span> <span class="se">\</span>
-    <span class="nt">--values</span> tuf-values.yaml
-
-kubectl <span class="nt">-n</span> fulcio-system get secrets fulcio-server-secret <span class="nt">-oyaml</span> <span class="se">\</span>
-    | <span class="nb">sed</span> <span class="s1">'s/namespace: .*/namespace: tuf-system/'</span> | kubectl apply <span class="nt">-f</span> -
-kubectl <span class="nt">-n</span> ctlog-system get secrets ctlog-secret <span class="nt">-oyaml</span> <span class="se">\</span>
-    | <span class="nb">sed</span> <span class="s1">'s/namespace: .*/namespace: tuf-system/'</span> | kubectl apply <span class="nt">-f</span> -
-curl <span class="nt">-k</span> rekor.sigstore.local/api/v1/log/publicKey <span class="nt">-o</span> /tmp/key <span class="nt">-v</span> <span class="o">&amp;&amp;</span> <span class="se">\</span>
-    kubectl create secret generic rekor-public-key <span class="se">\</span>
-        <span class="nt">--from-file</span><span class="o">=</span><span class="nv">key</span><span class="o">=</span>/tmp/key
-</code></pre></div></div>
 
 <h1 id="step-3-certificate-chain-and-domains">Step 3: Certificate chain and domains</h1>
 <p>To make Sigstore clients work with the cluster, you need to generate a chain of certificates with a self-signed root.
@@ -246,7 +221,7 @@ DNS.1 = </span><span class="nv">$service_name</span><span class="sh">.sigstore.l
 
     kubectl create secret tls <span class="nv">$service_name</span><span class="nt">-system</span> <span class="se">\</span>
         <span class="nt">--namespace</span><span class="o">=</span><span class="nv">$service_name</span><span class="nt">-system</span> <span class="se">\</span>
-        <span class="nt">--cert</span><span class="o">=</span><span class="nv">$service_name</span>.cert.pem <span class="se">\</span>
+        <span class="nt">--cert</span><span class="o">=</span><span class="nv">$service_name</span>.signed.cert.pem <span class="se">\</span>
         <span class="nt">--key</span><span class="o">=</span><span class="nv">$service_name</span>.private.pem
 <span class="k">done
 
@@ -331,7 +306,7 @@ If you’re curious about what’s next and how to help, read on in the next sec
 The Sigstore project is just getting started, and there are tons of ways to <a href="https://docs.sigstore.dev/contributing">contribute</a>.
 You can meet me and many others in the Sigstore Slack channel <code class="language-plaintext highlighter-rouge">private-sigstore-users</code>, putting together a manual for operating a deployment for a longer duration.</p>
 
-<p>This is a living document, and I’ll edit it in the future to remove the TUF section and add one for including DEX as an OIDC token forwarder.</p>
+<p>This is a living document, and I’ll edit it in the future to include DEX as an OIDC token forwarder.</p>
 
 
     
@@ -341,7 +316,7 @@ You can meet me and many others in the Sigstore Slack channel <code class="langu
       <footer class="post-modified-date">
         <p>
           Updated
-          <time datetime=" 2022-11-11T16:07:59+08:00 ">
+          <time datetime=" 2022-11-11T16:21:05+08:00 ">
             Friday, Nov 11, 2022
           </time>
         </p>
