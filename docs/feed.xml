@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>Felix Wolff</title>
   <subtitle>Super-fast Jekyll framework</subtitle>
-  <updated>2022-11-16T17:21:07+01:00</updated>
+  <updated>2022-11-30T12:44:47+01:00</updated>
   <id>https://flxw.de/</id>
   <generator uri="https://sparanoid.com/lab/amsf/" version="2.0.22">Almace Scaffolding</generator>
 
@@ -27,7 +27,7 @@
         <published>2022-11-10T00:00:00+01:00</published>
 
         
-          <updated>2022-11-11T16:21:05+01:00</updated>
+          <updated>2022-11-16T17:21:35+01:00</updated>
         
 
         <author>
@@ -68,12 +68,14 @@ kind was primarily designed for testing Kubernetes itself, but may be used for l
 &lt;p&gt;Along with the cluster, we shall also set up an nginx ingress, in line with the &lt;a href=&quot;https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx&quot;&gt;official instructions&lt;/a&gt;:&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;kind &lt;span class=&quot;c&quot;&gt;# only for brew users ;)&lt;/span&gt;
+brew &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;kind cosign ko &lt;span class=&quot;c&quot;&gt;# only for brew users ;)&lt;/span&gt;
 kind create cluster &lt;span class=&quot;nt&quot;&gt;--name&lt;/span&gt; kind-for-helm &lt;span class=&quot;nt&quot;&gt;--config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;kind-cluster-config.yaml
 kubectl apply &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;h1 id=&quot;step-20-install-sigstore&quot;&gt;Step 2.0: Install Sigstore&lt;/h1&gt;
+&lt;p&gt;&lt;strong&gt;Note to Mac users:&lt;/strong&gt; * Make sure to have OpenSSL at version 1.1, LibreSSL 2.8.x can cause problems.&lt;/p&gt;
+
+&lt;h1 id=&quot;step-2-install-sigstore&quot;&gt;Step 2: Install Sigstore&lt;/h1&gt;
 
 &lt;p&gt;After checking that our cluster and ingress are ready, we can install the bulk of Sigstore via &lt;a href=&quot;https://helm.sh&quot;&gt;helm&lt;/a&gt;:&lt;/p&gt;
 
@@ -120,7 +122,7 @@ DNS.1 = &lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;-CAcreateserial&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-out&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.signed.cert.pem &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;-extfile&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.cert.ext
 
-    kubectl create secret tls &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-system&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+    kubectl create secret tls &lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-tls&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;--namespace&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;-system&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;--cert&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.signed.cert.pem &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
         &lt;span class=&quot;nt&quot;&gt;--key&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service_name&lt;/span&gt;.private.pem
