@@ -54,9 +54,9 @@
 
 
   <meta property="article:published_time" content="2022-11-10T00:00:00+01:00">
-  <meta property="article:modified_time" content="2022-11-11T16:21:05+01:00">
+  <meta property="article:modified_time" content="2022-11-16T17:21:35+01:00">
   <meta name="twitter:label1" value="Words">
-  <meta name="twitter:data1" value="1116 words">
+  <meta name="twitter:data1" value="1136 words">
   <meta name="twitter:label2" value="Reading time">
   <meta name="twitter:data2" value="5 mins">
 
@@ -167,12 +167,14 @@ kind was primarily designed for testing Kubernetes itself, but may be used for l
 <p>Along with the cluster, we shall also set up an nginx ingress, in line with the <a href="https://kind.sigs.k8s.io/docs/user/ingress/#ingress-nginx">official instructions</a>:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">#!/bin/bash</span>
-brew <span class="nb">install </span>kind <span class="c"># only for brew users ;)</span>
+brew <span class="nb">install </span>kind cosign ko <span class="c"># only for brew users ;)</span>
 kind create cluster <span class="nt">--name</span> kind-for-helm <span class="nt">--config</span><span class="o">=</span>kind-cluster-config.yaml
 kubectl apply <span class="nt">-f</span> https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 </code></pre></div></div>
 
-<h1 id="step-20-install-sigstore">Step 2.0: Install Sigstore</h1>
+<p><strong>Note to Mac users:</strong> * Make sure to have OpenSSL at version 1.1, LibreSSL 2.8.x can cause problems.</p>
+
+<h1 id="step-2-install-sigstore">Step 2: Install Sigstore</h1>
 
 <p>After checking that our cluster and ingress are ready, we can install the bulk of Sigstore via <a href="https://helm.sh">helm</a>:</p>
 
@@ -219,7 +221,7 @@ DNS.1 = </span><span class="nv">$service_name</span><span class="sh">.sigstore.l
         <span class="nt">-CAcreateserial</span> <span class="nt">-out</span> <span class="nv">$service_name</span>.signed.cert.pem <span class="se">\</span>
         <span class="nt">-extfile</span> <span class="nv">$service_name</span>.cert.ext
 
-    kubectl create secret tls <span class="nv">$service_name</span><span class="nt">-system</span> <span class="se">\</span>
+    kubectl create secret tls <span class="nv">$service_name</span><span class="nt">-tls</span> <span class="se">\</span>
         <span class="nt">--namespace</span><span class="o">=</span><span class="nv">$service_name</span><span class="nt">-system</span> <span class="se">\</span>
         <span class="nt">--cert</span><span class="o">=</span><span class="nv">$service_name</span>.signed.cert.pem <span class="se">\</span>
         <span class="nt">--key</span><span class="o">=</span><span class="nv">$service_name</span>.private.pem
@@ -316,8 +318,8 @@ You can meet me and many others in the Sigstore Slack channel <code class="langu
       <footer class="post-modified-date">
         <p>
           Updated
-          <time datetime=" 2022-11-11T16:21:05+08:00 ">
-            Friday, Nov 11, 2022
+          <time datetime=" 2022-11-16T17:21:35+08:00 ">
+            Wednesday, Nov 16, 2022
           </time>
         </p>
       </footer>

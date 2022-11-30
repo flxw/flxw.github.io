@@ -34,12 +34,14 @@ Along with the cluster, we shall also set up an nginx ingress, in line with the 
 
 ```bash
 #!/bin/bash
-brew install kind # only for brew users ;)
+brew install kind cosign ko # only for brew users ;)
 kind create cluster --name kind-for-helm --config=kind-cluster-config.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
 ```
 
-# Step 2.0: Install Sigstore
+**Note to Mac users:** * Make sure to have OpenSSL at version 1.1, LibreSSL 2.8.x can cause problems.
+
+# Step 2: Install Sigstore
 
 After checking that our cluster and ingress are ready, we can install the bulk of Sigstore via [helm](https://helm.sh):
 
@@ -88,7 +90,7 @@ EOF
         -CAcreateserial -out $service_name.signed.cert.pem \
         -extfile $service_name.cert.ext
 
-    kubectl create secret tls $service_name-system \
+    kubectl create secret tls $service_name-tls \
         --namespace=$service_name-system \
         --cert=$service_name.signed.cert.pem \
         --key=$service_name.private.pem
