@@ -53,7 +53,7 @@ helm upgrade \
     sigstore/scaffold \
     -n sigstore \
     --create-namespace \
-    --values scaffold-values.yaml
+    --values scaffold.values.yaml
 ```
 
 This `scaffold` chart bundles individual charts for most of the Sigstore services: fulcio, rekor, ctlog, trillian, and TUF with an underlying MySQL database.
