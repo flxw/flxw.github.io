@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom">
   <title>Felix Wolff</title>
   <subtitle>Super-fast Jekyll framework</subtitle>
-  <updated>2022-12-07T12:22:53+01:00</updated>
+  <updated>2022-12-07T21:17:38+01:00</updated>
   <id>https://flxw.de/</id>
   <generator uri="https://sparanoid.com/lab/amsf/" version="2.0.22">Almace Scaffolding</generator>
 
@@ -27,7 +27,7 @@
         <published>2022-12-06T00:00:00+01:00</published>
 
         
-          <updated>2022-12-07T11:55:30+01:00</updated>
+          <updated>2022-12-07T12:23:09+01:00</updated>
         
 
         <author>
@@ -146,7 +146,7 @@ curl https://your-rekor.com/api/v1/log/publicKey &lt;span class=&quot;o&quot;&gt
 
 kubectl get secret/ctlog-public-key &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; ctlog-system &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;jsonpath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'{.data.public}'&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;base64&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; ctlog-public-key.pem
+    &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;jsonpath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;{.data.public}&apos;&lt;/span&gt; | &lt;span class=&quot;nb&quot;&gt;base64&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; ctlog-public-key.pem
 
 kubectl create cm public-keys &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; kyverno &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
@@ -188,9 +188,9 @@ Error from server: admission webhook &quot;mutate.kyverno.svc-fail&quot; denied 
 policy Pod/default/test for resource violation: 
 
 check-container-signature:
-  check-container-signature: 'failed to verify image ghcr.io/flxw/example-image@sha256:cab1dab84c35c2f9382ece97b02a42903a3135e7c1b81d937798bde9bf3ef486:
+  check-container-signature: &apos;failed to verify image ghcr.io/flxw/example-image@sha256:cab1dab84c35c2f9382ece97b02a42903a3135e7c1b81d937798bde9bf3ef486:
     .attestors[0].entries[0].keyless: subject mismatch: expected wolff.peter@protonmail.com,
-    received wolff.felix@protonmail.com'
+    received wolff.felix@protonmail.com&apos;
 Error from server: admission webhook &quot;mutate.kyverno.svc-fail&quot; denied the request: 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
@@ -354,7 +354,7 @@ To do that, tuf compiles a JSON file that needs to be extracted from the cluster
 It only needs to be used once for every initialization.&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
-kubectl &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; tuf-system get secrets tuf-root &lt;span class=&quot;nt&quot;&gt;-ojsonpath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;'{.data.root}'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+kubectl &lt;span class=&quot;nt&quot;&gt;-n&lt;/span&gt; tuf-system get secrets tuf-root &lt;span class=&quot;nt&quot;&gt;-ojsonpath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;{.data.root}&apos;&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     | &lt;span class=&quot;nb&quot;&gt;base64&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; root.json
 cosign initialize &lt;span class=&quot;nt&quot;&gt;--root&lt;/span&gt; root.json &lt;span class=&quot;nt&quot;&gt;--mirror&lt;/span&gt; https://tuf.sigstore.local
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -367,7 +367,7 @@ Afterward, we shall verify it.&lt;/p&gt;
 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
 
-&lt;span class=&quot;c&quot;&gt;# First, we'll spin up the local registry&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# First, we&apos;ll spin up the local registry&lt;/span&gt;
 docker run &lt;span class=&quot;nt&quot;&gt;-d&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;--restart&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;always &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
     &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; 5000:5000 &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
@@ -823,14 +823,14 @@ It will process your input files line-by-line and create the appropriate account
 
 &lt;span class=&quot;n&quot;&gt;CONFIG&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;N26Importer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;'XXXXXXMYIBANXXXXXXXXX'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;'Assets:N26'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;language&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'de'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;file_encoding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'utf-8'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&apos;XXXXXXMYIBANXXXXXXXXX&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&apos;Assets:N26&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;language&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;de&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;file_encoding&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&apos;utf-8&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
     &lt;span class=&quot;n&quot;&gt;CsvCamtImporter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;'XXXXXXMYIBAN2XXXXXXXX'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-        &lt;span class=&quot;s&quot;&gt;'Assets:Sparkasse'&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&apos;XXXXXXMYIBAN2XXXXXXXX&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;&apos;Assets:Sparkasse&apos;&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
@@ -1208,7 +1208,7 @@ bad documentation, and I want to note down my approach here for getting it to wo
 &lt;p&gt;The following is for Analysis for Excel versions &lt;strong&gt;2.0 and greater&lt;/strong&gt; (&lt;a href=&quot;http://scn.sap.com/docs/DOC-63785&quot;&gt;why&lt;/a&gt;)&lt;/p&gt;
 
 &lt;ol&gt;
-&lt;li&gt;Make sure Analysis for Excel is up to date. An obvious step but you don't want any version conflicts after having it set up.&lt;/li&gt;
+&lt;li&gt;Make sure Analysis for Excel is up to date. An obvious step but you don&apos;t want any version conflicts after having it set up.&lt;/li&gt;
 &lt;li&gt;Install the &lt;em&gt;HANA Client for Excel&lt;/em&gt; from &lt;a href=&quot;https://support.sap.com/software/installations.html&quot;&gt;here&lt;/a&gt; (Click &lt;em&gt;Search for Software&lt;/em&gt;)&lt;/li&gt;
 &lt;li&gt;Grant your database user the required privileges for accessing HANA via Excel through HTTP (&lt;a href=&quot;http://scn.sap.com/community/businessobjects-analysis-ms-office/blog&quot;&gt;why&lt;/a&gt;)
 
