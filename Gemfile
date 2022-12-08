@@ -1,6 +1,6 @@
 source "https://rubygems.org"
 
-gem "jekyll", "4.2.2"
+gem "jekyll", "4.2.0"
 
 group :development do
   gem "jekyll-last-modified-at"
@@ -15,7 +15,7 @@ end
 # Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem
 # and associated library.
 install_if -> { RUBY_PLATFORM =~ %r!mingw|mswin|java! } do
-  gem "tzinfo", "2.0.5"
+  gem "tzinfo", "2.0.2"
   gem "tzinfo-data"
 end
 

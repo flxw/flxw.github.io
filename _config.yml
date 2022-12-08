@@ -7,8 +7,8 @@
 # Jekyll basic configurations
 #
 source:         _app
-destination:    docs
-timezone:       Europe/Berlin
+destination:    _site
+timezone:       America/Los_Angeles
 permalink:      /:title.html
 markdown:       kramdown
 highlighter:    rouge
@@ -66,7 +66,7 @@ dev:            false
 # Site name
 #
 # Default:      Almace Scaffolding
-name:           Felix Wolff
+name:           Almace Scaffolding
 
 # Site short name
 #
@@ -82,7 +82,7 @@ name:           Felix Wolff
 # - name_short: Sparanoid
 #
 # Default:      AMSF
-name_short:     flxw.de
+name_short:     AMSF
 
 # Site description
 #
@@ -99,7 +99,7 @@ description:    Super-fast Jekyll framework
 # `/my-project`, without trailing slash.
 #
 # Default:      ""
-baseurl:        ""
+baseurl:        /lab/amsf
 
 # Flatten base
 #
@@ -129,7 +129,7 @@ feed:           /feed.xml
 # URLs for these fields
 #
 # Default:      https://sparanoid.com
-url:            https://flxw.de
+url:            https://sparanoid.com
 
 # Media assets URL
 #
