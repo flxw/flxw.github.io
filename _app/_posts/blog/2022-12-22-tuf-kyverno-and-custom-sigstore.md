@@ -76,23 +76,16 @@ The provided directory is empty but writeable, so that `cosign` can place the TU
 In the next section I will demonstrate an approach to provide a `TUF_ROOT` directory that isn't empty and has valid contents instead.
 
 # Providing a TUF root in Kyverno
-The goal is to provide a prepopulated directory to the `kyverno` container, that can also be written to.
+The goal is to provide a prepopulated directory to the `kyverno` container.
 Using a persistent volume sounds like a simple solution, but might invoke concurrency issues.
-Given that a `kyverno` deployment usually consists of several pods, two pods might enter the TUF update procedure at a similar time.
+Given that a `kyverno` deployment usually consists of several pods, two pods might try to update the local TUF repository at the same time.
 
 I believe that it is better to accept the cost of repeated updates, and use a separate volume for each container.
-The `kyverno` helm chart already provides an `emptyDir` volume to the `kyverno` pod.
-I will patch the `kyverno` deployment, and use an `initContainer` to copy the TUF root into the aforementioned volume.
+As mentioned above, the `kyverno` helm chart provides an `emptyDir` volume to the `kyverno` pods.
+We shall patch the `kyverno` deployment, and use an `initContainer` to initialize a local TUF repository on the mounted volume.
 Once the actual container with `kyverno` inside comes up, `cosign` will find all it needs inside the provided directory.
 
-The inital directory contents come from three config maps:
-```bash
-λ  .sigstore  kubectl create cm tuf-root --from-file=root --namespace=kyverno
-λ  .sigstore  kubectl create cm tuf-root-db --from-file=root/tuf.db --namespace=kyverno
-λ  .sigstore  kubectl create cm tuf-root-targets --from-file=root/targets --namespace=kyverno
-```
-
-This is the patch for the `kyverno` deployment, using a BusyBox container to do the copying:
+This is the patch for the `kyverno` deployment:
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -103,35 +96,19 @@ spec:
   template:
     spec:
       initContainers:
-      - image: busybox:latest
+      - args:
+        - cosign initialize --root $TUF_URL/root.json --mirror $TUF_URL
         command:
         - sh
         - -c
-        args:
-        - 'cp -RHv /tuf-root/* /.sigstore  
-          && chmod -R 777 /.sigstore
-          && ls -lahR /.sigstore'
-        imagePullPolicy: Always
-        name: copy-config-maps
+        env:
+        - name: TUF_URL
+          value: https://path.to.your.tuf.repository.com
+        image: ghcr.io/sigstore/cosign/cosign:v1.13.1
+        name: init-tuf-root
         volumeMounts:
-        - mountPath: /tuf-root
-          name: tuf-root
-        - mountPath: /tuf-root/tuf.db
-          name: tuf-root-db
-        - mountPath: /tuf-root/targets
-          name: tuf-root-targets
-        - mountPath: /.sigstore
-          name: sigstore # volume is provided by the helm charts
-      volumes:
-      - name: tuf-root
-        configMap:
-          name: tuf-root
-      - name: tuf-root-db
-        configMap:
-          name: tuf-root-db
-      - name: tuf-root-targets
-        configMap:
-          name: tuf-root-targets
+        - mountPath: /home/nonroot/.sigstore/root
+          name: sigstore
 ```
 
 # Verdict
