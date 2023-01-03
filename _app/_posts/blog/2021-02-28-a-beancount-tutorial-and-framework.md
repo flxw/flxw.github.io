@@ -54,8 +54,8 @@ As mentioned in the introduction, I perceive the big strength of PTA that you ca
 For this job, beancount offers a so-called [Importer API](https://beancount.github.io/docs/importing_external_data.html#example-importers).
 You can either write your own Python importer or copy and expand on one from Github.
 I used the following two in my projects:
-* https://gitlab.hasi.it/seth/beancount-csv-camt
-* https://github.com/siddhantgoel/beancount-n26
+* [https://gitlab.hasi.it/seth/beancount-csv-camt]
+* [https://github.com/siddhantgoel/beancount-n26]
 
 Either install the importer via `pip` or make it importable for Python from the `importers/` directory.
 It will process your input files line-by-line and create the appropriate accountin entries.
