@@ -8,21 +8,54 @@ Hi, I'm Felix. Thanks for visiting my site.
 
 I studied IT-Systems Engineering at the Hasso-Plattner-Institute (HPI) in Potsdam, Germany.
 After brief stints in consulting and product management, I am back in software engineering.
-Currently, I work as a Software Engineer at Celonis, and in my free time I spend a lot of time with Rust.
+Currently, I work as a Senior Security Engineer at Celonis.
 You can also find me on <a href="https://de.linkedin.com/in/felix-wolff" data-network="LinkedIn" data-proofer-ignore>LinkedIn.</a>
+You can also reach my via email at `wolff.felix@pm.me`.
 
 Here is a short version of my CV, peppered with keywords on technologies I used and duties I carried out during that time.
 
 ----
 
-**04/2022 - today - Senior Security Engineer @ [Celonis SE](https://celonis.com)**\\
-*Veracode, Asset Inventory, Python, AWS, GCP, Sigstore, Rapid-Risk-Assessment, Shift-left, SDLC optimization*
+**04/2022 - today - Senior Security Engineer @ [Celonis SE](https://celonis.com)**
 
-**08/2020 - 04/2022 - Software Engineer @ [Celonis SE](https://celonis.com)**\\
-*Java, Python, Rust, Spring Boot, Microservices, Kubernetes, Docker, Apereo CAS, Angular, Typescript, ArgoCD, SSO, OIDC, SAML*
+DevSecOps has become close to my heart - so I increased my focus on it:
 
-**10/2019 - 08/2020 - Product Manager @ [Celonis SE](https://celonis.com)**\\
-*Scrum, Refinements, Retrospectives, Enablements, Stakeholder Management, Roadmaps*
+- SAST/SCA program management and integration into software-development lifecycle
+- Research collaborations with universities on emerging technologies
+ - Seminar at the Hasso Plattner Institute (https://github.com/Root-DE/Applied-Cybersecurity-Django)
+- Tooling to shift security further left in the SDLC
+- Introducing software supply chain security: provenance, attestation, signature
+
+
+**08/2020 - 04/2022 - Software Engineer @ [Celonis SE](https://celonis.com)**
+
+Engineer in an interdisciplinary team (meaning it comprises of QA, Product and Engineers) that owned internal libraries, central micro-services like authentication and logging, and a lot of developer-related tooling:
+
+- Authentication via traditional credentials, SAML and OIDC
+- E-Mail S/MIME signatures
+- Tenant provisioning, configuration and de-provisioning
+- Software-development lifecycle iteration and improvements
+- Central identity management using Apereo CAS
+- Numerous customer support tickets
+- Incidents handling and response
+
+
+Technologies I worked with: PostgreSQL, Rabbit, Java, Spring, Rust, Python, Kubernetes, Typescript, Angular, Docker
+
+**10/2019 - 08/2020 - Product Manager @ [Celonis SE](https://celonis.com)**
+
+My first full-time job!
+Management of the backlog of the Platform Core team (5 people). The team owns internal tooling, providing the foundation for other teams to build their microservices on. Here is a non-exhaustive list of things I initiated and strived for during my time as PM:
+- Introduced scrum
+- Retain an estimated backlog with clearly separated epics
+- Keep interruptions during the sprint to a minimum
+- Create clear communication channels with the team to avoid interruptions of engineers
+- Structure and expand documentation and whitepapers
+- Maintain a friendly working relationship with many internal stakeholders as well as customers
+- Drive the development of enterprise-readiness features such as just-in-time user onboarding
+
+During my time as a PM, I felt that I could deliver more value as a developer.
+Hence I switched roles but stayed on the same team.My
 
 **04/2018 - 09/2018 - Master's Project @ [HPI](https://hpi.de)**\\
 *React, SAP HANA, BPMN, Interviewing, Process Mapping*
