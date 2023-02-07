@@ -14,7 +14,7 @@ you need to encode the secret _inside_ your KMS,
 and decode it inside the `ExternalSecret` using a `decodingStrategy`.
 The values will be base64-encoded again by k8s when the `Secret` gets created.
 
-An example would as follows (taken from [here](https://external-secrets.io/v0.6.1/guides/decoding-strategy/)):
+An example would be as follows (taken from [here](https://external-secrets.io/v0.6.1/guides/decoding-strategy/)):
 ```
 KMS secret value: aGFwcHkgc3RyZWV0
 ExternalSecret decodes it: happy street
@@ -40,5 +40,3 @@ spec:
       key: svc/app/secret
       decodingStrategy: Base64
 ```
-
-Note the colon that seperates the filepaths in `KUBECONFIG` - you can pass in more than one file.
