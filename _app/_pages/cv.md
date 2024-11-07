@@ -7,8 +7,7 @@ desc: My professional background without authwalls
 Hi, I'm Felix. Thanks for visiting my site.
 
 I studied IT-Systems Engineering at the Hasso-Plattner-Institute (HPI) in Potsdam, Germany.
-After brief stints in consulting and product management, I am back in software engineering.
-Currently, I work as a Senior Security Engineer at Celonis.
+I like to walk the fine line between product and engineering.
 You can also find me on <a href="https://de.linkedin.com/in/felix-wolff" data-network="LinkedIn" data-proofer-ignore>LinkedIn.</a>
 You can also reach my via email at `wolff.felix@pm.me`.
 
