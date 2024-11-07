@@ -16,7 +16,12 @@ Here is a short version of my CV, peppered with keywords on technologies I used 
 
 ----
 
-**04/2022 - today - Senior Security Engineer @ [Celonis SE](https://celonis.com)**
+**07/2022 - today - Technical Product Owner @ [Kardex](https://kardex.com)**
+Ownership of the control software that runs on Kardex’
+Miniload-in-a-box. Backlog management and refinement
+with an interdisciplinary team of six.
+
+**04/2022 - 06/2024 - Senior Security Engineer @ [Celonis SE](https://celonis.com)**
 
 DevSecOps has become close to my heart - so I increased my focus on it:
 
@@ -55,7 +60,7 @@ Management of the backlog of the Platform Core team (5 people). The team owns in
 - Drive the development of enterprise-readiness features such as just-in-time user onboarding
 
 During my time as a PM, I felt that I could deliver more value as a developer.
-Hence I switched roles but stayed on the same team.My
+Hence I switched roles but stayed on the same team.
 
 **04/2018 - 09/2018 - Master's Project @ [HPI](https://hpi.de)**\\
 *React, SAP HANA, BPMN, Interviewing, Process Mapping*
