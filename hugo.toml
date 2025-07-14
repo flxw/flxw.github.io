@@ -1,0 +1,19 @@
+baseURL = 'https://flxw.de/'
+languageCode = 'de-DE'
+title = 'Felix Wolff'
+theme = 'hugo-theme-stack'
+
+[params]
+rssFullContent = true
+footer.since = 2012
+sidebar.subtitle = "Welcome to my personal thought storage"
+sidebar.avatar.enabled = true
+sidebar.avatar.local = true
+article.readingTime = false
+article.toc = true
+
+[[params.widgets.homepage]]
+type = "tag-cloud"
+
+[[params.widgets.page]]
+type = "toc"
