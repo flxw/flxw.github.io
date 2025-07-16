@@ -28,16 +28,4 @@ nbproject
 node_modules/
 .bundle/
 vendor/
-
-# AMSF specified
-.amsf-cache
-.jekyll-cache
-.jekyll-metadata
-.sass-cache
-_site
-_app/assets/**/js
-_app/assets/**/css
-
-# AMSF deprecated, leave them for compatibility
-_amsf/themes
-_amsf/core
+public/
