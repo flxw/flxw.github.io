@@ -19,7 +19,7 @@ This policy would bank on Sigstore, and `kyverno` would use `cosign` internally 
 Per default, `cosign` communicates with the public Sigstore deployment, and requires additional initialization to communicate with a different deployment.
 In the previous post, this initialization was circumvented by passing the required public keys in environment variables.
 
-# Providing public keys is fine for testing
+## Providing public keys is fine for testing
 As shown in the *Future Work* section of the preceding article, public keys are a great way to get going with a test on a larger scale.
 Maintainability remains a major concern, however.
 A key rotation on any of the Sigstore components requires an update of the distributed keys, and that will cause Kyverno to be unable to verify signatures on artifacts that were signed using old keys. 
@@ -28,7 +28,7 @@ This problem is addressed by [The Update Framework (TUF)](https://theupdateframe
 Sigstore uses TUF as a distribution mechanism for its keys.
 Understanding TUF is hard, and this [post by Dan Lorenc](https://blog.sigstore.dev/the-update-framework-and-you-2f5cbaa964d5) can help you get started.
 
-# How cosign uses TUF
+## How cosign uses TUF
 When verifying signatures, `cosign` relies on information contained inside the `~/.sigstore/root` directory.
 If this directory does not exist, `cosign` initializes a local copy of the public TUF repository.
 As of December 22 2022, the contents look as follows:
@@ -64,7 +64,7 @@ cosign initialize --root root.json --mirror https://<some-tuf-mirror>
 
 If the `~/.sigstore/root` directory already exists, `cosign` will try to use it and also update its contents to match those of the TUF mirror.
 
-# How cosign works inside of Kyverno
+## How cosign works inside of Kyverno
 `Kyverno` runs inside of Kubernetes pods, and it uses the `cosign` Go libraries. Those are the same code routines as the command-line client.
 That means that `cosign` has to have a directory inside the `kyverno` container to create the local TUF repository and keep it up to date.
 
@@ -112,7 +112,7 @@ spec:
           name: sigstore
 ```
 
-# Verdict
+## Verdict
 The presented approach allows one to look more confidently at the integration of Sigstore and Kyverno.
 If a pre-existing Kyverno deployment should be used, this approach is fairly simple to implement using `kustomize`.
 
