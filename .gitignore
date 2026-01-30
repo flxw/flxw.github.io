@@ -1,3 +1,4 @@
+resources/_gen/
 # Numerous always-ignore extensions
 *.diff
 *.err
