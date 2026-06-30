@@ -2,7 +2,7 @@
 date = 2022-10-14
 title = "Oneliner: Merge kubectl configs"
 description = "A oneliner for merging two kubectl configuration files"
-tags = ["oneliners"]
+tags = ["oneliner"]
 +++
 Today's oneliner is for merging two kubectl configuration files into one.
 This can be useful when creating new clusters and exchanging small config files with your colleagues:
