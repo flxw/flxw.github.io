@@ -31,12 +31,12 @@ I rolled it back, fixed the error and applied the migration again.
 Since the migration file changed, the hash had changed, and even though the migration was rolled back, I ran into this error.
 Apparently, even with migrations that are rolled back and essentially void, Prisma compares the checksums.
 
-I think this is highly counterintuitive, and I am alone as a number of discussions show online:
+I think this is highly counterintuitive, and I am not alone as a number of discussions show online:
 1. https://github.com/prisma/prisma/discussions/19226
 2. https://www.answeroverflow.com/m/1351597703699890177
 3. https://medium.com/israeli-tech-radar/prisma-orm-are-you-seriously-offering-to-reset-my-production-db-really-aa99756099e2
 
-I want to heed caution about the approachh taken in the last link as it effectively resets your migration history,
+I want to heed caution about the approach taken in the last link as it effectively resets your migration history,
 and may persist schema drift.
 It may fix the problem temporarily and cause bigger headache down the line.
 
