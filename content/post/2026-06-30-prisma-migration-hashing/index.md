@@ -1,70 +1,42 @@
 +++
 date = 2026-06-30
-title = "Prisma XXX"
-description = "What to do when Prisma flags a migration that shouldn't be flagged"
-draft = true
+title = "Fixing Prisma Migration Failures When Nothing Is Broken"
+description = "What to do when Prisma 6/7 flags a migration that shouldn't be flagged"
+image = 'prisma_prompt.webp'
 +++
 
-Ample reason to be annoyed: https://github.com/prisma/prisma/discussions/19226
-prisma migration failure
-check migrations table for outdated rolled-back migrations and their checksums
-warn about this blogpost as it basically resets the production migration history
-horrible advice: https://medium.com/israeli-tech-radar/prisma-orm-are-you-seriously-offering-to-reset-my-production-db-really-aa99756099e2
-
-Sample table output
-
-id                                  |checksum                                                        |finished_at                  |migration_name                                           |logs                                                                                                                                                                                                                                                           |rolled_back_at               |started_at                   |applied_steps_count|
-------------------------------------+----------------------------------------------------------------+-----------------------------+---------------------------------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------+-----------------------------+-------------------+
-5d1c85bb-ec30-4a78-8d74-b7c738a6e737|b05af831338127421f8c8035ed788af98532eae056c2fdb1cd282cc51442e2c4|2026-06-01 13:19:06.129 +0200|20260528081819_init                                      |                                                                                                                                                                                                                                                               |                             |2026-06-01 13:19:06.066 +0200|                  1|
-5f27cee3-2bb7-42a5-a38e-792fc3398bf9|f82d430a030413e9341b0d8d5bb9b4dce6115d0b08cd8baf7a95143041c4ad9b|                             |20260618085901_teams                                     |A migration failed to apply. New migrations cannot be applied before the error is recovered from. Read more about how to resolve migration issues in a production database: https://pris.ly/d/migrate-resolve¶¶Migration name: 20260618085901_teams¶¶Database e|2026-06-25 11:37:51.667 +0200|2026-06-25 11:37:24.459 +0200|                  0|
-75751378-af71-4e6c-9e35-5632fbc931ce|f74242e8fbbbc66d7b092dcde69f5b850c2c5c2162cf1a233975aaca245bd2d2|2026-06-01 13:19:06.132 +0200|20260528105333_add_kursleiter_status_and_nullable_profile|                                                                                                                                                                                                                                                               |                             |2026-06-01 13:19:06.130 +0200|                  1|
-5d722977-4b44-4e8e-8bee-3453ff5a40f0|f82d430a030413e9341b0d8d5bb9b4dce6115d0b08cd8baf7a95143041c4ad9b|2026-06-25 11:37:51.671 +0200|20260618085901_teams                                     |                                                                                                                                                                                                                                                               |                             |2026-06-25 11:37:51.671 +0200|                  0|
-aaaae998-08b2-4e73-bdc6-384dfb125fd1|d8dfbbd8b98cfa457a44d670be7a8e0b9ef670aff79c49241362ff9eae2d54ac|2026-06-01 14:41:24.854 +0200|20260601000000_collapse_kursleiter_status_into_role      |                                                                                                                                                                                                                                                               |                             |2026-06-01 14:41:24.842 +0200|                  1|
-bcdd1702-3d20-402a-add5-c384aa98eb42|c20cf52d5b98aaf902916fa1f9ce6f956dc383f16fe88daa91afdf96e4895512|2026-06-03 10:19:39.511 +0200|20260603081939_add_user_photo                            |                                                                                                                                                                                                                                                               |                             |2026-06-03 10:19:39.506 +0200|                  1|
-e2db064c-e7ce-403d-a30c-b3e7f0f8eed7|d3b0b5f49eeb02fc07600be13af430d55c5c8001193d50f8765bfadfa327a89d|2026-06-10 08:50:36.795 +0200|20260610065010_add_user_coordinates                      |                                                                                                                                                                                                                                                               |                             |2026-06-10 08:50:36.791 +0200|                  1|
-668829ee-9c39-4e89-a14e-d530970ad505|c1e72beada579a2e9d8ff3fa95c4aef125b18428be2c19cdb5116a18a4b3ad45|2026-06-11 17:56:21.146 +0200|20260611154442_add_user_location_preference              |                                                                                                                                                                                                                                                               |                             |2026-06-11 17:56:21.120 +0200|                  1|
-8b53ba95-1d4c-4cf9-8ec4-410b579dd0ac|88e4f43cfc764a8dedf142de86dde3545edc1b1af7675add640e4b87e0e11af2|2026-06-16 10:35:14.518 +0200|20260615145805_add_availabilty_timeframes                |                                                                                                                                                                                                                                                               |                             |2026-06-16 10:35:14.498 +0200|                  1|
-3f48e8bf-daf8-4bfb-8377-13853b302f6c|0cbda38341f1f13364e7bc481a80ff216e500543a2569a374c00b9f532ce911b|2026-06-16 16:05:03.268 +0200|20260616123414_add_messaging_capability                  |                                                                                                                                                                                                                                                               |                             |2026-06-16 16:05:03.253 +0200|                  1|
-fd1b66d4-a172-4a0b-914b-86805fc6d7cd|4d4da5c999f44708f7a3b2644b49417c25b477c55d777499bd593e27e7521a8a|2026-06-17 15:50:26.817 +0200|20260617082748_split_name_and_surname                    |                                                                                                                                                                                                                                                               |                             |2026-06-17 15:50:26.817 +0200|                  0|
-8645ac2a-6347-46c8-b685-3141af29b1dd|9ed73ea3aa280429c79fc919644d1e2850a81ad4f3c37829656c9fa46444838b|2026-06-18 10:58:57.503 +0200|20260617134935_dated_availability_slots                  |                                                                                                                                                                                                                                                               |                             |2026-06-18 10:58:57.503 +0200|                  0|
-7ff2264a-07cb-4cc1-9176-060a4b86f83f|1a49ebd516a6bd5c515eeffc131b7e7998150f5e52f988d1c61cbb24ed0fa3fb|2026-06-29 15:13:25.338 +0200|20260625093804_message_tracing                           |                                                                                                                                                                                                                                                               |                             |2026-06-29 15:13:25.338 +0200|                  0|
-21fc1fc3-7b5a-4591-bba9-ab4c28494a5c|bcaec0ac18b12ef24a2aa261944e80316b344d5750e46f9d97463656edb3d54b|2026-06-29 15:51:53.580 +0200|20260629132937_add_notes_on_user                         |                                                                                                                                                                                                                                                               |                             |2026-06-29 15:51:53.574 +0200|                  1|
-d582d050-5e7c-417d-92c7-9bde16dd3f43|5012ab9193654ff24af124108b03ef40741c7021883f2c469ad8041f5a3c4631|2026-06-29 16:54:26.959 +0200|20260629145414_add_documents                             |                                                                                                                                                                                                                                                               |                             |2026-06-29 16:54:26.936 +0200|                  1|
+Database migrations fail.
+It's a fact of life.
+Most often it's due to small inconsistencies that don't warrant a full schema reset.
+However, this is the very thing that Prisma suggests doing whenever it's logic for applying migrations fails.
+In my case, I found an interesting quirk of Prisma 6 and Prisma 7 while fixing the migration.
+You can see that in the title image above.
+I'll lay out the fix first and the reasons for it after.
 
 
-id                                  |checksum                                                        |migration_name                                           |
-------------------------------------+----------------------------------------------------------------+---------------------------------------------------------+
-5d1c85bb-ec30-4a78-8d74-b7c738a6e737|b05af831338127421f8c8035ed788af98532eae056c2fdb1cd282cc51442e2c4|20260528081819_init                                      |
-5f27cee3-2bb7-42a5-a38e-792fc3398bf9|f82d430a030413e9341b0d8d5bb9b4dce6115d0b08cd8baf7a95143041c4ad9b|20260618085901_teams                                     |
-75751378-af71-4e6c-9e35-5632fbc931ce|f74242e8fbbbc66d7b092dcde69f5b850c2c5c2162cf1a233975aaca245bd2d2|20260528105333_add_kursleiter_status_and_nullable_profile|
-5d722977-4b44-4e8e-8bee-3453ff5a40f0|f82d430a030413e9341b0d8d5bb9b4dce6115d0b08cd8baf7a95143041c4ad9b|20260618085901_teams                                     |
-aaaae998-08b2-4e73-bdc6-384dfb125fd1|d8dfbbd8b98cfa457a44d670be7a8e0b9ef670aff79c49241362ff9eae2d54ac|20260601000000_collapse_kursleiter_status_into_role      |
-bcdd1702-3d20-402a-add5-c384aa98eb42|c20cf52d5b98aaf902916fa1f9ce6f956dc383f16fe88daa91afdf96e4895512|20260603081939_add_user_photo                            |
-e2db064c-e7ce-403d-a30c-b3e7f0f8eed7|d3b0b5f49eeb02fc07600be13af430d55c5c8001193d50f8765bfadfa327a89d|20260610065010_add_user_coordinates                      |
-668829ee-9c39-4e89-a14e-d530970ad505|c1e72beada579a2e9d8ff3fa95c4aef125b18428be2c19cdb5116a18a4b3ad45|20260611154442_add_user_location_preference              |
-8b53ba95-1d4c-4cf9-8ec4-410b579dd0ac|88e4f43cfc764a8dedf142de86dde3545edc1b1af7675add640e4b87e0e11af2|20260615145805_add_availabilty_timeframes                |
-3f48e8bf-daf8-4bfb-8377-13853b302f6c|0cbda38341f1f13364e7bc481a80ff216e500543a2569a374c00b9f532ce911b|20260616123414_add_messaging_capability                  |
-fd1b66d4-a172-4a0b-914b-86805fc6d7cd|4d4da5c999f44708f7a3b2644b49417c25b477c55d777499bd593e27e7521a8a|20260617082748_split_name_and_surname                    |
-8645ac2a-6347-46c8-b685-3141af29b1dd|9ed73ea3aa280429c79fc919644d1e2850a81ad4f3c37829656c9fa46444838b|20260617134935_dated_availability_slots                  |
-7ff2264a-07cb-4cc1-9176-060a4b86f83f|1a49ebd516a6bd5c515eeffc131b7e7998150f5e52f988d1c61cbb24ed0fa3fb|20260625093804_message_tracing                           |
-21fc1fc3-7b5a-4591-bba9-ab4c28494a5c|bcaec0ac18b12ef24a2aa261944e80316b344d5750e46f9d97463656edb3d54b|20260629132937_add_notes_on_user                         |
-d582d050-5e7c-417d-92c7-9bde16dd3f43|5012ab9193654ff24af124108b03ef40741c7021883f2c469ad8041f5a3c4631|20260629145414_add_documents                             |
+# How to fix it
+1. Calculate the SHA256 checksum of the flagged migration 
+```bash
+cat migration.sql | sha256sum
+```
+2. Update the hash of ALL entries for that migration inside the prisma migrations table 
+```sql
+UPDATE TABLE _prisma_migrations SET checksum = '5d1...' WHERE migration_name = 'xxx'`
+```
+3. Rerun `prisma migrate deploy`
 
+# Why it happens
+In my case it happened because I applied a migration during development that had an error in it.
+I rolled it back, fixed the error and applied the migration again.
+Since the migration file changed, the hash had changed, and even though the migration was rolled back, I ran into this error.
+Apparently, even with migrations that are rolled back and essentially void, Prisma compares the checksums.
 
-id                                  |checksum                                                        |migration_name                                           |rolled_back_at               |
-------------------------------------+----------------------------------------------------------------+---------------------------------------------------------+-----------------------------+
-5d1c85bb-ec30-4a78-8d74-b7c738a6e737|b05af831338127421f8c8035ed788af98532eae056c2fdb1cd282cc51442e2c4|20260528081819_init                                      |                             |
-5f27cee3-2bb7-42a5-a38e-792fc3398bf9|f82d430a030413e9341b0d8d5bb9b4dce6115d0b08cd8baf7a95143041c4ad9b|20260618085901_teams                                     |2026-06-25 11:37:51.667 +0200|
-75751378-af71-4e6c-9e35-5632fbc931ce|f74242e8fbbbc66d7b092dcde69f5b850c2c5c2162cf1a233975aaca245bd2d2|20260528105333_add_kursleiter_status_and_nullable_profile|                             |
-5d722977-4b44-4e8e-8bee-3453ff5a40f0|f82d430a030413e9341b0d8d5bb9b4dce6115d0b08cd8baf7a95143041c4ad9b|20260618085901_teams                                     |                             |
-aaaae998-08b2-4e73-bdc6-384dfb125fd1|d8dfbbd8b98cfa457a44d670be7a8e0b9ef670aff79c49241362ff9eae2d54ac|20260601000000_collapse_kursleiter_status_into_role      |                             |
-bcdd1702-3d20-402a-add5-c384aa98eb42|c20cf52d5b98aaf902916fa1f9ce6f956dc383f16fe88daa91afdf96e4895512|20260603081939_add_user_photo                            |                             |
-e2db064c-e7ce-403d-a30c-b3e7f0f8eed7|d3b0b5f49eeb02fc07600be13af430d55c5c8001193d50f8765bfadfa327a89d|20260610065010_add_user_coordinates                      |                             |
-668829ee-9c39-4e89-a14e-d530970ad505|c1e72beada579a2e9d8ff3fa95c4aef125b18428be2c19cdb5116a18a4b3ad45|20260611154442_add_user_location_preference              |                             |
-8b53ba95-1d4c-4cf9-8ec4-410b579dd0ac|88e4f43cfc764a8dedf142de86dde3545edc1b1af7675add640e4b87e0e11af2|20260615145805_add_availabilty_timeframes                |                             |
-3f48e8bf-daf8-4bfb-8377-13853b302f6c|0cbda38341f1f13364e7bc481a80ff216e500543a2569a374c00b9f532ce911b|20260616123414_add_messaging_capability                  |                             |
-fd1b66d4-a172-4a0b-914b-86805fc6d7cd|4d4da5c999f44708f7a3b2644b49417c25b477c55d777499bd593e27e7521a8a|20260617082748_split_name_and_surname                    |                             |
-8645ac2a-6347-46c8-b685-3141af29b1dd|9ed73ea3aa280429c79fc919644d1e2850a81ad4f3c37829656c9fa46444838b|20260617134935_dated_availability_slots                  |                             |
-7ff2264a-07cb-4cc1-9176-060a4b86f83f|1a49ebd516a6bd5c515eeffc131b7e7998150f5e52f988d1c61cbb24ed0fa3fb|20260625093804_message_tracing                           |                             |
-21fc1fc3-7b5a-4591-bba9-ab4c28494a5c|bcaec0ac18b12ef24a2aa261944e80316b344d5750e46f9d97463656edb3d54b|20260629132937_add_notes_on_user                         |                             |
-d582d050-5e7c-417d-92c7-9bde16dd3f43|5012ab9193654ff24af124108b03ef40741c7021883f2c469ad8041f5a3c4631|20260629145414_add_documents                             |                             |
+I think this is highly counterintuitive, and I am alone as a number of discussions show online:
+1. https://github.com/prisma/prisma/discussions/19226
+2. https://www.answeroverflow.com/m/1351597703699890177
+3. https://medium.com/israeli-tech-radar/prisma-orm-are-you-seriously-offering-to-reset-my-production-db-really-aa99756099e2
+
+I want to heed caution about the approachh taken in the last link as it effectively resets your migration history,
+and may persist schema drift.
+It may fix the problem temporarily and cause bigger headache down the line.
+
