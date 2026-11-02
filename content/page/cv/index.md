@@ -14,13 +14,11 @@ icon = "user"
 
 ## Working Experience
 
-### Libra
-Role: Software Engineer
+#### SAP (Senior Software Engineer, 2026/09 - today)
 
-Duration: 2025/08 - Today
+#### Code8 (Client Solutions Engineer, 2025/08 - 2026/08)
 
 #### Kardex (Technical Product Owner, 2024/07 - 2025/01) 
-
 
 #### Celonis (Senior Security Engineer, 2019/09 - 2024/07)
 
